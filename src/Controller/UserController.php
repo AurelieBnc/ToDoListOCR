@@ -3,24 +3,29 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Manager\UserManager;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 #[Route('/users', name: 'users')]
 class UserController extends AbstractController
 {
+    public function __construct(
+        private readonly UserManager $userManager,
+        private readonly UserRepository $userRepository
+    ) {
+    }
+
     #[Route('/list', name: '_list')]
-    public function getUserList(UserRepository $userRepository, Request $request): Response 
+    public function getUserList(Request $request): Response 
     {
         $userListPaginated = null;
         $page = $request->query->getInt('page', 1);
-        $userListPaginated = $userRepository->findUsersListPaginated($page);
+        $userListPaginated = $this->userRepository->findUsersListPaginated($page);
 
         $pages = $userListPaginated['pages'] ?? null;
         if ( $page < 1  || $pages === null) {
@@ -33,25 +38,11 @@ class UserController extends AbstractController
     }
     
     #[Route('/create', name: '_create')]
-    public function createAction(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function createAction(Request $request): RedirectResponse|Response
     {
-        $user = new User;
-        $userForm = $this->createForm(UserType::class, $user);
-
-        $userForm->handleRequest($request);
+        $userForm = $this->userManager->createUser($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $userForm->get('plainPassword')->getData()
-                )
-            );
-            $user = $userForm->getData();
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
             $this->addFlash('success', 'L\'utilisateur a bien été ajouté !');
 
             return $this->redirectToRoute('users_list');
@@ -63,23 +54,12 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: '_edit')]
-    public function editAction(User $user, Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager)
+    public function editAction(User $user, Request $request)
     {
-        $userForm = $this->createForm(UserType::class, $user);
-        $userForm->handleRequest($request);
+        $userForm = $this->userManager->editUser($request, $user);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $userForm->get('plainPassword')->getData()
-                )
-            );
-
-            $user = $userForm->getData();
-
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $this->userRepository->update($user, true);
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
