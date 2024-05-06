@@ -23,11 +23,11 @@
                 <tbody>
                 {% for user in users.data %}
                     <tr>
-                        <th scope="row">{{ loop.index }}</th>
+                        <th scope="row">{{ user.id }}</th>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
                         <td>
-                            <a href="#" class="btn btn-success btn-sm">Edit</a>
+                            <a href="{{ path('users_edit', {'id' : user.id}) }}" class="btn btn-success btn-sm">Edit</a>
                         </td>
                     </tr>
                 {% endfor %}

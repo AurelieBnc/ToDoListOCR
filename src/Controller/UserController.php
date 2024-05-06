@@ -33,7 +33,7 @@ class UserController extends AbstractController
     }
     
     #[Route('/create', name: '_create')]
-    public function createUser(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
+    public function createAction(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $user = new User;
         $userForm = $this->createForm(UserType::class, $user);
@@ -60,5 +60,32 @@ class UserController extends AbstractController
         return $this->render('user/create_user.html.twig', [
             'userForm' => $userForm->createView(),
         ]);
+    }
+
+    #[Route('/{id}/edit', name: '_edit')]
+    public function editAction(User $user, Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager)
+    {
+        $userForm = $this->createForm(UserType::class, $user);
+        $userForm->handleRequest($request);
+
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $userForm->get('plainPassword')->getData()
+                )
+            );
+
+            $user = $userForm->getData();
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', "L'utilisateur a bien été modifié");
+
+            return $this->redirectToRoute('users_list');
+        }
+
+        return $this->render('user/edit_user.html.twig', ['userForm' => $userForm->createView(), 'user' => $user]);
     }
 }
