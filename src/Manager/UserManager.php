@@ -58,4 +58,9 @@ class UserManager
 
         return $userForm;
     }
+
+    public function deleteUser(User $user)
+    {
+        $this->userRepository->remove($user, true);
+    }
 }

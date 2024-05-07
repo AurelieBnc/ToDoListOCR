@@ -28,6 +28,11 @@
                         <td>{{ user.email }}</td>
                         <td>
                             <a href="{{ path('users_edit', {'id' : user.id}) }}" class="btn btn-success btn-sm">Edit</a>
+                            <a onclick="return confirm('Es-tu sûr de vouloir supprimer cet utilisateur ?')"
+                                href="{{ path('users_delete', {'id': user.id}) }}" class="btn btn-danger btn-sm"
+                                title="Suppression de l\'utilisateur"> 
+                                <i id="trash-icon" class="fa-solid fa-trash"></i>
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}
