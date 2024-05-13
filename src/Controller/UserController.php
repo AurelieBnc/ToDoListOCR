@@ -54,7 +54,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: '_edit')]
-    public function editAction(User $user, Request $request)
+    public function editAction(User $user, Request $request): RedirectResponse|Response
     {
         $userForm = $this->userManager->editUser($request, $user);
 

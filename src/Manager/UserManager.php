@@ -6,10 +6,10 @@ use App\Entity\User;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Form;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Repository\UserRepository;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 
 class UserManager
 {
@@ -21,7 +21,7 @@ class UserManager
     ) {
     }
 
-    public function createUser(Request $request): Form
+    public function createUser(Request $request): FormInterface
     {
         $user = new User();
         $userForm = $this->formFactory->create(UserType::class, $user);
@@ -41,7 +41,7 @@ class UserManager
         return $userForm;
     }
 
-    public function editUser(Request $request, User $user): Form
+    public function editUser(Request $request, User $user): FormInterface
     {
         $userForm = $this->formFactory->create(UserType::class, $user);
         $userForm->handleRequest($request);
@@ -59,7 +59,7 @@ class UserManager
         return $userForm;
     }
 
-    public function deleteUser(User $user)
+    public function deleteUser(User $user): void
     {
         $this->userRepository->remove($user, true);
     }
