@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-
+        <link rel="icon" href="{{ asset('favicon.ico') }}">
         <title>To Do List app</title>
 
         <!-- Bootstrap Core CSS -->
@@ -38,14 +38,14 @@
         <!-- Page Content -->
         <div class="container mt-3">
             <div class="column d-flex justify-content-between mb-3">
-                <a href="#" class="btn btn-primary">Créer un utilisateur</a>
+                <a href="{{ path('users_create') }}" class="btn btn-primary">Créer un utilisateur</a>
 
                 {% if app.user %}
-                <a href="#" class="pull-right btn btn-danger">Se déconnecter</a>
+                <a href="{{ path('app_logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
                 {% endif %}
 
-                {% if not app.user and 'login' != app.request.attributes.get('_route') %}
-                <a href="#" class="btn btn-success">Se connecter</a>
+                {% if not app.user and 'app_login' != app.request.attributes.get('_route') %}
+                <a href="{{ path('app_login') }}" class="btn btn-success">Se connecter</a>
                 {% endif %}
             </div>
 
@@ -53,13 +53,21 @@
                 <div class="col-md-12">
                     {% for flash_message in app.session.flashBag.get('success') %}
                         <div class="alert alert-success" role="alert">
-                            <strong>Superbe !</strong> {{ flash_message }}
+                            <p>Superbe !</p> 
+                            <div>
+                                {{ flash_message }}
+                                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
                         </div>
                     {% endfor %}
 
                     {% for flash_message in app.session.flashBag.get('error') %}
                         <div class="alert alert-danger" role="alert">
-                            <strong>Oops !</strong> {{ flash_message }}
+                            <p>Oops !</p> 
+                            <div>
+                                {{ flash_message }}
+                                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
                         </div>
                     {% endfor %}
 
@@ -93,5 +101,6 @@
 
         <script src="{{ asset('js/jquery.js') }}"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="https://kit.fontawesome.com/ea7977182c.js" crossorigin="anonymous"></script>
     </body>
 </html>
