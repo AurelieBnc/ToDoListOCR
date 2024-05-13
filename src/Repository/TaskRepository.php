@@ -95,7 +95,16 @@ class TaskRepository extends ServiceEntityRepository
         $result['pages'] = $pages;
         $result['page'] = $page;
         $result['limit'] = $limit;
-dump($result);
+
         return $result;
+    }
+
+    public function add(Task $task, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($task);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
     }
 }

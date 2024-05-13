@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Manager\TaskManager;
 use App\Repository\TaskRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -33,5 +34,23 @@ class TaskController extends AbstractController
         $page = $request->query->getInt('page', 1);
 
         return $this->render('task/list.html.twig', ['tasks' => $this->taskRepository->findTasksListIsNotDonePaginated($page)]);
+    }
+
+    #[Route(path: '/create', name: '_create')]
+    public function createAction(Request $request): RedirectResponse|Response
+    {
+        $taskForm = $this->taskManager->createTask($request, $this->getUser());
+
+        if ($taskForm->isSubmitted() && $taskForm->isValid()) {
+            $this->addFlash(
+                'success','La tâche a bien été ajoutée.'
+            );
+
+            return $this->redirectToRoute('tasks_list_is_not_done');
+        }
+
+        return $this->render('task/create_task.html.twig', [
+            'taskForm' => $taskForm,
+        ]);
     }
 }
