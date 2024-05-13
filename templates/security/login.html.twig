@@ -4,9 +4,14 @@
 
 {% block body %}
     {% if error %}
-        <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% if error.message is same as "Bad credentials." %}
+            <div class="alert alert-danger" role="alert">Les données de connexion ne correspondent à aucun utilisateur, réessaie!</div>
+        {% elseif error.message is same as "Invalid CSRF token." %}
+        <div class="alert alert-danger" role="alert">Jeton CSRF non valide.</div>
+        {% else %}
+            <div class="alert alert-danger" role="alert">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
     {% endif %}
-
     <form action="{{ path('app_login') }}" method="post">
         <div class="m-2">
             <label for="username" class="py-2 pe-3">Nom d'utilisateur :</label>
