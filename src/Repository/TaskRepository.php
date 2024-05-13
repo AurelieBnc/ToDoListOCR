@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Task;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,4 +46,56 @@ class TaskRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findTasksListIsDonePaginated(int $page, int $limit = 10): array
+    {
+        $limit = abs($limit);
+        $result = [];
+
+        $query = $this->createQueryBuilder('t')
+        ->orderBy('t.createdAt', 'ASC')
+        ->where('t.isDone = true')
+        ->setMaxResults($limit)
+        ->setFirstResult($page * $limit - $limit);
+
+        $paginator = new Paginator($query);
+        $data = $paginator->getQuery()->getResult();
+
+        if (empty($data)) {
+            return $result;
+        }
+        $pages = ceil($paginator->count() / $limit);
+        $result['data'] = $data;
+        $result['pages'] = $pages;
+        $result['page'] = $page;
+        $result['limit'] = $limit;
+
+        return $result;
+    }
+
+    public function findTasksListIsNotDonePaginated(int $page, int $limit = 10): array
+    {
+        $limit = abs($limit);
+        $result = [];
+
+        $query = $this->createQueryBuilder('t')
+        ->orderBy('t.createdAt', 'ASC')
+        ->where('t.isDone = false')
+        ->setMaxResults($limit)
+        ->setFirstResult($page * $limit - $limit);
+
+        $paginator = new Paginator($query);
+        $data = $paginator->getQuery()->getResult();
+
+        if (empty($data)) {
+            return $result;
+        }
+        $pages = ceil($paginator->count() / $limit);
+        $result['data'] = $data;
+        $result['pages'] = $pages;
+        $result['page'] = $page;
+        $result['limit'] = $limit;
+dump($result);
+        return $result;
+    }
 }
