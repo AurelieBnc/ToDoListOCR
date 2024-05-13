@@ -33,4 +33,16 @@ class TaskManager
 
         return $form;
     }
+
+    public function editTask(Request $request, Task $task): FormInterface
+    {
+        $form = $this->formFactory->create(TaskType::class, $task);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->taskRepository->update($task, true);
+        }
+
+        return $form;
+    }
 }

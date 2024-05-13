@@ -107,4 +107,9 @@ class TaskRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    public function update(Task $task, bool $flush = false): void
+    {
+        $this->add($task, $flush);
+    }
 }

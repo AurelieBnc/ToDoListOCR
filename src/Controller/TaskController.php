@@ -36,7 +36,7 @@ class TaskController extends AbstractController
         return $this->render('task/list.html.twig', ['tasks' => $this->taskRepository->findTasksListIsNotDonePaginated($page)]);
     }
 
-    #[Route(path: '/create', name: '_create')]
+    #[Route('/create', name: '_create')]
     public function createAction(Request $request): RedirectResponse|Response
     {
         $taskForm = $this->taskManager->createTask($request, $this->getUser());
@@ -51,6 +51,25 @@ class TaskController extends AbstractController
 
         return $this->render('task/create_task.html.twig', [
             'taskForm' => $taskForm,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: '_edit')]
+    public function editAction(Task $task, Request $request): RedirectResponse|Response
+    {
+        $taskForm = $this->taskManager->editTask($request, $task);
+
+        if ($taskForm->isSubmitted() && $taskForm->isValid()) {
+            $this->addFlash(
+                'success', 'La tâche a bien été mise à jour.'
+            );
+
+            return $this->redirectToRoute('tasks_list_is_not_done');
+        }
+
+        return $this->render('task/edit_task.html.twig', [
+            'taskForm' => $taskForm,
+            'task' => $task,
         ]);
     }
 }
