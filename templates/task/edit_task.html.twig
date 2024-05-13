@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        {{ form_start(taskForm, {'action' : path('tasks_edit', { 'id' : task.id })}) }}
+            {{ form_widget(taskForm) }}
+
+            <div class="row ms-auto col-md-3 my-3">
+                <button type="submit" class="btn btn-success">Modifier</button>
+            </div>
+        {{ form_end(taskForm) }}
+    </div>
+{% endblock %}
