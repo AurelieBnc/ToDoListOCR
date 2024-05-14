@@ -53,10 +53,9 @@
                 <div class="col-md-12">
                     {% for flash_message in app.session.flashBag.get('success') %}
                         <div class="alert alert-success" role="alert">
-                            <p>Superbe !</p> 
-                            <div>
-                                {{ flash_message }}
-                                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="fw-bold row d-flex justify-content-around">
+                                Superbe ! {{ flash_message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
                     {% endfor %}

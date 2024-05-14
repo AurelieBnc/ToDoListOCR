@@ -45,4 +45,9 @@ class TaskManager
 
         return $form;
     }
+
+    public function deleteTask(Task $task): void
+    {
+        $this->taskRepository->remove($task, true);
+    }
 }

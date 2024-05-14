@@ -78,4 +78,19 @@ class TaskController extends AbstractController
             'task' => $task,
         ]);
     }
+
+    #[Route(path: '/{id}/delete', name: '_delete')]
+    public function deleteTaskAction(Task $task, Request $request): RedirectResponse
+    {
+        $isDone = $task->getIsDone();
+        $this->taskManager->deleteTask($task);
+
+        $this->addFlash('success', 'La tâche a bien été supprimée !');
+
+        if ($isDone) {
+            return $this->redirectToRoute('tasks_list_is_done');
+        }
+
+        return $this->redirectToRoute('tasks_list_is_not_done');
+    }
 }
