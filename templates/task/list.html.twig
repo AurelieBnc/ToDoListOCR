@@ -16,13 +16,22 @@
             <div class="col-sm-4 col-lg-4 col-md-4">
                 <div class="img-thumbnail">
                     <div class="figure-caption">
-                        <h4><a href="{{ path('tasks_edit', {'id' : task.id }) }}" class="btn text-primary fw-bold ">{{ task.title }}</a>
-                        {% if task.isDone %}
-                            <span><i class="fa-solid fa-check ps-3"></i></span>
+                        <div>
+                            <h4><a href="{{ path('tasks_edit', {'id' : task.id }) }}" class="btn text-primary fw-bold ">{{ task.title }}</a>
+                                {% if task.isDone %}
+                                    <span><i class="fa-solid fa-check ps-3"></i></span>
+                                {% else %}
+                                    <span><i class="fa-solid fa-xmark ps-3"></i></span>
+                                {% endif %}</h4>
+                                <p class="p-2">{{ task.content }}</p>
+                        </div>
+                        <div class="d-flex justify-content-end pe-3 p-2 fst-italic fw-bold">
+                        {% if task.owner == null %}
+                            Anonyme
                         {% else %}
-                            <span><i class="fa-solid fa-xmark ps-3"></i></span>
-                        {% endif %}</h4>
-                        <p class="p-2">{{ task.content }}</p>
+                            {{ task.owner.username }}
+                        {% endif %}
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex flex-row justify-content-end mb-3">
