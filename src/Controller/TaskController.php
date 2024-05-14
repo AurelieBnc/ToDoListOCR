@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/tasks', name: 'tasks')]
 class TaskController extends AbstractController
@@ -21,6 +22,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/list-is-done', name: '_list_is_done')]
+    #[IsGranted('TASK_LIST')]
     public function listIsDoneAction(Request $request): Response
     {
         $taskListPaginated = null;
@@ -39,6 +41,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/list-is-not-done', name: '_list_is_not_done')]
+    #[IsGranted('TASK_LIST')]
     public function listIsNotDoneAction(Request $request): Response
     {
         $taskListPaginated = null;
@@ -57,6 +60,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/create', name: '_create')]
+    #[IsGranted('TASK_CREATE')]
     public function createAction(Request $request): RedirectResponse|Response
     {
         $taskForm = $this->taskManager->createTask($request, $this->getUser());
@@ -81,6 +85,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: '_edit')]
+    #[IsGranted('TASK_EDIT', 'task')]
     public function editAction(Task $task, Request $request): RedirectResponse|Response
     {
         $taskForm = $this->taskManager->editTask($request, $task);
@@ -103,6 +108,7 @@ class TaskController extends AbstractController
     }
 
     #[Route(path: '/{id}/delete', name: '_delete')]
+    #[IsGranted('TASK_DELETE', 'task')]
     public function deleteTaskAction(Task $task, Request $request): RedirectResponse
     {
         $isDone = $task->getIsDone();
@@ -118,6 +124,7 @@ class TaskController extends AbstractController
     }
 
     #[Route(path: '/{id}/toggle', name: '_toggle')]
+    #[IsGranted('TASK_TOGGLE', 'task')]
     public function toggleTaskAction(Task $task): RedirectResponse
     {
         $task = $this->taskManager->toggle($task);
