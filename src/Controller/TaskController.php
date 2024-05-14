@@ -45,7 +45,10 @@ class TaskController extends AbstractController
             $this->addFlash(
                 'success','La tâche a bien été ajoutée.'
             );
-
+            $isDone = $request->request->has('isDone') ? (bool)$request->request->get('isDone') : false;
+            if ($isDone) {
+                return $this->redirectToRoute('tasks_list_is_done');
+            }
             return $this->redirectToRoute('tasks_list_is_not_done');
         }
 
@@ -63,6 +66,9 @@ class TaskController extends AbstractController
             $this->addFlash(
                 'success', 'La tâche a bien été mise à jour.'
             );
+            if ($task->getIsDone()) {
+                return $this->redirectToRoute('tasks_list_is_done');
+            }
 
             return $this->redirectToRoute('tasks_list_is_not_done');
         }

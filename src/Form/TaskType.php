@@ -32,9 +32,10 @@ class TaskType extends AbstractType
                 'rows'=> 10,
             ],
         ])
-            ->add('isDone', CheckboxType::class, [
-                'required' => false,
-            ])
+        ->add('isDone', CheckboxType::class, [
+            'required' => false,
+            'data' => false,
+        ])
         ;
     }
 
