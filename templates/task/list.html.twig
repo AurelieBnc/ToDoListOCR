@@ -22,13 +22,13 @@
             </div>
             <div class="d-flex flex-row justify-content-end mb-3">
                 <form action="">
-                    <button class="btn btn-success btn-sm">
+                    <a href="{{ path('tasks_toggle', {'id' : task.id }) }}" class="btn btn-success btn-sm">
                         {% if not task.isDone %}
                             Marquer comme faite
                         {% else %}
                             Marquer non terminée
                         {% endif %}
-                    </button>
+                    </a>
                 </form>
                 <a onclick="return confirm('Es-tu sûr de vouloir supprimer cette tâche ?')"
                 href="{{ path('tasks_delete', {'id': task.id}) }}" class="btn btn-danger btn-sm"

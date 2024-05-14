@@ -50,4 +50,12 @@ class TaskManager
     {
         $this->taskRepository->remove($task, true);
     }
+
+    public function toggle(Task $task): Task
+    {
+        $task->toggle(!$task->getIsDone());
+        $this->taskRepository->update($task, true);
+
+        return $task;
+    }
 }

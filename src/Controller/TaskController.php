@@ -93,4 +93,24 @@ class TaskController extends AbstractController
 
         return $this->redirectToRoute('tasks_list_is_not_done');
     }
+
+    #[Route(path: '/{id}/toggle', name: '_toggle')]
+    public function toggleTaskAction(Task $task): RedirectResponse
+    {
+        $task = $this->taskManager->toggle($task);
+
+        if ($task->getIsDone()) {
+            $this->addFlash(
+                'success', 'La tâche a bien été marquée comme réalisée!'
+            );
+
+            return $this->redirectToRoute('tasks_list_is_done');
+        }
+
+        $this->addFlash(
+            'success', 'La tâche a bien été marquée comme non faite!'
+        );
+
+        return $this->redirectToRoute('tasks_list_is_not_done');
+    }
 }
