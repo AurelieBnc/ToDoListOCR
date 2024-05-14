@@ -23,17 +23,37 @@ class TaskController extends AbstractController
     #[Route('/list-is-done', name: '_list_is_done')]
     public function listIsDoneAction(Request $request): Response
     {
+        $taskListPaginated = null;
         $page = $request->query->getInt('page', 1);
+        $taskListPaginated = $this->taskRepository->findTasksListIsDonePaginated($page);
 
-        return $this->render('task/list.html.twig', ['tasks' => $this->taskRepository->findTasksListIsDonePaginated($page)]);
+        $pages = $taskListPaginated['pages'] ?? null;
+        if ( $page < 1  || $pages === null) {
+            throw $this->createNotFoundException('Numéro de page invalide');
+        }
+
+        return $this->render('task/list.html.twig', [
+            'tasks' => $taskListPaginated,
+            'flag' => 1
+        ]);
     }
 
     #[Route('/list-is-not-done', name: '_list_is_not_done')]
     public function listIsNotDoneAction(Request $request): Response
     {
+        $taskListPaginated = null;
         $page = $request->query->getInt('page', 1);
+        $taskListPaginated = $this->taskRepository->findTasksListIsNotDonePaginated($page);
 
-        return $this->render('task/list.html.twig', ['tasks' => $this->taskRepository->findTasksListIsNotDonePaginated($page)]);
+        $pages = $taskListPaginated['pages'] ?? null;
+        if ( $page < 1  || $pages === null) {
+            throw $this->createNotFoundException('Numéro de page invalide');
+        }
+
+        return $this->render('task/list.html.twig', [
+            'tasks' => $taskListPaginated,
+            'flag' => 0
+        ]);
     }
 
     #[Route('/create', name: '_create')]
@@ -45,10 +65,13 @@ class TaskController extends AbstractController
             $this->addFlash(
                 'success','La tâche a bien été ajoutée.'
             );
-            $isDone = $request->request->has('isDone') ? (bool)$request->request->get('isDone') : false;
-            if ($isDone) {
+            $data = $request->request->all();
+            $isDone = $data['task']['isDone'] ?? null;
+
+            if (isset($isDone)) {
                 return $this->redirectToRoute('tasks_list_is_done');
             }
+            
             return $this->redirectToRoute('tasks_list_is_not_done');
         }
 
