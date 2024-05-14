@@ -38,10 +38,14 @@
         <!-- Page Content -->
         <div class="container mt-3">
             <div class="column d-flex justify-content-between mb-3">
-                <a href="{{ path('users_create') }}" class="btn btn-primary">Créer un utilisateur</a>
-
+                {% if is_granted('USER_CREATE') %}
+                    <a href="{{ path('users_create') }}" class="btn btn-primary m-2">Créer un utilisateur</a>
+                {% endif %}
+                {% if is_granted('USER_LIST') %}
+                    <a href="{{ path('users_list') }}" class="btn btn-primary m-2">Liste utilisateurs</a>
+                {% endif %}
                 {% if app.user %}
-                <a href="{{ path('app_logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
+                    <a href="{{ path('app_logout') }}" class="ms-auto btn btn-danger">Se déconnecter</a>
                 {% endif %}
 
                 {% if not app.user and 'app_login' != app.request.attributes.get('_route') %}
