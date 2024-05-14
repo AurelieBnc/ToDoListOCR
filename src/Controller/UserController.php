@@ -10,6 +10,7 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/users', name: 'users')]
 class UserController extends AbstractController
@@ -21,6 +22,7 @@ class UserController extends AbstractController
     }
 
     #[Route('/list', name: '_list')]
+    #[IsGranted('USER_LIST')]
     public function getUserList(Request $request): Response 
     {
         $userListPaginated = null;
@@ -38,6 +40,7 @@ class UserController extends AbstractController
     }
     
     #[Route('/create', name: '_create')]
+    #[IsGranted('USER_CREATE')]
     public function createAction(Request $request): RedirectResponse|Response
     {
         $userForm = $this->userManager->createUser($request);
@@ -54,13 +57,13 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: '_edit')]
+    #[IsGranted('USER_EDIT', 'user')]
     public function editAction(User $user, Request $request): RedirectResponse|Response
     {
         $userForm = $this->userManager->editUser($request, $user);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
             $this->userRepository->update($user, true);
-
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('users_list');
@@ -70,10 +73,10 @@ class UserController extends AbstractController
     }
 
     #[Route(path: '/{id}/delete', name: '_delete')]
-    public function deleteTaskAction(User $user, Request $request): RedirectResponse
+    #[IsGranted('USER_DELETE', 'user')]
+    public function deleteTaskAction(User $user): RedirectResponse
     {
         $this->userManager->deleteUser($user);
-
         $this->addFlash('success', 'L\'utilisateur a bien été supprimé !');
 
         return $this->redirectToRoute('users_list');
