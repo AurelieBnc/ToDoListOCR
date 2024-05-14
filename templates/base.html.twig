@@ -28,7 +28,7 @@
         <nav class="navbar navbar-light navbar-fixed-top mt-0" style="background-color: #e3f2fd;" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                    <a class="navbar-brand text-info fw-bold" href="#">To Do List app</a>
+                    <a class="navbar-brand text-primary fw-bold" href="{{ path('app_home_page') }}">To Do List app</a>
 
                     <img src="{{ asset('img/Logo_OpenClassrooms.png') }}" alt="OpenClassrooms" />
                 </div>
@@ -53,10 +53,9 @@
                 <div class="col-md-12">
                     {% for flash_message in app.session.flashBag.get('success') %}
                         <div class="alert alert-success" role="alert">
-                            <p>Superbe !</p> 
-                            <div>
-                                {{ flash_message }}
-                                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="fw-bold row d-flex justify-content-around">
+                                Superbe ! {{ flash_message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
                     {% endfor %}
@@ -88,7 +87,7 @@
 
         <div class="container">
 
-            <hr>
+            <hr class="mt-5">
             <footer>
                 <div class="row">
                     <div class="col-lg-12">
@@ -99,7 +98,7 @@
 
         </div>
 
-        <script src="{{ asset('js/jquery.js') }}"></script>
+        {# <script src="{{ asset('js/jquery.js') }}"></script> #}
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
         <script src="https://kit.fontawesome.com/ea7977182c.js" crossorigin="anonymous"></script>
     </body>
