@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,7 +28,7 @@ class UserController extends AbstractController
     {
         $userListPaginated = null;
         $page = $request->query->getInt('page', 1);
-        $userListPaginated = $this->userRepository->findUsersListPaginated($page);
+        $userListPaginated = $this->userRepository->findByPagination($page);
 
         $pages = $userListPaginated['pages'] ?? null;
         if ( $page < 1  || $pages === null) {
@@ -43,9 +44,13 @@ class UserController extends AbstractController
     #[IsGranted('USER_CREATE')]
     public function createAction(Request $request): RedirectResponse|Response
     {
-        $userForm = $this->userManager->createUser($request);
+        $user = new User();
+
+        $userForm = $this->createForm(UserType::class, $user);
+        $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
+            $user = $this->userManager->createUser($user, $userForm->getData('plainPassword'));
             $this->addFlash('success', 'L\'utilisateur a bien été ajouté !');
 
             return $this->redirectToRoute('users_list');
@@ -60,10 +65,11 @@ class UserController extends AbstractController
     #[IsGranted('USER_EDIT', 'user')]
     public function editAction(User $user, Request $request): RedirectResponse|Response
     {
-        $userForm = $this->userManager->editUser($request, $user);
+        $userForm = $this->createForm(UserType::class, $user);
+        $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $this->userRepository->update($user, true);
+            $user = $this->userManager->editUser($user, $userForm->getData());
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('users_list');

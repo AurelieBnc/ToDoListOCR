@@ -21,42 +21,35 @@ class UserManager
     ) {
     }
 
-    public function createUser(Request $request): FormInterface
+    public function createUser(User $user,string $plainPassword): User
     {
-        $user = new User();
-        $userForm = $this->formFactory->create(UserType::class, $user);
-        $userForm->handleRequest($request);
-
-        if ($userForm->isSubmitted() && $userForm->isValid()) {
         $user->setPassword(
             $this->userPasswordHasher->hashPassword(
                 $user,
-                $userForm->get('plainPassword')->getData()
+                $plainPassword
             )
         );
+        $this->userRepository->add($user, flush:true);
 
-            $this->userRepository->add($user, true);
-        }
-
-        return $userForm;
+        return $user;
     }
 
-    public function editUser(Request $request, User $user): FormInterface
+    public function editUser(User $user, User $userUpdated): User
     {
-        $userForm = $this->formFactory->create(UserType::class, $user);
-        $userForm->handleRequest($request);
-
-        if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $user->setPassword(
-                $this->userPasswordHasher->hashPassword(
-                    $user,
-                    $userForm->get('plainPassword')->getData()
-                )
-            );
-            $this->userRepository->update($user, true);
+        $user->setPassword(
+            $this->userPasswordHasher->hashPassword(
+                $user,
+                $userUpdated->getPassword()
+            )
+        );
+        $user->setUsername($userUpdated->getUsername());
+        $user->setEmail($userUpdated->getEmail());
+        if(null === $userUpdated->getRoles()){
+            $user->setRoles($userUpdated->getRoles());
         }
+        $this->userRepository->update($user, flush:true);
 
-        return $userForm;
+        return $user;
     }
 
     public function deleteUser(User $user): void

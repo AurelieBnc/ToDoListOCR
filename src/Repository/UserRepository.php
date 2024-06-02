@@ -39,7 +39,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function findUsersListPaginated(int $page, int $limit = 15): array
+    public function findByPagination(int $page, int $limit = 15): array
     {
         $limit = abs($limit);
         $result = [];
@@ -52,7 +52,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $paginator = new Paginator($query);
         $data = $paginator->getQuery()->getResult();
 
+        //possibilité DTO
         if (empty($data)) {
+            $result['data'] = [];
+            $result['pages'] = 1;
             return $result;
         }
         $pages = ceil($paginator->count() / $limit);
