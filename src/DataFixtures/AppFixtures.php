@@ -19,6 +19,7 @@ class AppFixtures extends Fixture
     {
         $this->userPasswordHasher = $userPasswordHasher;
     }
+
     public function load(ObjectManager $manager): void
     {
         $userList = [];
@@ -51,7 +52,7 @@ class AppFixtures extends Fixture
         $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
         $manager->persist($userAdmin); 
 
-        // create 20 tasks
+        // Création de 20 tasks
         $taskFixture = new TaskFixtures();
         $taskContentList = $taskFixture->TaskContentList();
 

@@ -14,6 +14,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            name: secured_area
             lazy: true
             provider: app_user_provider
             form_login:
