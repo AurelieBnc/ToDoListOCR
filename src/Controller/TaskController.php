@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Form\TaskType;
 use App\Manager\TaskManager;
 use App\Repository\TaskRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -63,9 +64,12 @@ class TaskController extends AbstractController
     #[IsGranted('TASK_CREATE')]
     public function createAction(Request $request): RedirectResponse|Response
     {
-        $taskForm = $this->taskManager->createTask($request, $this->getUser());
+        $task = new Task();
+        $form = $this->createForm(TaskType::class, $task);
+        $form->handleRequest($request);
 
-        if ($taskForm->isSubmitted() && $taskForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $task = $this->taskManager->createTask($task, $this->getUser());
             $this->addFlash(
                 'success','La tâche a bien été ajoutée.'
             );
@@ -80,17 +84,20 @@ class TaskController extends AbstractController
         }
 
         return $this->render('task/create_task.html.twig', [
-            'taskForm' => $taskForm,
+            'taskForm' => $form,
         ]);
     }
 
     #[Route('/{id}/edit', name: '_edit')]
     #[IsGranted('TASK_EDIT', 'task')]
     public function editAction(Task $task, Request $request): RedirectResponse|Response
-    {
-        $taskForm = $this->taskManager->editTask($request, $task);
+    {        
+        $form = $this->createForm(TaskType::class, $task);
+        $form->handleRequest($request);
 
-        if ($taskForm->isSubmitted() && $taskForm->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            $task = $this->taskManager->editTask($task);
+
             $this->addFlash(
                 'success', 'La tâche a bien été mise à jour.'
             );
@@ -102,7 +109,7 @@ class TaskController extends AbstractController
         }
 
         return $this->render('task/edit_task.html.twig', [
-            'taskForm' => $taskForm,
+            'taskForm' => $form,
             'task' => $task,
         ]);
     }

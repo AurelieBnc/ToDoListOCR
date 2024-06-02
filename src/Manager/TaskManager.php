@@ -20,30 +20,19 @@ class TaskManager
     ) {
     }
 
-    public function createTask(Request $request, User $user): FormInterface
+    public function createTask(Task $task, User $user): Task
     {
-        $task = new Task();
-        $form = $this->formFactory->create(TaskType::class, $task);
-        $form->handleRequest($request);
+        $task->setOwner($user);
+        $this->taskRepository->add($task, true);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->addTask($task);
-            $this->taskRepository->add($task, true);
-        }
-
-        return $form;
+        return $task;
     }
 
-    public function editTask(Request $request, Task $task): FormInterface
+    public function editTask(Task $task): Task
     {
-        $form = $this->formFactory->create(TaskType::class, $task);
-        $form->handleRequest($request);
+        $this->taskRepository->update($task, true);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->taskRepository->update($task, true);
-        }
-
-        return $form;
+        return $task;
     }
 
     public function deleteTask(Task $task): void
