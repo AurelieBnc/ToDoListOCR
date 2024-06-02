@@ -59,7 +59,8 @@
                 {% set path = 'tasks_list_is_not_done' %}
             {% endif %}
             {% set pages = tasks.pages %}
-            {% set currentPage = tasks.page %}
+            {# {% set currentPage = tasks.page %} #}
+            {% set currentPage = app.request.get('page') %}
             {% include 'partials/pagination.html.twig' %}
 
         </div>

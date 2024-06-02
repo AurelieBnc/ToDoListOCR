@@ -41,7 +41,7 @@
 
             {% set path = 'users_list' %}
             {% set pages = users.pages %}
-            {% set currentPage = users.page %}
+            {% set currentPage = app.request.get('page') %}
             {% include 'partials/pagination.html.twig' %}
             
         </div>

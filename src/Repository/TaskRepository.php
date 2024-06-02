@@ -22,9 +22,9 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
-    public function findTasksListIsDonePaginated(int $page, int $limit = 12): array
+    public function findTasksListIsDonePaginated(int $page): array
     {
-        $limit = abs($limit);
+        $limit = 12;
         $result = [];
 
         $query = $this->createQueryBuilder('t')
@@ -42,15 +42,13 @@ class TaskRepository extends ServiceEntityRepository
         $pages = ceil($paginator->count() / $limit);
         $result['data'] = $data;
         $result['pages'] = $pages;
-        $result['page'] = $page;
-        $result['limit'] = $limit;
 
         return $result;
     }
 
-    public function findTasksListIsNotDonePaginated(int $page, int $limit = 12): array
+    public function findTasksListIsNotDonePaginated(int $page): array
     {
-        $limit = abs($limit);
+        $limit = 12;
         $result = [];
 
         $query = $this->createQueryBuilder('t')
@@ -68,8 +66,6 @@ class TaskRepository extends ServiceEntityRepository
         $pages = ceil($paginator->count() / $limit);
         $result['data'] = $data;
         $result['pages'] = $pages;
-        $result['page'] = $page;
-        $result['limit'] = $limit;
 
         return $result;
     }
