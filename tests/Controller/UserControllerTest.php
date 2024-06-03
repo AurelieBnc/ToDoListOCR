@@ -55,12 +55,77 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(3, $crawler->filter('.user'));
     }
 
+    /**
+     * @expectedException     NotFoundHttpException
+     * @expectedExceptionMessage Numéro de page invalide
+     */
     public function testUserListWithPageUnvalid(): void
     {
         $crawler = $this->client->request('GET', '/users/list?page=0');
         $response = $this->client->getResponse();
 
+		// $catched = false;
+		
+		// try {
+        //     $crawler = $this->client->request('GET', '/users/list?page=0');
+        //     $response = $this->client->getResponse();
+		// } catch(NotFoundHttpException $badInt) {
+		// 	$catched = true;
+		// }
+		// $this->assertTrue($catched);
+	
+        // $this->expectException('Exception');
+        // throw new NotFoundHttpException('Numéro de page invalide');
+
         $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+    }
+
+    public function testCreateUserWithUnauthorizedAccess(): void
+    {
+        $this->client->loginUser($this->user, 'secured_area');
+
+        $this->client->request('GET', '/users/create');
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+    }
+
+    public function testCreateUserWithAuthorizedAccess(): void
+    {
+        $this->client->loginUser($this->admin, 'secured_area');
+
+        $this->client->request('GET', '/users/create');
+        $response = $this->client->getResponse();
+ 
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSelectorTextContains('button', 'Ajouter');
+    }
+
+    public function testCreateUsertWithData()
+    {   
+        $this->client->followRedirects();
+        
+        $this->client->loginUser($this->admin, 'secured_area'); 
+
+        $crawler = $this->client->request('GET', '/users/create');
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSelectorTextContains('h1', 'Créer un utilisateur');
+        $this->assertSelectorTextContains('button', 'Ajouter');
+
+        $form = $crawler->selectButton('Ajouter')->form();
+        $form['user[username]'] = 'Username';
+        $form['user[email]'] = 'username@todolist.fr';
+        $form['user[plainPassword][first]'] = 'password';
+        $form['user[plainPassword][second]'] = 'password';
+        $form['user[roles]']->select(1);
+
+        $crawler = $this->client->submit($form);
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
+        $this->assertCount(4, $crawler->filter('.user'));
     }
 
     public function testEditUserWithUnauthorizedAccess(): void
@@ -100,7 +165,7 @@ class UserControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
-        $this->assertCount(3, $crawler->filter('.user'));
+        $this->assertCount(4, $crawler->filter('.user'));
     }
 
     public function testUserDeleteWithUnauthorizedAccess()
@@ -125,6 +190,6 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
 
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
-        $this->assertCount(2, $crawler->filter('.user'));
+        $this->assertCount(3, $crawler->filter('.user'));
     }
 }
