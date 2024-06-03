@@ -52,7 +52,7 @@ class AppFixtures extends Fixture
         $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
         $manager->persist($userAdmin); 
 
-        // Création de 20 tasks
+        // Création de 20 tasks avec Owner
         $taskFixture = new TaskFixtures();
         $taskContentList = $taskFixture->TaskContentList();
 
@@ -72,6 +72,95 @@ class AppFixtures extends Fixture
             $manager->persist($task);
         }
 
+        //Création de 5 tasks anonyme
+        for ($i = 0; $i < 5; $i++) {
+            $randomCreatedAt = (new DateFixtures())->randDate();
+
+            $randomContentIndex = array_rand($taskContentList);
+            $randomContent = $taskContentList[$randomContentIndex];
+
+            $task = new Task();
+            $task->setTitle('Titre tache anonyme '.$i);
+            $task->setContent($randomContent);
+            // /** @var DateTimeImmutable $randomCreatedAt */
+            $task->setCreatedAt($randomCreatedAt);
+            $task->setIsDone((bool)rand(0,1));
+            $manager->persist($task);
+        }
+
+        // Création de 5 tasks stables
+        //Utilisateur 1
+        $randomCreatedAt = (new DateFixtures())->randDate();
+
+        $randomContentIndex = array_rand($taskContentList);
+        $randomContent = $taskContentList[$randomContentIndex];
+
+        $task = new Task();
+        $task->setTitle('Titre tache utilisateur 1');
+        $task->setContent($randomContent);
+        // /** @var DateTimeImmutable $randomCreatedAt */
+        $task->setCreatedAt($randomCreatedAt);
+        $task->setOwner($firstUser);
+        $task->setIsDone(1);
+        $manager->persist($task);
+
+        $randomCreatedAt = (new DateFixtures())->randDate();
+
+        $randomContentIndex = array_rand($taskContentList);
+        $randomContent = $taskContentList[$randomContentIndex];
+
+        $task = new Task();
+        $task->setTitle('Titre tache utilisateur 1 à éditer');
+        $task->setContent($randomContent);
+        // /** @var DateTimeImmutable $randomCreatedAt */
+        $task->setCreatedAt($randomCreatedAt);
+        $task->setOwner($firstUser);
+        $task->setIsDone(1);
+        $manager->persist($task);
+
+        $randomCreatedAt = (new DateFixtures())->randDate();
+
+        $randomContentIndex = array_rand($taskContentList);
+        $randomContent = $taskContentList[$randomContentIndex];
+
+        $task = new Task();
+        $task->setTitle('Titre tache utilisateur 1 à supprimer');
+        $task->setContent($randomContent);
+        // /** @var DateTimeImmutable $randomCreatedAt */
+        $task->setCreatedAt($randomCreatedAt);
+        $task->setOwner($firstUser);
+        $task->setIsDone(1);
+        $manager->persist($task);
+
+        //Utilisateur 2
+        $randomCreatedAt = (new DateFixtures())->randDate();
+
+        $randomContentIndex = array_rand($taskContentList);
+        $randomContent = $taskContentList[$randomContentIndex];
+
+        $task = new Task();
+        $task->setTitle('Titre tache utilisateur 2');
+        $task->setContent($randomContent);
+        // /** @var DateTimeImmutable $randomCreatedAt */
+        $task->setCreatedAt($randomCreatedAt);
+        $task->setOwner($secondUser);
+        $task->setIsDone(0);
+        $manager->persist($task);
+
+        $randomCreatedAt = (new DateFixtures())->randDate();
+
+        $randomContentIndex = array_rand($taskContentList);
+        $randomContent = $taskContentList[$randomContentIndex];
+
+        $task = new Task();
+        $task->setTitle('Titre tache utilisateur 2 à supprimer');
+        $task->setContent($randomContent);
+        // /** @var DateTimeImmutable $randomCreatedAt */
+        $task->setCreatedAt($randomCreatedAt);
+        $task->setOwner($secondUser);
+        $task->setIsDone(0);
+        $manager->persist($task);
+        
         $manager->flush();
     }
 }
