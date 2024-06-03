@@ -34,7 +34,6 @@ class UserController extends AbstractController
         if ( $page < 1  || $pages === null) {
             throw $this->createNotFoundException('Numéro de page invalide');
         }
-
         return $this->render('user/user_list.html.twig', [
             'users' => $userListPaginated,
         ]);
@@ -45,17 +44,17 @@ class UserController extends AbstractController
     public function createAction(Request $request): RedirectResponse|Response
     {
         $user = new User();
-
         $userForm = $this->createForm(UserType::class, $user);
         $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $user = $this->userManager->createUser($user, $userForm->getData('plainPassword'));
+            $plainPassword = $userForm->get('plainPassword')->getData();
+
+            $user = $this->userManager->createUser($user, $plainPassword);
             $this->addFlash('success', 'L\'utilisateur a bien été ajouté !');
 
             return $this->redirectToRoute('users_list');
         }
-
         return $this->render('user/create_user.html.twig', [
             'userForm' => $userForm->createView(),
         ]);
@@ -74,7 +73,6 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('users_list');
         }
-
         return $this->render('user/edit_user.html.twig', ['userForm' => $userForm->createView(), 'user' => $user]);
     }
 

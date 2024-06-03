@@ -21,7 +21,7 @@ class UserManager
     ) {
     }
 
-    public function createUser(User $user,string $plainPassword): User
+    public function createUser(User $user, string $plainPassword): User
     {
         $user->setPassword(
             $this->userPasswordHasher->hashPassword(
