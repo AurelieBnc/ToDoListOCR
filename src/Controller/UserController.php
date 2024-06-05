@@ -68,7 +68,8 @@ class UserController extends AbstractController
         $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $user = $this->userManager->editUser($user, $userForm->getData());
+            $plainPassword = $userForm->get('plainPassword')->getData();
+            $user = $this->userManager->editUser($user, $plainPassword);
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('users_list');

@@ -34,16 +34,14 @@ class UserManager
         return $user;
     }
 
-    public function editUser(User $user, User $userUpdated): User
-    {
-        $this->userRepository->upgradePassword($user,$this->userPasswordHasher->hashPassword(
+    public function editUser(User $user, string $plainPassword): User
+    {        
+        $newPasswordHashed = $this->userPasswordHasher->hashPassword(
             $user,
-            $userUpdated->getPassword()
-        ));
-        $user->setUsername($userUpdated->getUsername());
-        $user->setEmail($userUpdated->getEmail());
-        $user->setRoles($userUpdated->getRoles());
-
+            $plainPassword
+        );
+        
+        $this->userRepository->upgradePassword($user, $newPasswordHashed);
         $this->userRepository->update($user, flush:true);
 
         return $user;
