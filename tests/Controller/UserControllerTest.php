@@ -52,30 +52,13 @@ class UserControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
-        $this->assertCount(3, $crawler->filter('.user'));
+        $this->assertCount(4, $crawler->filter('.user'));
     }
 
-    /**
-     * @expectedException     NotFoundHttpException
-     * @expectedExceptionMessage Numéro de page invalide
-     */
     public function testUserListWithPageUnvalid(): void
     {
-        $crawler = $this->client->request('GET', '/users/list?page=0');
+        $this->client->request('GET', '/users/list?page=0');
         $response = $this->client->getResponse();
-
-		// $catched = false;
-		
-		// try {
-        //     $crawler = $this->client->request('GET', '/users/list?page=0');
-        //     $response = $this->client->getResponse();
-		// } catch(NotFoundHttpException $badInt) {
-		// 	$catched = true;
-		// }
-		// $this->assertTrue($catched);
-	
-        // $this->expectException('Exception');
-        // throw new NotFoundHttpException('Numéro de page invalide');
 
         $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
     }
@@ -125,7 +108,7 @@ class UserControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
-        $this->assertCount(4, $crawler->filter('.user'));
+        $this->assertCount(5, $crawler->filter('.user'));
     }
 
     public function testEditUserWithUnauthorizedAccess(): void
@@ -165,7 +148,7 @@ class UserControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
-        $this->assertCount(4, $crawler->filter('.user'));
+        $this->assertCount(5, $crawler->filter('.user'));
     }
 
     public function testUserDeleteWithUnauthorizedAccess()
@@ -190,6 +173,6 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
 
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
-        $this->assertCount(3, $crawler->filter('.user'));
+        $this->assertCount(4, $crawler->filter('.user'));
     }
 }

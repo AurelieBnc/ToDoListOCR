@@ -6,10 +6,8 @@ use App\Entity\Task;
 use App\Entity\User;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
-use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class TaskControllerTest extends WebTestCase
@@ -19,6 +17,7 @@ class TaskControllerTest extends WebTestCase
     private UserRepository $userRepository;
     private User $user;
     private User $admin;
+    private User $userWithoutRole;
     private Task $taskUser1;
     private Task $taskUser2;
     private Task $task;
@@ -45,6 +44,8 @@ class TaskControllerTest extends WebTestCase
  
         $user = $this->userRepository->findOneByEmail('user1@todolist.fr');
         $this->user = $user;
+        $user = $this->userRepository->findOneByEmail('user3@todolist.fr');
+        $this->userWithoutRole = $user;
         $admin = $this->userRepository->findOneByEmail('admin@todolist.fr');
         $this->admin = $admin;
         
@@ -71,6 +72,17 @@ class TaskControllerTest extends WebTestCase
  
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('button', 'Ajouter');
+    }
+
+    public function testCreateTasktWithDataWithUserWithoutRole()
+    {   
+        $this->client->followRedirects();
+        
+        $this->client->loginUser($this->userWithoutRole, 'secured_area'); 
+        $this->client->request('GET', '/tasks/create');
+        $response = $this->client->getResponse();
+ 
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
     public function testCreateTasktWithData()

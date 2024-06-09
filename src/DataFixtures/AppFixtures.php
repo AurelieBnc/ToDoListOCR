@@ -11,6 +11,9 @@ use App\DataFixtures\DateFixtures;
 use App\DataFixtures\TaskFixtures;
 use DateTimeImmutable;
 
+/**
+ * @codeCoverageIgnore
+ */
 class AppFixtures extends Fixture
 {
     private $userPasswordHasher;
@@ -43,6 +46,16 @@ class AppFixtures extends Fixture
         $manager->persist($secondUser);
 
         $userList[] = $secondUser;
+
+        //création d'un user sans role
+        $otherUser = new User();
+        $otherUser->setUsername("User3");
+        $otherUser->setEmail("user3@todolist.fr");
+        $otherUser->setRoles([null]);
+        $otherUser->setPassword($this->userPasswordHasher->hashPassword($otherUser, "password"));
+        $manager->persist($otherUser);
+
+        $userList[] = $otherUser;
         
         // Création d'un user admin
         $userAdmin = new User();
