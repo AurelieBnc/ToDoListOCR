@@ -9,10 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserControllerTest extends WebTestCase
-{    //public static function setUpBeforeClass(): void => pour charge une fois au début et garder le dérouler // pour le fonctionnel
-    //rechercher comment charger la base de données dans le setup::beforeClass
-    // use FixturesTrait;
-
+{
     private KernelBrowser $client;
     private UserRepository $userRepository;
     private User $user;

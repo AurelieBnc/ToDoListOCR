@@ -23,12 +23,8 @@ class UserType extends AbstractType
             'required' => true,
             'label' => 'Nom d\'utilisateur', 
             'label_attr' =>['class' => 'fw-bold'],
-            'attr' => [
-                'placeholder' => 'Comment va-t-on t\'appeler?',
-            ],
             'constraints' => [
-                new Assert\NotBlank([
-                    'message' => 'Merci de renseigner votre pseudo.',]) 
+                new Assert\NotBlank
             ],
         ])
         ->add('roles', ChoiceType::class, [
@@ -47,14 +43,9 @@ class UserType extends AbstractType
         ->add('email', EmailType::class, [
             'label' => 'Adresse email',
             'label_attr' =>['class' => 'fw-bold'],
-            'attr' => [
-                'placeholder' => 'Indiques ton adresse mail',
-            ],
             'required' => true,
             'constraints' => [
-                new Assert\NotBlank([
-                    'message' => 'Merci de renseigner ton Email.',
-                    ]) 
+                new Assert\NotBlank
             ],
         ])
         ->add('plainPassword', RepeatedType::class, [
@@ -65,7 +56,6 @@ class UserType extends AbstractType
                 //     new Assert\Length([
                 //         'min' => 12,
                 //         'minMessage' => 'Le mot de passe doit contenir au moins 12 caractères.',
-                //         // max length allowed by Symfony for security reasons
                 //         'max' => 4096,
                 //     ]),
                 //     // Password must contain at least a upper and lower case
@@ -110,15 +100,12 @@ class UserType extends AbstractType
         ])
         ;
 
-        // For the user role
         $builder->get('roles')
             ->addModelTransformer(new CallbackTransformer(
                 function ($tagsAsArray) {
-                    // transform the array to a string
                     return $tagsAsArray;
                 },
                 function ($tagsAsString) {
-                    // transform the string back to an array
                     return [$tagsAsString];
                 }
             ))
