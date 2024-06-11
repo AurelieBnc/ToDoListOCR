@@ -33,8 +33,14 @@ class UserVoter extends Voter
         $userRoles = $user->getRoles();
 
         if (in_array('ROLE_ADMIN', $userRoles)) {
-            return $attribute === self::CREATE || $attribute === self::EDIT || $attribute === self::DELETE || $attribute === self::LIST
-            ?? false;
+            switch ($attribute) {
+                case self::DELETE:
+                case self::EDIT:
+                case self::LIST:
+                case self::CREATE:
+                    return true;
+                    break;
+            }
         }
 
         return false;
