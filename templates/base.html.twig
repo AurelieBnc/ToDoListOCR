@@ -42,7 +42,7 @@
                     <a href="{{ path('users_create') }}" class="btn btn-primary m-2">Créer un utilisateur</a>
                 {% endif %}
                 {% if is_granted('USER_LIST') %}
-                    <a href="{{ path('users_list') }}" class="btn btn-primary m-2">Liste utilisateurs</a>
+                    <a href="{{ path('users_list', {'page' : 1}) }}" class="btn btn-primary m-2">Liste utilisateurs</a>
                 {% endif %}
                 {% if app.user %}
                     <a href="{{ path('app_logout') }}" class="m-2 ms-auto btn btn-danger">Se déconnecter</a>

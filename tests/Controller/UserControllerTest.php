@@ -60,7 +60,7 @@ class UserControllerTest extends WebTestCase
         $this->client->request('GET', '/users/list?page=0');
         $response = $this->client->getResponse();
 
-        $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        $this->assertResponseIsSuccessful();
     }
 
     public function testCreateUserWithUnauthorizedAccess(): void

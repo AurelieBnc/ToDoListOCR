@@ -9,18 +9,23 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\DataFixtures\DateFixtures;
 use App\DataFixtures\TaskFixtures;
-use DateTimeImmutable;
+use App\Enum\TaskStatus;
 
 /**
  * @codeCoverageIgnore
  */
 class AppFixtures extends Fixture
 {
+    private $listStatus;
     private $userPasswordHasher;
     
     public function __construct(UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userPasswordHasher = $userPasswordHasher;
+        $this->listStatus = [
+            TaskStatus::IsDone,
+            TaskStatus::Todo
+        ];
     }
 
     public function load(ObjectManager $manager): void
@@ -71,9 +76,10 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < 35; $i++) {
             $randomCreatedAt = (new DateFixtures())->randDate();
-
             $randomContentIndex = array_rand($taskContentList);
             $randomContent = $taskContentList[$randomContentIndex];
+            $randomStatusIndex = array_rand($this->listStatus);
+            $randomStatus = $this->listStatus[$randomStatusIndex];
 
             $task = new Task();
             $task->setTitle('Titre tache '.$i);
@@ -81,7 +87,8 @@ class AppFixtures extends Fixture
             // /** @var DateTimeImmutable $randomCreatedAt */
             $task->setCreatedAt($randomCreatedAt);
             $task->setOwner($userList[array_rand($userList)]);
-            $task->setIsDone((bool)rand(0,1));
+            $task->setStatus($randomStatus);
+            
             $manager->persist($task);
         }
 
@@ -91,13 +98,16 @@ class AppFixtures extends Fixture
 
             $randomContentIndex = array_rand($taskContentList);
             $randomContent = $taskContentList[$randomContentIndex];
+            $randomStatusIndex = array_rand($this->listStatus);
+            $randomStatus = $this->listStatus[$randomStatusIndex];
 
             $task = new Task();
             $task->setTitle('Titre tache anonyme '.$i);
             $task->setContent($randomContent);
             // /** @var DateTimeImmutable $randomCreatedAt */
             $task->setCreatedAt($randomCreatedAt);
-            $task->setIsDone((bool)rand(0,1));
+            $task->setStatus($randomStatus);
+            
             $manager->persist($task);
         }
 
@@ -114,7 +124,8 @@ class AppFixtures extends Fixture
         // /** @var DateTimeImmutable $randomCreatedAt */
         $task->setCreatedAt($randomCreatedAt);
         $task->setOwner($firstUser);
-        $task->setIsDone(1);
+        $task->setStatus(TaskStatus::IsDone);
+
         $manager->persist($task);
 
         $randomCreatedAt = (new DateFixtures())->randDate();
@@ -128,7 +139,8 @@ class AppFixtures extends Fixture
         // /** @var DateTimeImmutable $randomCreatedAt */
         $task->setCreatedAt($randomCreatedAt);
         $task->setOwner($firstUser);
-        $task->setIsDone(1);
+        $task->setStatus(TaskStatus::IsDone);
+
         $manager->persist($task);
 
         $randomCreatedAt = (new DateFixtures())->randDate();
@@ -142,7 +154,8 @@ class AppFixtures extends Fixture
         // /** @var DateTimeImmutable $randomCreatedAt */
         $task->setCreatedAt($randomCreatedAt);
         $task->setOwner($firstUser);
-        $task->setIsDone(1);
+        $task->setStatus(TaskStatus::IsDone);
+
         $manager->persist($task);
 
         //Utilisateur 2
@@ -157,7 +170,8 @@ class AppFixtures extends Fixture
         // /** @var DateTimeImmutable $randomCreatedAt */
         $task->setCreatedAt($randomCreatedAt);
         $task->setOwner($secondUser);
-        $task->setIsDone(0);
+        $task->setStatus(TaskStatus::Todo);
+
         $manager->persist($task);
 
         $randomCreatedAt = (new DateFixtures())->randDate();
@@ -171,7 +185,8 @@ class AppFixtures extends Fixture
         // /** @var DateTimeImmutable $randomCreatedAt */
         $task->setCreatedAt($randomCreatedAt);
         $task->setOwner($secondUser);
-        $task->setIsDone(0);
+        $task->setStatus(TaskStatus::Todo);
+
         $manager->persist($task);
         
         $manager->flush();

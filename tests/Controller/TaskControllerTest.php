@@ -48,8 +48,6 @@ class TaskControllerTest extends WebTestCase
         $this->userWithoutRole = $user;
         $admin = $this->userRepository->findOneByEmail('admin@todolist.fr');
         $this->admin = $admin;
-        
-        // $this->client->loginUser($this->admin, 'secured_area');
     }
 
     public function testCreateTaskWithUnauthorizedAccess(): void
@@ -100,7 +98,7 @@ class TaskControllerTest extends WebTestCase
         $form = $crawler->selectButton('Ajouter')->form();
         $form['task[title]'] = 'Title task create';
         $form['task[content]'] = 'Content of task';
-        $form['task[isDone]'] = false;
+        $form['task[status]'] = 'todo';
 
         $crawler = $this->client->submit($form);
 

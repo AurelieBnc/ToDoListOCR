@@ -7,6 +7,7 @@ use App\Form\TaskType;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use App\Enum\TaskStatus;
 
 /**
  * Unit testUnit test of the TaskType form.
@@ -23,6 +24,7 @@ class TaskTypeTest extends TypeTestCase
         $formData = [
             'title' => 'A title',
             'content' => 'A great content!',
+            'status' => TaskStatus::IsDone
         ];
 
         // $objectToCompare will retrieve data from the form submission
@@ -32,6 +34,7 @@ class TaskTypeTest extends TypeTestCase
         $task = new Task();
         $task->setTitle('A title');
         $task->setContent('A great content!');
+        $task->setStatus(TaskStatus::IsDone);
 
         $form->submit($formData);
         $this->assertTrue($form->isSynchronized());

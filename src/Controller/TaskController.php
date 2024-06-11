@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Enum\TaskStatus;
 use App\Form\TaskType;
 use App\Manager\TaskManager;
 use App\Repository\TaskRepository;
@@ -22,13 +23,12 @@ class TaskController extends AbstractController
     ) {
     }
 
-    #[Route('/list-is-done', name: '_list_is_done')]
+    #[Route('/_list/{status}/{page}', name: '_list')]
     #[IsGranted('TASK_LIST')]
-    public function listIsDoneAction(Request $request): Response
+    public function listAction(TaskStatus $status, int $page): Response
     {
         $taskListPaginated = null;
-        $page = $request->query->getInt('page', 1);
-        $taskListPaginated = $this->taskRepository->findTasksListIsDonePaginated($page);
+        $taskListPaginated = $this->taskRepository->findByPagination($page, $status);
 
         $pages = $taskListPaginated['pages'] ?? null;
         if ( $page < 1  || $pages === null) {
@@ -36,27 +36,8 @@ class TaskController extends AbstractController
         }
 
         return $this->render('task/list.html.twig', [
+            'status' => $status,
             'tasks' => $taskListPaginated,
-            'flag' => 1
-        ]);
-    }
-
-    #[Route('/list-is-not-done', name: '_list_is_not_done')]
-    #[IsGranted('TASK_LIST')]
-    public function listIsNotDoneAction(Request $request): Response
-    {
-        $taskListPaginated = null;
-        $page = $request->query->getInt('page', 1);
-        $taskListPaginated = $this->taskRepository->findTasksListIsNotDonePaginated($page);
-
-        $pages = $taskListPaginated['pages'] ?? null;
-        if ( $page < 1  || $pages === null) {
-            throw $this->createNotFoundException('Numéro de page invalide');
-        }
-
-        return $this->render('task/list.html.twig', [
-            'tasks' => $taskListPaginated,
-            'flag' => 0
         ]);
     }
 
@@ -73,14 +54,9 @@ class TaskController extends AbstractController
             $this->addFlash(
                 'success','La tâche a bien été ajoutée.'
             );
-            $data = $request->request->all();
-            $isDone = $data['task']['isDone'] ?? null;
-
-            if (isset($isDone)) {
-                return $this->redirectToRoute('tasks_list_is_done');
-            }
+            $status = $this->taskManager->convertStatusTaskToString($task->getStatus());
             
-            return $this->redirectToRoute('tasks_list_is_not_done');
+            return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
         }
 
         return $this->render('task/create_task.html.twig', [
@@ -101,11 +77,9 @@ class TaskController extends AbstractController
             $this->addFlash(
                 'success', 'La tâche a bien été mise à jour.'
             );
-            if ($task->getIsDone()) {
-                return $this->redirectToRoute('tasks_list_is_done');
-            }
-
-            return $this->redirectToRoute('tasks_list_is_not_done');
+            $status = $this->taskManager->convertStatusTaskToString($task->getStatus());
+            
+            return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
         }
 
         return $this->render('task/edit_task.html.twig', [
@@ -118,16 +92,14 @@ class TaskController extends AbstractController
     #[IsGranted('TASK_DELETE', 'task')]
     public function deleteTaskAction(Task $task, Request $request): RedirectResponse
     {
-        $isDone = $task->getIsDone();
+        $isDone = $task->getStatus();
         $this->taskManager->deleteTask($task);
 
         $this->addFlash('success', 'La tâche a bien été supprimée !');
 
-        if ($isDone) {
-            return $this->redirectToRoute('tasks_list_is_done');
-        }
-
-        return $this->redirectToRoute('tasks_list_is_not_done');
+        $status = $this->taskManager->convertStatusTaskToString($task->getStatus());
+            
+        return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
     }
 
     #[Route(path: '/{id}/toggle', name: '_toggle')]
@@ -135,19 +107,18 @@ class TaskController extends AbstractController
     public function toggleTaskAction(Task $task): RedirectResponse
     {
         $task = $this->taskManager->toggle($task);
+        $status = $this->taskManager->convertStatusTaskToString($task->getStatus());
 
-        if ($task->getIsDone()) {
+        if ($status === 'isDone') {
             $this->addFlash(
                 'success', 'La tâche a bien été marquée comme réalisée!'
             );
-
-            return $this->redirectToRoute('tasks_list_is_done');
+        } else {
+            $this->addFlash(
+                'success', 'La tâche a bien été marquée comme non faite!'
+            );
         }
-
-        $this->addFlash(
-            'success', 'La tâche a bien été marquée comme non faite!'
-        );
-
-        return $this->redirectToRoute('tasks_list_is_not_done');
+       
+        return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
     }
 }

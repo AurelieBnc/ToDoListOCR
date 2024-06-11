@@ -22,18 +22,13 @@ class UserController extends AbstractController
     ) {
     }
 
-    #[Route('/list', name: '_list')]
+    #[Route('/list/{page}', name: '_list', defaults: ['page' => 1])]
     #[IsGranted('USER_LIST')]
-    public function getUserList(Request $request): Response 
+    public function getUserList(int $page): Response 
     {
         $userListPaginated = null;
-        $page = $request->query->getInt('page', 1);
         $userListPaginated = $this->userRepository->findByPagination($page);
 
-        $pages = $userListPaginated['pages'] ?? null;
-        if ( $page < 1  || $pages === null) {
-            throw $this->createNotFoundException('Numéro de page invalide');
-        }
         return $this->render('user/user_list.html.twig', [
             'users' => $userListPaginated,
         ]);

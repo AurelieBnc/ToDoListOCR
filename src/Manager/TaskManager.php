@@ -4,12 +4,10 @@ namespace App\Manager;
 
 use App\Entity\Task;
 use App\Entity\User;
-use App\Form\TaskType;
+use App\Enum\TaskStatus;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use App\Repository\TaskRepository;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 
 class TaskManager
 {
@@ -42,9 +40,19 @@ class TaskManager
 
     public function toggle(Task $task): Task
     {
-        $task->toggle(!$task->getIsDone());
-        $this->taskRepository->update($task, true);
+        $newStatus = $task->toggle($task->getStatus());
+        $this->taskRepository->update($newStatus);
 
         return $task;
+    }
+
+    public function convertStatusTaskToString(TaskStatus $status): string
+    {
+        if (TaskStatus::IsDone === $status) {
+            return 'isDone';
+        }
+        if (TaskStatus::Todo === $status) {
+            return 'todo';
+        }
     }
 }

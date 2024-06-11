@@ -20,7 +20,7 @@
                     <div class="figure-caption">
                         <div>
                             <h4><a href="{{ path('tasks_edit', {'id' : task.id }) }}" class="btn text-primary fw-bold ">{{ task.title }}</a>
-                                {% if task.isDone %}
+                                {% if task.status == constant('App\\Enum\\TaskStatus::IsDone') %}
                                     <span><i class="fa-solid fa-check ps-3"></i></span>
                                 {% else %}
                                     <span><i class="fa-solid fa-xmark ps-3"></i></span>
@@ -39,10 +39,10 @@
                 <div class="d-flex flex-row justify-content-end mb-3">
                     <form action="">
                         <a href="{{ path('tasks_toggle', {'id' : task.id }) }}" class="btn btn-success btn-sm">
-                            {% if not task.isDone %}
-                                Marquer comme faite
-                            {% else %}
+                            {% if task.status == constant('App\\Enum\\TaskStatus::IsDone') %}
                                 Marquer non terminée
+                            {% else %}
+                                Marquer comme faite
                             {% endif %}
                         </a>
                     </form>
@@ -55,15 +55,11 @@
             </div>
             {% endfor %}
 
-            {% if flag is same as 1 %}
-                {% set path = 'tasks_list_is_done' %}
-            {% elseif flag is same as 0 %}
-                {% set path = 'tasks_list_is_not_done' %}
-            {% endif %}
+            {% set path = 'tasks_list' %}
+            {% set status = app.request.get('status') %}
             {% set pages = tasks.pages %}
-            {# {% set currentPage = tasks.page %} #}
             {% set currentPage = app.request.get('page') %}
-            {% include 'partials/pagination.html.twig' %}
+            {% include 'partials/pagination.html.twig' %} 
 
         </div>
     {% endif %}

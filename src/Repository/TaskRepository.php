@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Task;
+use App\Enum\TaskStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,14 +23,23 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
-    public function findTasksListIsDonePaginated(int $page): array
+    public function findByPagination(int $page, TaskStatus $status): array
     {
         $limit = 12;
         $result = [];
+        $statusToString = null;
+
+        if ($status === TaskStatus::IsDone) {
+            $statusToString = 'isDone';
+        }
+        if ($status === TaskStatus::Todo) {
+            $statusToString = 'todo';
+        }
 
         $query = $this->createQueryBuilder('t')
-        ->orderBy('t.createdAt', 'ASC')
-        ->where('t.isDone = true')
+        ->orderBy('t.id', 'ASC')
+        ->where('t.status = :status')
+        ->setParameter('status', $statusToString)
         ->setMaxResults($limit)
         ->setFirstResult($page * $limit - $limit);
 
@@ -37,6 +47,8 @@ class TaskRepository extends ServiceEntityRepository
         $data = $paginator->getQuery()->getResult();
 
         if (empty($data)) {
+            $result['data'] = [];
+            $result['pages'] = 1;
             return $result;
         }
         $pages = ceil($paginator->count() / $limit);
@@ -46,50 +58,20 @@ class TaskRepository extends ServiceEntityRepository
         return $result;
     }
 
-    public function findTasksListIsNotDonePaginated(int $page): array
-    {
-        $limit = 12;
-        $result = [];
-
-        $query = $this->createQueryBuilder('t')
-        ->orderBy('t.createdAt', 'ASC')
-        ->where('t.isDone = false')
-        ->setMaxResults($limit)
-        ->setFirstResult($page * $limit - $limit);
-
-        $paginator = new Paginator($query);
-        $data = $paginator->getQuery()->getResult();
-
-        if (empty($data)) {
-            return $result;
-        }
-        $pages = ceil($paginator->count() / $limit);
-        $result['data'] = $data;
-        $result['pages'] = $pages;
-
-        return $result;
-    }
-
-    public function add(Task $task, bool $flush = false): void
+    public function add(Task $task): void
     {
         $this->getEntityManager()->persist($task);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->getEntityManager()->flush();
     }
 
-    public function update(Task $task, bool $flush = false): void
+    public function update(Task $task): void
     {
-        $this->add($task, $flush);
+        $this->add($task);
     }
 
-    public function remove(Task $task, bool $flush = false): void
+    public function remove(Task $task): void
     {
         $this->getEntityManager()->remove($task);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->getEntityManager()->flush();
     }
 }

@@ -3,13 +3,10 @@
 namespace App\Manager;
 
 use App\Entity\User;
-use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Repository\UserRepository;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 
 class UserManager
 {
@@ -29,7 +26,7 @@ class UserManager
                 $plainPassword
             )
         );
-        $this->userRepository->add($user, flush:true);
+        $this->userRepository->add($user);
 
         return $user;
     }
@@ -42,7 +39,7 @@ class UserManager
         );
         
         $this->userRepository->upgradePassword($user, $newPasswordHashed);
-        $this->userRepository->update($user, flush:true);
+        $this->userRepository->update($user);
 
         return $user;
     }
