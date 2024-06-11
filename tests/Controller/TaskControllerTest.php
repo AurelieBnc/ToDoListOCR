@@ -215,7 +215,7 @@ class TaskControllerTest extends WebTestCase
         $this->client->loginUser($this->user, 'secured_area'); 
         $taskToDelete = $this->taskRepository->findOneByTitle('Titre tache utilisateur 1 à supprimer');
 
-        $this->client->request('GET', '/tasks/' . $taskToDelete->getId() . '/delete');
+        $this->client->request('GET', '/tasks/'.$taskToDelete->getId().'/delete');
         $response = $this->client->getResponse();
 
         $this->assertResponseIsSuccessful();
@@ -230,7 +230,7 @@ class TaskControllerTest extends WebTestCase
         $this->client->loginUser($this->admin, 'secured_area');
         $taskToDelete = $this->taskRepository->findOneByTitle('Titre tache utilisateur 2 à supprimer');
 
-        $this->client->request('GET', '/tasks/' . $taskToDelete->getId() . '/delete');
+        $this->client->request('GET', '/tasks/'.$taskToDelete->getId().'/delete');
         $response = $this->client->getResponse();
 
         $this->assertResponseIsSuccessful();

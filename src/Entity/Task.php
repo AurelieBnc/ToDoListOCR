@@ -118,7 +118,7 @@ class Task
         if ($status === TaskStatus::IsDone) {
              $this->setStatus(TaskStatus::Todo);
         }
-        
+
         return $this;
     }
 }

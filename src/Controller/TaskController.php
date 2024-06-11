@@ -27,6 +27,9 @@ class TaskController extends AbstractController
     ) {
     }
 
+    /**
+     * Paginated list of task by status
+     */
     #[Route('/_list/{status}/{page}', name: '_list')]
     #[IsGranted('TASK_LIST')]
     public function listAction(TaskStatus $status, int $page): Response
@@ -45,6 +48,9 @@ class TaskController extends AbstractController
         ]);
     }
 
+    /**
+     * Create task function
+     */
     #[Route('/create', name: '_create')]
     #[IsGranted('TASK_CREATE')]
     public function createAction(Request $request): RedirectResponse|Response
@@ -68,6 +74,9 @@ class TaskController extends AbstractController
         ]);
     }
 
+    /**
+     * Edit task function
+     */
     #[Route('/{id}/edit', name: '_edit')]
     #[IsGranted('TASK_EDIT', 'task')]
     public function editAction(Task $task, Request $request): RedirectResponse|Response
@@ -92,6 +101,9 @@ class TaskController extends AbstractController
         ]);
     }
 
+    /**
+     * Delete task function
+     */
     #[Route(path: '/{id}/delete', name: '_delete')]
     #[IsGranted('TASK_DELETE', 'task')]
     public function deleteTaskAction(Task $task): RedirectResponse
@@ -104,6 +116,9 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
     }
 
+    /**
+     * Toogle task function - change the status of task
+     */
     #[Route(path: '/{id}/toggle', name: '_toggle')]
     #[IsGranted('TASK_TOGGLE', 'task')]
     public function toggleTaskAction(Task $task): RedirectResponse

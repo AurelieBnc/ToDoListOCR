@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
     }
 
     /**
-     * Load : 
+     * Load :
      *      - 3 users  + 1 admin
      *      - 20 tasks avec Owner
      *      - 5 tasks anonyme

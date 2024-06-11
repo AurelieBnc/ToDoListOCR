@@ -11,7 +11,7 @@ use DateTimeImmutable;
 class DateFixtures
 {
     /**
-     * Function to simulate a date 
+     * Function to simulate a date
      *
      * @return DateTimeImmutable
      */
@@ -31,6 +31,6 @@ class DateFixtures
         $randomDate = $startDate->add(new DateInterval('P'.$randomDays.'D'));
 
         return $randomDate;
-        
+
     }
 }

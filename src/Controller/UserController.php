@@ -41,7 +41,7 @@ class UserController extends AbstractController
     }
     
     /**
-     * Create user function 
+     * Create user function
      */
     #[Route('/create', name: '_create')]
     #[IsGranted('USER_CREATE')]
@@ -80,7 +80,7 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('users_list');
         }
-        
+
         return $this->render('user/edit_user.html.twig', ['userForm' => $userForm->createView(), 'user' => $user]);
     }
 

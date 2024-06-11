@@ -9,7 +9,7 @@ class TaskFixtures
 {
     /**
      * List of Content for task list
-     * 
+     *
      * @return array<string>
      */
     public static function TaskContentList(): array

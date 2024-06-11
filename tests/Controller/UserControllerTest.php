@@ -120,7 +120,7 @@ class UserControllerTest extends WebTestCase
 
     public function testEditUserWithAuthorizedAccess(): void
     {
-        $this->client->request('GET', '/users/' . $this->user->getId() . '/edit');
+        $this->client->request('GET', '/users/'.$this->user->getId().'/edit');
         $this->client->getResponse();
 
         $this->assertResponseIsSuccessful();
@@ -163,7 +163,7 @@ class UserControllerTest extends WebTestCase
         $this->client->followRedirects();
         $user = $this->userRepository->findOneByEmail('user2@todolist.fr');
 
-        $crawler = $this->client->request('GET', '/users/' . $user->getId() . '/delete');
+        $crawler = $this->client->request('GET', '/users/'.$user->getId().'/delete');
         $response = $this->client->getResponse();
 
         $this->assertResponseIsSuccessful();
