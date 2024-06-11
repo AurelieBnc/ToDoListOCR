@@ -88,3 +88,6 @@ Lancer une couverture de tests avec visuel html:
 ```
 vendor/bin/phpunit --coverage-html public/test-coverage
 ```
+## Audit
+### Codacy
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e4d7aac320aa43a39a909f965de216bb)](https://app.codacy.com/gh/AurelieBnc/ToDoListOCR/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
