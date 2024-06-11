@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AccessAdminTest extends WebTestCase
 {
+    
     private KernelBrowser $client;
     private TaskRepository $taskRepository;
     private UserRepository $userRepository;

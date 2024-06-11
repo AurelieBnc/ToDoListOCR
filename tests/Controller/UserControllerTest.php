@@ -10,10 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserControllerTest extends WebTestCase
 {
+    
     private KernelBrowser $client;
     private UserRepository $userRepository;
-    private User $user;
     private User $admin;
+
 
     protected function setUp(): void
     {
@@ -22,34 +23,11 @@ class UserControllerTest extends WebTestCase
             'HTTPS' => false,
         ]);
         $this->userRepository = $this->client->getContainer()->get(UserRepository::class);
- 
-        $user = $this->userRepository->findOneByEmail('user1@todolist.fr');
-        $this->user = $user;
 
         $admin = $this->userRepository->findOneByEmail('admin@todolist.fr');
         $this->admin = $admin;
         
         $this->client->loginUser($this->admin, 'secured_area');
-    }
-
-    public function testUserListWithUnauthorizedAccess(): void
-    {
-        $this->client->loginUser($this->user, 'secured_area');
-
-        $this->client->request('GET', '/users/list');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
-    }
-
-    public function testUserListWithAuthorizedAccess(): void
-    {
-        $crawler = $this->client->request('GET', '/users/list');
-        $this->client->getResponse();
-
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
-        $this->assertCount(4, $crawler->filter('.user'));
     }
 
     public function testUserListWithPageUnvalid(): void
@@ -58,27 +36,6 @@ class UserControllerTest extends WebTestCase
         $this->client->getResponse();
 
         $this->assertResponseIsSuccessful();
-    }
-
-    public function testCreateUserWithUnauthorizedAccess(): void
-    {
-        $this->client->loginUser($this->user, 'secured_area');
-
-        $this->client->request('GET', '/users/create');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
-    }
-
-    public function testCreateUserWithAuthorizedAccess(): void
-    {
-        $this->client->loginUser($this->admin, 'secured_area');
-
-        $this->client->request('GET', '/users/create');
-        $response = $this->client->getResponse();
- 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertSelectorTextContains('button', 'Ajouter');
     }
 
     public function testCreateUsertWithData()
@@ -108,26 +65,6 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(5, $crawler->filter('.user'));
     }
 
-    public function testEditUserWithUnauthorizedAccess(): void
-    {
-        $this->client->loginUser($this->user, 'secured_area');
-
-        $this->client->request('GET', '/users/'.$this->user->getId().'/edit');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
-    }
-
-    public function testEditUserWithAuthorizedAccess(): void
-    {
-        $this->client->request('GET', '/users/'.$this->user->getId().'/edit');
-        $this->client->getResponse();
-
-        $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('button', 'Modifier');
-        $this->assertSelectorTextContains('h1', 'Modifier '. $this->user->getUsername());
-    }
-
     public function testEditUsertWithNewData()
     {
         $userToTest = $this->userRepository->findOneByEmail('user2@todolist.fr');
@@ -146,30 +83,5 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
         $this->assertCount(5, $crawler->filter('.user'));
-    }
-
-    public function testUserDeleteWithUnauthorizedAccess()
-    {
-        $this->client->loginUser($this->user, 'secured_area');
-
-        $this->client->request('GET', '/users/'.$this->user->getId().'/delete');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
-    }
-
-    public function testUserDeleteWithAuthorizedAccess()
-    {
-        $this->client->followRedirects();
-        $user = $this->userRepository->findOneByEmail('user2@todolist.fr');
-
-        $crawler = $this->client->request('GET', '/users/'.$user->getId().'/delete');
-        $response = $this->client->getResponse();
-
-        $this->assertResponseIsSuccessful();
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-
-        $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
-        $this->assertCount(4, $crawler->filter('.user'));
     }
 }

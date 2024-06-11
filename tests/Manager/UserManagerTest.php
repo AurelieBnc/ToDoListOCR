@@ -5,11 +5,7 @@ namespace App\Tests\Manager;
 use App\Entity\User;
 use App\Manager\UserManager;
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use PHPUnit\Framework\TestCase ;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserManagerTest extends WebTestCase
@@ -33,10 +29,8 @@ class UserManagerTest extends WebTestCase
         $this->mockUserRepository = $this->createMock(UserRepository::class);
 
         $this->sut = new UserManager(
-            $this->createMock(EntityManagerInterface::class),
-            $this->stubUserPasswordHasher,   
-            $this->mockUserRepository,    
-            $this->createMock(FormFactoryInterface::class),  
+            $this->mockUserRepository,
+            $this->stubUserPasswordHasher,
         );
  
         $user = $this->userRepository->findOneByEmail('user1@todolist.fr');

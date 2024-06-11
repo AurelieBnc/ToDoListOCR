@@ -11,7 +11,7 @@ use App\Repository\UserRepository;
 class UserManager
 {
     private UserPasswordHasherInterface $userPasswordHasher;
-    private UserRepository $userRepository;
+    private readonly UserRepository $userRepository;
 
 
     public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher) 

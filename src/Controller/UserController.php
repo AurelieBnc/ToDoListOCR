@@ -21,6 +21,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/users', name: 'users')]
 class UserController extends AbstractController
 {
+    
     private readonly UserManager $userManager;
     private readonly UserRepository $userRepository;
 

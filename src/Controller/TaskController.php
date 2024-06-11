@@ -22,6 +22,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/tasks', name: 'tasks')]
 class TaskController extends AbstractController
 {
+    
     private readonly TaskManager $taskManager;
     private readonly TaskRepository $taskRepository;
 

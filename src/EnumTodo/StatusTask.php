@@ -6,5 +6,5 @@ enum TaskStatus: string
 {
     case IsDone = 'isDone';
     case Todo = 'todo';
-    
+
 }
