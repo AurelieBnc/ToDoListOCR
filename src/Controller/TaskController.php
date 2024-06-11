@@ -90,15 +90,13 @@ class TaskController extends AbstractController
 
     #[Route(path: '/{id}/delete', name: '_delete')]
     #[IsGranted('TASK_DELETE', 'task')]
-    public function deleteTaskAction(Task $task, Request $request): RedirectResponse
+    public function deleteTaskAction(Task $task): RedirectResponse
     {
-        $isDone = $task->getStatus();
         $this->taskManager->deleteTask($task);
+        $status = $this->taskManager->convertStatusTaskToString($task->getStatus());
 
         $this->addFlash('success', 'La tâche a bien été supprimée !');
 
-        $status = $this->taskManager->convertStatusTaskToString($task->getStatus());
-            
         return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
     }
 

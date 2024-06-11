@@ -58,7 +58,7 @@ class UserControllerTest extends WebTestCase
     public function testUserListWithPageUnvalid(): void
     {
         $this->client->request('GET', '/users/list?page=0');
-        $response = $this->client->getResponse();
+        $this->client->getResponse();
 
         $this->assertResponseIsSuccessful();
     }
@@ -123,7 +123,7 @@ class UserControllerTest extends WebTestCase
 
     public function testEditUserWithAuthorizedAccess(): void
     {
-        $crawler = $this->client->request('GET', '/users/' . $this->user->getId() . '/edit');
+        $this->client->request('GET', '/users/' . $this->user->getId() . '/edit');
         $this->client->getResponse();
 
         $this->assertResponseIsSuccessful();
