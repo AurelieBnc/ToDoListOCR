@@ -20,7 +20,7 @@
                     <div class="figure-caption">
                         <div>
                             <h4><a href="{{ path('tasks_edit', {'id' : task.id }) }}" class="btn text-primary fw-bold ">{{ task.title }}</a>
-                                {% if task.status == constant('App\\Enum\\TaskStatus::IsDone') %}
+                                {% if task.status == constant('App\\EnumTodo\\TaskStatus::IsDone') %}
                                     <span><i class="fa-solid fa-check ps-3"></i></span>
                                 {% else %}
                                     <span><i class="fa-solid fa-xmark ps-3"></i></span>
@@ -39,7 +39,7 @@
                 <div class="d-flex flex-row justify-content-end mb-3">
                     <form action="">
                         <a href="{{ path('tasks_toggle', {'id' : task.id }) }}" class="btn btn-success btn-sm">
-                            {% if task.status == constant('App\\Enum\\TaskStatus::IsDone') %}
+                            {% if task.status == constant('App\\EnumTodo\\TaskStatus::IsDone') %}
                                 Marquer non terminée
                             {% else %}
                                 Marquer comme faite

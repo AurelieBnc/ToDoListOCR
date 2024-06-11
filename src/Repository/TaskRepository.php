@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Task;
-use App\Enum\TaskStatus;
+use App\EnumTodo\TaskStatus;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;

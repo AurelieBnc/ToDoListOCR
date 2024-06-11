@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Enum\TaskStatus;
+use App\EnumTodo\TaskStatus;
 use App\Repository\TaskRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;

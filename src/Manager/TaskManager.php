@@ -4,7 +4,7 @@ namespace App\Manager;
 
 use App\Entity\Task;
 use App\Entity\User;
-use App\Enum\TaskStatus;
+use App\EnumTodo\TaskStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TaskRepository;
 use Symfony\Component\Form\FormFactoryInterface;

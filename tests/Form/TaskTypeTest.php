@@ -7,7 +7,7 @@ use App\Form\TaskType;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
-use App\Enum\TaskStatus;
+use App\EnumTodo\TaskStatus;
 
 /**
  * Unit testUnit test of the TaskType form.

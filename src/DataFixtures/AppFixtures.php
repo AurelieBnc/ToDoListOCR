@@ -9,7 +9,7 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\DataFixtures\DateFixtures;
 use App\DataFixtures\TaskFixtures;
-use App\Enum\TaskStatus;
+use App\EnumTodo\TaskStatus;
 
 /**
  * @codeCoverageIgnore

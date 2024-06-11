@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Task;
-use App\Enum\TaskStatus;
+use App\EnumTodo\TaskStatus;
 use App\Form\TaskType;
 use App\Manager\TaskManager;
 use App\Repository\TaskRepository;
