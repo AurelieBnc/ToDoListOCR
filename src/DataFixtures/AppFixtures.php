@@ -16,6 +16,7 @@ use App\EnumTodo\TaskStatus;
  */
 class AppFixtures extends Fixture
 {
+
     private $listStatus;
     private $userPasswordHasher;
     
@@ -26,13 +27,22 @@ class AppFixtures extends Fixture
             TaskStatus::IsDone,
             TaskStatus::Todo
         ];
+
     }
 
+    /**
+     * Load : 
+     *      - 3 users  + 1 admin
+     *      - 20 tasks avec Owner
+     *      - 5 tasks anonyme
+     *      - 3 tasks stables - user1
+     *      - 2 tasks stables - user2
+     */
     public function load(ObjectManager $manager): void
     {
         $userList = [];
 
-        // Création d'un user
+        // Création d'un user.
         $firstUser = new User();
         $firstUser->setUsername("User1");
         $firstUser->setEmail("user1@todolist.fr");
@@ -42,7 +52,7 @@ class AppFixtures extends Fixture
 
         $userList[] = $firstUser;
 
-        // Création d'un second user
+        // Création d'un second user.
         $secondUser = new User();
         $secondUser->setUsername("User2");
         $secondUser->setEmail("user2@todolist.fr");
@@ -52,7 +62,7 @@ class AppFixtures extends Fixture
 
         $userList[] = $secondUser;
 
-        //création d'un user sans role
+        // Création d'un user sans role.
         $otherUser = new User();
         $otherUser->setUsername("User3");
         $otherUser->setEmail("user3@todolist.fr");
@@ -62,15 +72,15 @@ class AppFixtures extends Fixture
 
         $userList[] = $otherUser;
         
-        // Création d'un user admin
+        // Création d'un user admin.
         $userAdmin = new User();
         $userAdmin->setUsername("Admin");
         $userAdmin->setEmail("admin@todolist.fr");
         $userAdmin->setRoles(["ROLE_ADMIN"]);
         $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
-        $manager->persist($userAdmin); 
+        $manager->persist($userAdmin);
 
-        // Création de 20 tasks avec Owner
+        // Création de 20 tasks avec Owner.
         $taskFixture = new TaskFixtures();
         $taskContentList = $taskFixture->TaskContentList();
 
@@ -84,7 +94,6 @@ class AppFixtures extends Fixture
             $task = new Task();
             $task->setTitle('Titre tache '.$i);
             $task->setContent($randomContent);
-            // /** @var DateTimeImmutable $randomCreatedAt */
             $task->setCreatedAt($randomCreatedAt);
             $task->setOwner($userList[array_rand($userList)]);
             $task->setStatus($randomStatus);
@@ -92,7 +101,7 @@ class AppFixtures extends Fixture
             $manager->persist($task);
         }
 
-        //Création de 5 tasks anonyme
+        // Création de 5 tasks anonyme
         for ($i = 0; $i < 5; $i++) {
             $randomCreatedAt = (new DateFixtures())->randDate();
 
@@ -104,7 +113,6 @@ class AppFixtures extends Fixture
             $task = new Task();
             $task->setTitle('Titre tache anonyme '.$i);
             $task->setContent($randomContent);
-            // /** @var DateTimeImmutable $randomCreatedAt */
             $task->setCreatedAt($randomCreatedAt);
             $task->setStatus($randomStatus);
             
@@ -112,7 +120,7 @@ class AppFixtures extends Fixture
         }
 
         // Création de 5 tasks stables
-        //Utilisateur 1
+        // Utilisateur 1
         $randomCreatedAt = (new DateFixtures())->randDate();
 
         $randomContentIndex = array_rand($taskContentList);
@@ -121,7 +129,6 @@ class AppFixtures extends Fixture
         $task = new Task();
         $task->setTitle('Titre tache utilisateur 1');
         $task->setContent($randomContent);
-        // /** @var DateTimeImmutable $randomCreatedAt */
         $task->setCreatedAt($randomCreatedAt);
         $task->setOwner($firstUser);
         $task->setStatus(TaskStatus::IsDone);
@@ -136,7 +143,6 @@ class AppFixtures extends Fixture
         $task = new Task();
         $task->setTitle('Titre tache utilisateur 1 à éditer');
         $task->setContent($randomContent);
-        // /** @var DateTimeImmutable $randomCreatedAt */
         $task->setCreatedAt($randomCreatedAt);
         $task->setOwner($firstUser);
         $task->setStatus(TaskStatus::IsDone);
@@ -151,14 +157,13 @@ class AppFixtures extends Fixture
         $task = new Task();
         $task->setTitle('Titre tache utilisateur 1 à supprimer');
         $task->setContent($randomContent);
-        // /** @var DateTimeImmutable $randomCreatedAt */
         $task->setCreatedAt($randomCreatedAt);
         $task->setOwner($firstUser);
         $task->setStatus(TaskStatus::IsDone);
 
         $manager->persist($task);
 
-        //Utilisateur 2
+        // Utilisateur 2
         $randomCreatedAt = (new DateFixtures())->randDate();
 
         $randomContentIndex = array_rand($taskContentList);
@@ -167,7 +172,6 @@ class AppFixtures extends Fixture
         $task = new Task();
         $task->setTitle('Titre tache utilisateur 2');
         $task->setContent($randomContent);
-        // /** @var DateTimeImmutable $randomCreatedAt */
         $task->setCreatedAt($randomCreatedAt);
         $task->setOwner($secondUser);
         $task->setStatus(TaskStatus::Todo);
@@ -182,7 +186,6 @@ class AppFixtures extends Fixture
         $task = new Task();
         $task->setTitle('Titre tache utilisateur 2 à supprimer');
         $task->setContent($randomContent);
-        // /** @var DateTimeImmutable $randomCreatedAt */
         $task->setCreatedAt($randomCreatedAt);
         $task->setOwner($secondUser);
         $task->setStatus(TaskStatus::Todo);

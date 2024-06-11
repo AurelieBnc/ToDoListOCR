@@ -8,12 +8,14 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * @codeCoverageIgnore
  */
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -36,9 +38,11 @@ class Task
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $owner = null;
 
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+
     }
 
     public function getId(): ?int
@@ -114,6 +118,7 @@ class Task
         if ($status === TaskStatus::IsDone) {
              $this->setStatus(TaskStatus::Todo);
         }
+        
         return $this;
     }
 }

@@ -13,6 +13,10 @@ use App\Manager\UserManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+
+/**
+ * Provides functionality for managing, updating, deleting and marking users as complete within the system
+ */
 #[Route('/users', name: 'users')]
 class UserController extends AbstractController
 {
@@ -20,20 +24,25 @@ class UserController extends AbstractController
         private readonly UserManager $userManager,
         private readonly UserRepository $userRepository
     ) {
+
     }
 
+    /**
+     * Paginated list of user
+     */
     #[Route('/list/{page}', name: '_list', defaults: ['page' => 1])]
     #[IsGranted('USER_LIST')]
-    public function getUserList(int $page): Response 
+    public function getUserList(int $page): Response
     {
         $userListPaginated = null;
         $userListPaginated = $this->userRepository->findByPagination($page);
 
-        return $this->render('user/user_list.html.twig', [
-            'users' => $userListPaginated,
-        ]);
+        return $this->render('user/user_list.html.twig', ['users' => $userListPaginated]);
     }
     
+    /**
+     * Create user function 
+     */
     #[Route('/create', name: '_create')]
     #[IsGranted('USER_CREATE')]
     public function createAction(Request $request): RedirectResponse|Response
@@ -50,11 +59,13 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('users_list');
         }
-        return $this->render('user/create_user.html.twig', [
-            'userForm' => $userForm->createView(),
-        ]);
+
+        return $this->render('user/create_user.html.twig', ['userForm' => $userForm->createView()]);
     }
 
+    /**
+     * Edit user function
+     */
     #[Route('/{id}/edit', name: '_edit')]
     #[IsGranted('USER_EDIT', 'user')]
     public function editAction(User $user, Request $request): RedirectResponse|Response
@@ -69,9 +80,13 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('users_list');
         }
+        
         return $this->render('user/edit_user.html.twig', ['userForm' => $userForm->createView(), 'user' => $user]);
     }
 
+    /**
+     * Delete user function
+     */
     #[Route(path: '/{id}/delete', name: '_delete')]
     #[IsGranted('USER_DELETE', 'user')]
     public function deleteTaskAction(User $user): RedirectResponse
