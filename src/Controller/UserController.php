@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -21,18 +22,12 @@ class UserController extends AbstractController
     ) {
     }
 
-    #[Route('/list', name: '_list')]
+    #[Route('/list/{page}', name: '_list', defaults: ['page' => 1])]
     #[IsGranted('USER_LIST')]
-    public function getUserList(Request $request): Response 
+    public function getUserList(int $page): Response 
     {
         $userListPaginated = null;
-        $page = $request->query->getInt('page', 1);
-        $userListPaginated = $this->userRepository->findUsersListPaginated($page);
-
-        $pages = $userListPaginated['pages'] ?? null;
-        if ( $page < 1  || $pages === null) {
-            throw $this->createNotFoundException('Numéro de page invalide');
-        }
+        $userListPaginated = $this->userRepository->findByPagination($page);
 
         return $this->render('user/user_list.html.twig', [
             'users' => $userListPaginated,
@@ -43,14 +38,18 @@ class UserController extends AbstractController
     #[IsGranted('USER_CREATE')]
     public function createAction(Request $request): RedirectResponse|Response
     {
-        $userForm = $this->userManager->createUser($request);
+        $user = new User();
+        $userForm = $this->createForm(UserType::class, $user);
+        $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
+            $plainPassword = $userForm->get('plainPassword')->getData();
+
+            $user = $this->userManager->createUser($user, $plainPassword);
             $this->addFlash('success', 'L\'utilisateur a bien été ajouté !');
 
             return $this->redirectToRoute('users_list');
         }
-
         return $this->render('user/create_user.html.twig', [
             'userForm' => $userForm->createView(),
         ]);
@@ -60,15 +59,16 @@ class UserController extends AbstractController
     #[IsGranted('USER_EDIT', 'user')]
     public function editAction(User $user, Request $request): RedirectResponse|Response
     {
-        $userForm = $this->userManager->editUser($request, $user);
+        $userForm = $this->createForm(UserType::class, $user);
+        $userForm->handleRequest($request);
 
         if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $this->userRepository->update($user, true);
+            $plainPassword = $userForm->get('plainPassword')->getData();
+            $user = $this->userManager->editUser($user, $plainPassword);
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('users_list');
         }
-
         return $this->render('user/edit_user.html.twig', ['userForm' => $userForm->createView(), 'user' => $user]);
     }
 

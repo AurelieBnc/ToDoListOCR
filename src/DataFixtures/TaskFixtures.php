@@ -2,6 +2,9 @@
 
 namespace App\DataFixtures;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TaskFixtures
 {
     /**

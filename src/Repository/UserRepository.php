@@ -39,9 +39,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    public function findUsersListPaginated(int $page, int $limit = 15): array
+    public function findByPagination(int $page): array
     {
-        $limit = abs($limit);
+        $limit = 15;
         $result = [];
 
         $query = $this->createQueryBuilder('u')
@@ -53,37 +53,31 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $data = $paginator->getQuery()->getResult();
 
         if (empty($data)) {
+            $result['data'] = [];
+            $result['pages'] = 1;
             return $result;
         }
         $pages = ceil($paginator->count() / $limit);
         $result['data'] = $data;
         $result['pages'] = $pages;
-        $result['page'] = $page;
-        $result['limit'] = $limit;
 
         return $result;
     }
 
-    public function add(User $entity, bool $flush = false): void
+    public function add(User $entity): void
     {
         $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->getEntityManager()->flush();
     }
 
-    public function update(User $entity, bool $flush = false): void
+    public function update(User $entity): void
     {
-        $this->add($entity, $flush);
+        $this->add($entity);
     }
 
-    public function remove(User $entity, bool $flush = false): void
+    public function remove(User $entity): void
     {
         $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        $this->getEntityManager()->flush();
     }
 }

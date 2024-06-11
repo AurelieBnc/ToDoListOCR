@@ -10,6 +10,6 @@
             </div>
         {{ form_end(taskForm) }}
 
-        <a href="{{ path('tasks_list_is_not_done') }}" class="btn btn-primary">Retour à la liste des tâches</a>
+        <a href="{{ path('tasks_list', {'status':'todo','page' : 1}) }}" class="btn btn-primary">Retour à la liste des tâches</a>
     </div>
 {% endblock %}

@@ -4,31 +4,29 @@
         <nav class="d-flex align-items-center ">
             <ul class="pagination">
                 {% set maxPage = pages|abs %}
-                {% if currentPage > 1 %}
+
+                {% if currentPage != 1 and currentPage > 0 %}
                     <li class="page-item">
-                        <a href="{{ path(path, {page:currentPage -1}) }}" class="page-link">&lt;</a>
-                    </li>
-                {% elseif currentPage != 1 %}
-                    <li class="page-item disabled">    
-                        <a href="#" class="page-link">&lt;</a>
+                        <a class="page-link" href="{{ path(path, {'status':status, page:currentPage -1}) }}" title="Previous">
+                            <span>&laquo;</span>
+                          </a>
                     </li>
                 {% endif %}
+
                 {% for page in 1..pages %}
                     <li class="page-item {{ page == currentPage ? 'active' : '' }}">
-                        <a href="{{ path(path, {page:page}) }}" class="page-link">{{ page }}</a>
+                        <a href="{{ path(path, {'status':status, page:page}) }}" class="page-link">{{ page }}</a>
                     </li>
                 {% endfor %}
-                {% if currentPage > 1 or currentPage is same as 1 %}
-                    {% if currentPage != maxPage %}
-                    <li class="page-item">
-                        <a href="{{ path(path, {page:currentPage +1}) }}" class="page-link">&gt;</a>
-                    </li>
-                    {% endif %}
-                {% else %}
-                    <li class="page-item disabled">
-                        <a href="#" class="page-lsink">&gt;</a>
-                    </li>
+
+                {% if currentPage != maxPage %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path(path, {'status':status, page:currentPage +1}) }}" title="Next">
+                        <span>&raquo;</span>
+                      </a>
+                </li>
                 {% endif %}
+
             </ul>
         </nav>
     </div>

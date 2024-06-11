@@ -3,13 +3,10 @@
 namespace App\Manager;
 
 use App\Entity\User;
-use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Repository\UserRepository;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 
 class UserManager
 {
@@ -21,42 +18,30 @@ class UserManager
     ) {
     }
 
-    public function createUser(Request $request): FormInterface
+    public function createUser(User $user, string $plainPassword): User
     {
-        $user = new User();
-        $userForm = $this->formFactory->create(UserType::class, $user);
-        $userForm->handleRequest($request);
-
-        if ($userForm->isSubmitted() && $userForm->isValid()) {
         $user->setPassword(
             $this->userPasswordHasher->hashPassword(
                 $user,
-                $userForm->get('plainPassword')->getData()
+                $plainPassword
             )
         );
+        $this->userRepository->add($user);
 
-            $this->userRepository->add($user, true);
-        }
-
-        return $userForm;
+        return $user;
     }
 
-    public function editUser(Request $request, User $user): FormInterface
-    {
-        $userForm = $this->formFactory->create(UserType::class, $user);
-        $userForm->handleRequest($request);
+    public function editUser(User $user, string $plainPassword): User
+    {        
+        $newPasswordHashed = $this->userPasswordHasher->hashPassword(
+            $user,
+            $plainPassword
+        );
+        
+        $this->userRepository->upgradePassword($user, $newPasswordHashed);
+        $this->userRepository->update($user);
 
-        if ($userForm->isSubmitted() && $userForm->isValid()) {
-            $user->setPassword(
-                $this->userPasswordHasher->hashPassword(
-                    $user,
-                    $userForm->get('plainPassword')->getData()
-                )
-            );
-            $this->userRepository->update($user, true);
-        }
-
-        return $userForm;
+        return $user;
     }
 
     public function deleteUser(User $user): void

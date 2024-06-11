@@ -2,11 +2,15 @@
 
 namespace App\Entity;
 
+use App\EnumTodo\TaskStatus;
 use App\Repository\TaskRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * @codeCoverageIgnore
+ */
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
 {
@@ -24,8 +28,9 @@ class Task
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column]
-    private bool $isDone = false;
+    #[ORM\Column(name:'status',type: Types::STRING,
+    enumType: TaskStatus::class, options: ['default' => TaskStatus::Todo])]
+    private TaskStatus $status = TaskStatus::Todo;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
@@ -77,14 +82,14 @@ class Task
         return $this;
     }
 
-    public function getIsDone(): bool
+    public function getStatus(): TaskStatus 
     {
-        return $this->isDone;
+        return $this->status;
     }
 
-    public function setIsDone(bool $isDone): static
+    public function setStatus(TaskStatus $status): static
     {
-        $this->isDone = $isDone;
+        $this->status = $status;
 
         return $this;
     }
@@ -101,10 +106,14 @@ class Task
         return $this;
     }
 
-    public function toggle(bool $flag): static
+    public function toggle(TaskStatus $status): static
     {
-        $this->isDone = $flag;
-
+        if ($status === TaskStatus::Todo) {
+             $this->setStatus(TaskStatus::IsDone);
+        }
+        if ($status === TaskStatus::IsDone) {
+             $this->setStatus(TaskStatus::Todo);
+        }
         return $this;
     }
 }

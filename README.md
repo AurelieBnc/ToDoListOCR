@@ -31,9 +31,9 @@ php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 ```
 
-### Installation des fixtures 
+### Installation des fixtures
 ```
-
+php bin/console doctrine:fixtures:load
 ```
 
 ### Lancer/arrêter le serveur local Symfony
@@ -60,4 +60,31 @@ Dans votre fichier .env.local, modifiez:
 ```
 APP_ENV=prod
 APP_DEBUG=0
+```
+
+## Tests et couverture de test
+### Création de la base de données de Test et charger les fixtures
+Configurer votre fichier env.local avec l'adresse de votre base de donnée. 
+Symfony se chargera de la renommée en suffixant le nom de la base par _test.
+
+Créer la base de donnée de test
+```
+php bin/console doctrine:database:create --env=test
+php bin//console doctrine:migrations:migrate --env=test
+```
+
+Charger les fixtures
+```
+php bin/console doctrine:fixtures:load --env=test
+```
+
+### Lancement des tests et de la couverture de test
+Pour lancer les tests PhpUnit, pensez à bien relancer les fixtures avant, puis:
+```
+vendor/bin/phpunit
+```
+
+Lancer une couverture de tests avec visuel html:
+```
+vendor/bin/phpunit --coverage-html public/test-coverage
 ```

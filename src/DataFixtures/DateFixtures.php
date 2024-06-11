@@ -5,6 +5,9 @@ namespace App\DataFixtures;
 use DateInterval;
 use DateTimeImmutable;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DateFixtures 
 {
     /**

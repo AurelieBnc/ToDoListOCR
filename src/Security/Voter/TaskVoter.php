@@ -34,6 +34,10 @@ class TaskVoter extends Voter
         }
         $userRoles = $user->getRoles();
 
+        if (in_array(null, $userRoles)) {
+            return false;
+        }  
+
         if (in_array('ROLE_ADMIN', $userRoles)) {
             switch ($attribute) {
                 case self::DELETE:
