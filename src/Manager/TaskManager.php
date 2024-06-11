@@ -7,15 +7,16 @@ use App\Entity\User;
 use App\EnumTodo\TaskStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TaskRepository;
-use Symfony\Component\Form\FormFactoryInterface;
+
 
 class TaskManager
 {
-    public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly TaskRepository $taskRepository,
-        private readonly FormFactoryInterface $formFactory,
-    ) {
+    private readonly TaskRepository $taskRepository;
+
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->taskRepository = $entityManager->getRepository(Task::class);
     }
 
     public function createTask(Task $task, User $user): Task

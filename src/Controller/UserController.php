@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use App\Manager\UserManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -20,10 +21,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/users', name: 'users')]
 class UserController extends AbstractController
 {
-    public function __construct(
-        private readonly UserManager $userManager,
-        private readonly UserRepository $userRepository
-    ) {
+    private readonly UserManager $userManager;
+    private readonly UserRepository $userRepository;
+
+
+    public function __construct(EntityManagerInterface $entityManager, UserManager $userManager)
+    {
+        $this->userManager = $userManager;
+        $this->userRepository = $entityManager->getRepository(User::class);
 
     }
 

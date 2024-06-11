@@ -7,6 +7,7 @@ use App\EnumTodo\TaskStatus;
 use App\Form\TaskType;
 use App\Manager\TaskManager;
 use App\Repository\TaskRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,10 +22,15 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/tasks', name: 'tasks')]
 class TaskController extends AbstractController
 {
-    public function __construct(
-        private readonly TaskManager $taskManager,
-        private readonly TaskRepository $taskRepository,
-    ) {
+    private readonly TaskManager $taskManager;
+    private readonly TaskRepository $taskRepository;
+
+
+    public function __construct(EntityManagerInterface $entityManager, TaskManager $taskManager)
+    {
+        $this->taskManager = $taskManager;
+        $this->taskRepository = $entityManager->getRepository(Task::class);
+
     }
 
     /**

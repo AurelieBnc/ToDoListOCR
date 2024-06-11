@@ -6,16 +6,19 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Repository\UserRepository;
-use Symfony\Component\Form\FormFactoryInterface;
+
 
 class UserManager
 {
-    public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly UserPasswordHasherInterface $userPasswordHasher,
-        private readonly UserRepository $userRepository,
-        private readonly FormFactoryInterface $formFactory,
-    ) {
+    private UserPasswordHasherInterface $userPasswordHasher;
+    private UserRepository $userRepository;
+
+
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher) 
+    {
+        $this->userRepository = $entityManager->getRepository(User::class);
+        $this->userPasswordHasher = $userPasswordHasher;
+
     }
 
     public function createUser(User $user, string $plainPassword): User
