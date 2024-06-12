@@ -22,7 +22,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/tasks', name: 'tasks')]
 class TaskController extends AbstractController
 {
-    
+
     private readonly TaskManager $taskManager;
     private readonly TaskRepository $taskRepository;
 
@@ -36,6 +36,10 @@ class TaskController extends AbstractController
 
     /**
      * Paginated list of task by status
+     * 
+     * @param TaskStatus $status The status of task is an enum
+     * 
+     * @return Response
      */
     #[Route('/_list/{status}/{page}', name: '_list')]
     #[IsGranted('TASK_LIST')]
@@ -44,19 +48,26 @@ class TaskController extends AbstractController
         $taskListPaginated = null;
         $taskListPaginated = $this->taskRepository->findByPagination($page, $status);
 
-        $pages = $taskListPaginated['pages'] ?? null;
-        if ( $page < 1  || $pages === null) {
+        ($pages = $taskListPaginated['pages'] ?? null);
+        if ($page < 1  || $pages === null) {
             throw $this->createNotFoundException('Numéro de page invalide');
         }
 
-        return $this->render('task/list.html.twig', [
-            'status' => $status,
-            'tasks' => $taskListPaginated,
-        ]);
+        return $this->render('task/list.html.twig',
+            [
+                'status' => $status,
+                'tasks' => $taskListPaginated,
+            ]
+        );
+
     }
 
     /**
      * Create task function
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
     #[Route('/create', name: '_create')]
     #[IsGranted('TASK_CREATE')]
@@ -74,15 +85,23 @@ class TaskController extends AbstractController
             $status = $this->taskManager->convertStatusTaskToString($task->getStatus());
             
             return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
+
         }
 
-        return $this->render('task/create_task.html.twig', [
-            'taskForm' => $form,
-        ]);
+        return $this->render('task/create_task.html.twig',
+            [
+                'taskForm' => $form,
+            ]
+        );
+
     }
 
     /**
      * Edit task function
+     * @param Request $request
+     * @param Task $task Task we need update
+     *
+     * @return RedirectResponse|Response
      */
     #[Route('/{id}/edit', name: '_edit')]
     #[IsGranted('TASK_EDIT', 'task')]
@@ -100,16 +119,24 @@ class TaskController extends AbstractController
             $status = $this->taskManager->convertStatusTaskToString($task->getStatus());
             
             return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
+
         }
 
-        return $this->render('task/edit_task.html.twig', [
-            'taskForm' => $form,
-            'task' => $task,
-        ]);
+        return $this->render('task/edit_task.html.twig',
+            [
+                'taskForm' => $form,
+                'task' => $task,
+            ]
+        );
+
     }
 
     /**
      * Delete task function
+     * 
+     * @param Task $task Task we need delete
+     * 
+     * @return RedirectResponse
      */
     #[Route(path: '/{id}/delete', name: '_delete')]
     #[IsGranted('TASK_DELETE', 'task')]
@@ -121,10 +148,15 @@ class TaskController extends AbstractController
         $this->addFlash('success', 'La tâche a bien été supprimée !');
 
         return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
+
     }
 
     /**
      * Toogle task function - change the status of task
+     * 
+     * @param Task $task Task we need change status
+     * 
+     * @return RedirectResponse
      */
     #[Route(path: '/{id}/toggle', name: '_toggle')]
     #[IsGranted('TASK_TOGGLE', 'task')]
@@ -137,12 +169,13 @@ class TaskController extends AbstractController
             $this->addFlash(
                 'success', 'La tâche a bien été marquée comme réalisée!'
             );
-        } else {
-            $this->addFlash(
-                'success', 'La tâche a bien été marquée comme non faite!'
-            );
         }
-       
+
+        $this->addFlash(
+            'success', 'La tâche a bien été marquée comme non faite!'
+        );
+
         return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
+
     }
 }

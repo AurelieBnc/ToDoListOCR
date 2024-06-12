@@ -68,5 +68,6 @@ class TaskFixtures
         ];
 
         return $taskContentList;
+
     }
 }

@@ -12,7 +12,7 @@ class SecurityController extends AbstractController
 {
     /**
      * Function to login
-     * @param AuthenticationUtils $authenticationUtils
+     * @param AuthenticationUtils $authenticationUtils The authentication utils service
      * @return Response
      */
     #[Route(path: '/login', name: 'app_login')]
