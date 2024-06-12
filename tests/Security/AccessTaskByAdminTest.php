@@ -10,6 +10,9 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Test the access with role Admin
+ */
 class AccessAdminTest extends WebTestCase
 {
     
@@ -23,10 +26,12 @@ class AccessAdminTest extends WebTestCase
 
     protected function setUp(): void
     {
-        $this->client = static::createClient([], [
-            'HTTP_HOST' => 'localhost',
-            'HTTPS' => false,
-        ]);
+        $this->client = static::createClient([],
+            [
+                'HTTP_HOST' => 'localhost',
+                'HTTPS' => false,
+            ]
+        );
         $this->taskRepository = $this->client->getContainer()->get(TaskRepository::class);
         
         $task = $this->taskRepository->findOneByTitle('Titre tache anonyme 1');
@@ -40,7 +45,7 @@ class AccessAdminTest extends WebTestCase
         $this->admin = $admin;
     }
 
-    public function testEditTaskWithOutOwnerAndWithRoleUser()
+    public function testEditTaskWithOutOwnerAndWithRoleUser(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
 
@@ -50,7 +55,7 @@ class AccessAdminTest extends WebTestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
-    public function testEditTaskWithOutOwnerAndWithRoleAdmin()
+    public function testEditTaskWithOutOwnerAndWithRoleAdmin(): void
     {
         $this->client->loginUser($this->admin, 'secured_area');
 
@@ -61,7 +66,7 @@ class AccessAdminTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Modifier');
     }
 
-    public function testAnonymousTaskDeleteWithUnauthorizedUser()
+    public function testAnonymousTaskDeleteWithUnauthorizedUser(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
 
@@ -71,7 +76,7 @@ class AccessAdminTest extends WebTestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
-    public function testTaskDeleteWithRoleAdminInOtherOwner()
+    public function testTaskDeleteWithRoleAdminInOtherOwner(): void
     {
         $this->client->followRedirects();
         $this->client->loginUser($this->admin, 'secured_area');
@@ -86,7 +91,7 @@ class AccessAdminTest extends WebTestCase
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
     }
 
-    public function testToggleTaskWithOutOwnerAndWithRoleAdmin()
+    public function testToggleTaskWithOutOwnerAndWithRoleAdmin(): void
     {
         $this->client->followRedirects();
         $this->client->loginUser($this->admin, 'secured_area');
@@ -97,4 +102,5 @@ class AccessAdminTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
     }
+
 }

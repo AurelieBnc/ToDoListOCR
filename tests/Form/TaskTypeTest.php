@@ -17,7 +17,7 @@ class TaskTypeTest extends TypeTestCase
     /**
      * Test valid data.
      */
-    public function testSubmitValidData()
+    public function testSubmitValidData(): void
     {
         $taskToTest = new Task();
 
@@ -27,7 +27,6 @@ class TaskTypeTest extends TypeTestCase
             'status' => TaskStatus::IsDone
         ];
 
-        // $objectToCompare will retrieve data from the form submission
         $form = $this->factory->create(TaskType::class, $taskToTest);
 
         // Create new Task
@@ -53,5 +52,7 @@ class TaskTypeTest extends TypeTestCase
     protected function getExtensions()
     {
         return [new ValidatorExtension(Validation::createValidator())];
+
     }
+
 }

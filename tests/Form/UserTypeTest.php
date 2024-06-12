@@ -18,9 +18,10 @@ class UserTypeTest extends TypeTestCase
     /**
      * Test valid data.
      */
-    public function testLoginSubmitValidData()
+    public function testLoginSubmitValidData(): void
     {
-    $userToTest = new User();
+
+        $userToTest = new User();
 
         // Create a list of tasks
         $task1 = new Task();
@@ -33,12 +34,13 @@ class UserTypeTest extends TypeTestCase
 
         $taskList = [$task1, $task2];
 
-        $formData = [
-            'username' => 'UserName',
-            'email' => 'user@todolist.fr',
-            'roles' => ['ROLE_USER'],
-            'tasks' => $taskList,
-        ];
+        $formData = 
+            [
+                'username' => 'UserName',
+                'email' => 'user@todolist.fr',
+                'roles' => ['ROLE_USER'],
+                'tasks' => $taskList,
+            ];
 
         $form = $this->factory->create(UserType::class, $userToTest);
 
@@ -63,6 +65,7 @@ class UserTypeTest extends TypeTestCase
             $this->assertSame($expectedTask->getTitle(), $actualTasks[$key]->getTitle());
             $this->assertSame($expectedTask->getContent(), $actualTasks[$key]->getContent());
         }
+
     }
 
     /**
@@ -71,5 +74,7 @@ class UserTypeTest extends TypeTestCase
     protected function getExtensions()
     {
         return [new ValidatorExtension(Validation::createValidator())];
+
     }
+
 }

@@ -14,7 +14,7 @@ class UserManager
     private readonly UserRepository $userRepository;
 
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher) 
+    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userRepository = $entityManager->getRepository(User::class);
         $this->userPasswordHasher = $userPasswordHasher;

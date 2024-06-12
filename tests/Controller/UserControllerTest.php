@@ -38,7 +38,7 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-    public function testCreateUsertWithData()
+    public function testCreateUsertWithData(): void
     {   
         $this->client->followRedirects();
         
@@ -84,4 +84,5 @@ class UserControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
         $this->assertCount(5, $crawler->filter('.user'));
     }
+
 }

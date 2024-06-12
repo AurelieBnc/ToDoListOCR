@@ -16,7 +16,7 @@ class AccessTaskByUserTest extends WebTestCase
     private KernelBrowser $client;
     private TaskRepository $taskRepository;
     private UserRepository $userRepository;
-    
+
     private User $user;
     private User $userWithoutRole;
     private Task $taskUser1;
@@ -26,12 +26,14 @@ class AccessTaskByUserTest extends WebTestCase
 
     protected function setUp(): void
     {
-        $this->client = static::createClient([], [
-            'HTTP_HOST' => 'localhost',
-            'HTTPS' => false,
-        ]);
+        $this->client = static::createClient([],
+            [
+                'HTTP_HOST' => 'localhost',
+                'HTTPS' => false,
+            ]
+        );
         $this->taskRepository = $this->client->getContainer()->get(TaskRepository::class);
-        
+
         $task = $this->taskRepository->findOneByTitle('Titre tache Utilisateur 1');
         $this->taskUser1 = $task;
         $task = $this->taskRepository->findOneByTitle('Titre tache Utilisateur 2');
@@ -40,7 +42,7 @@ class AccessTaskByUserTest extends WebTestCase
         $this->task = $task;
 
         $this->userRepository = $this->client->getContainer()->get(UserRepository::class);
- 
+
         $user = $this->userRepository->findOneByEmail('user1@todolist.fr');
         $this->user = $user;
         $user = $this->userRepository->findOneByEmail('user3@todolist.fr');
@@ -53,7 +55,7 @@ class AccessTaskByUserTest extends WebTestCase
 
         $this->client->request('GET', '/tasks/create');
         $response = $this->client->getResponse();
- 
+
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('button', 'Se connecter');
     }
@@ -69,8 +71,8 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Ajouter');
     }
 
-    public function testCreateTasktWithDataWithUserWithoutRole()
-    {   
+    public function testCreateTasktWithDataWithUserWithoutRole(): void
+    {
         $this->client->followRedirects();
         
         $this->client->loginUser($this->userWithoutRole, 'secured_area'); 
@@ -91,7 +93,7 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Se connecter');
     }
 
-    public function testEditTasktWitUnauthorizedUser()
+    public function testEditTasktWitUnauthorizedUser(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
 
@@ -101,7 +103,7 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
-    public function testEditTasktWithAuthorizedUser()
+    public function testEditTasktWithAuthorizedUser(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
         $this->client->request('GET', '/tasks/'.$this->taskUser1->getId().'/edit');
@@ -111,8 +113,9 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Modifier');
     }
 
-    public function testTaskDeleteWithUnauthorizedAccess()
-    {        $this->client->followRedirects();
+    public function testTaskDeleteWithUnauthorizedAccess(): void
+    {
+        $this->client->followRedirects();
         $this->client->request('GET', '/tasks/'.$this->task->getId().'/delete');
         $response = $this->client->getResponse();
 
@@ -120,7 +123,7 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Se connecter');
     }
 
-    public function testTaskDeleteWithUnauthorizedUser()
+    public function testTaskDeleteWithUnauthorizedUser(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
 
@@ -130,7 +133,7 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
-    public function testTaskDeleteWithAuthorizedAccess()
+    public function testTaskDeleteWithAuthorizedAccess(): void
     {
         $this->client->followRedirects();
         $this->client->loginUser($this->user, 'secured_area'); 
@@ -144,4 +147,5 @@ class AccessTaskByUserTest extends WebTestCase
 
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
     }
+
 }
