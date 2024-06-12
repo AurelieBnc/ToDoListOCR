@@ -8,18 +8,24 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SecurityControllerTest extends WebTestCase
 {
+
     private KernelBrowser $client;
 
+    
     protected function setUp(): void
     {
-        $this->client = static::createClient([], [
-            'HTTP_HOST' => 'localhost',
-            'HTTPS' => false,
-        ]);
+        $this->client = static::createClient(
+            [],
+            [
+                'HTTP_HOST' => 'localhost',
+                'HTTPS' => false,
+            ]
+        );
+
     }
 
-    public function testLogin()
-    {        
+    public function testLogin(): void
+    {
         $this->client->followRedirects();
 
         $this->client->request('GET', '/tasks/create');
@@ -29,8 +35,8 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Se connecter');
     }
 
-    public function testLogOut()
-    {        
+    public function testLogOut(): void
+    {
         $this->client->followRedirects();
 
         $this->client->request('GET', '/logout');
@@ -39,4 +45,5 @@ class SecurityControllerTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('h1', 'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !');
     }
+
 }

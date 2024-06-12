@@ -17,33 +17,40 @@ class TaskType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('title', TextType::class, [
+        ->add('title', TextType::class, 
+        [
             'required' => true,
             'label' => 'Titre',
-            'label_attr' =>['class'=> 'fw-bold pb-2 mt-3'],
+            'label_attr' => ['class' => 'fw-bold pb-2 mt-3'],
             'constraints' => [
                 new Assert\NotBlank([
-                    'message' => 'Merci de renseigner un titre.',])
+                    'message' => 'Merci de renseigner un titre.',
+                ])
             ],
         ])
-        ->add('content', TextareaType::class, [
+        ->add('content', TextareaType::class, 
+        [
             'label' => 'Détail de la tâche',
             'required' => false,
             'attr'=> [
-                'rows'=> 10,
+                'rows' => 10,
             ],
         ])
-        ->add('status', EnumType::class, [
+        ->add('status', EnumType::class, 
+        [
             'class' => TaskStatus::class,
             'required' => false,
         ])
         ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => Task::class,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => Task::class,
+            ]
+        );
     }
 }

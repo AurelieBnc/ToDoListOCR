@@ -13,7 +13,7 @@ class HomePageControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !');
-    
+
         if ($client->getContainer()->get('security.authorization_checker')->isGranted('TASK_CREATE')) {
             $this->assertSelectorExists('a.btn.btn-success');
         }
@@ -23,4 +23,5 @@ class HomePageControllerTest extends WebTestCase
             $this->assertSelectorExists('a.btn.text-info.fw-bold');
         }
     }
+
 }

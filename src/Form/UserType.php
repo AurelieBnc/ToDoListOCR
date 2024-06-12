@@ -19,15 +19,17 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('username', TextType::class, [
+        ->add('username', TextType::class, 
+        [
             'required' => true,
             'label' => 'Nom d\'utilisateur', 
-            'label_attr' =>['class' => 'fw-bold'],
+            'label_attr' => ['class' => 'fw-bold'],
             'constraints' => [
                 new Assert\NotBlank
             ],
         ])
-        ->add('roles', ChoiceType::class, [
+        ->add('roles', ChoiceType::class, 
+        [
             'choices' => [
                 'Choisir un rôle' => [
                     'Visiteur' => null,
@@ -40,15 +42,17 @@ class UserType extends AbstractType
             'label' => 'Rôle de l\'utilisateur',
             'label_attr' => ['class' => 'fw-bold pe-3']
         ])
-        ->add('email', EmailType::class, [
+        ->add('email', EmailType::class, 
+        [
             'label' => 'Adresse email',
-            'label_attr' =>['class' => 'fw-bold'],
+            'label_attr' => ['class' => 'fw-bold'],
             'required' => true,
             'constraints' => [
                 new Assert\NotBlank
             ],
         ])
-        ->add('plainPassword', RepeatedType::class, [
+        ->add('plainPassword', RepeatedType::class, 
+        [
             'type' => PasswordType::class,
             'first_options' => [
                 // 'constraints' => [
@@ -78,7 +82,7 @@ class UserType extends AbstractType
                 //     ]),
                 // ],
                 'label' => 'Mot de passe',
-                'label_attr' =>['class' => 'fw-bold '],
+                'label_attr' => ['class' => 'fw-bold '],
                 'attr' => [
                     'autocomplete' => 'new-password',
                     'class' => 'font-weight-light',
@@ -88,7 +92,7 @@ class UserType extends AbstractType
             ],
             'second_options' => [
                 'label' => 'Tapez le mot de passe à nouveau',
-                'label_attr' =>['class' => 'fw-bold'],
+                'label_attr' => ['class' => 'fw-bold'],
                 'attr' => [
                     'class' => 'font-weight-light',
                     'placeholder' => 'Mot de passe identique',
@@ -114,8 +118,10 @@ class UserType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => User::class,
+            ]
+        );
     }
 }

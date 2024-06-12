@@ -24,6 +24,7 @@ class TaskVoter extends Voter
             in_array($attribute, [self::EDIT, self::DELETE, self::TOGGLE])
             && $subject instanceof Task
         );
+
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -31,47 +32,57 @@ class TaskVoter extends Voter
         $user = $token->getUser();
         if (!$user instanceof User) {
             return false;
+
         }
         $userRoles = $user->getRoles();
 
         if (in_array(null, $userRoles)) {
             return false;
-        }  
+
+        }
 
         if (in_array('ROLE_ADMIN', $userRoles)) {
-            switch ($attribute) {
-                case self::DELETE:
-                case self::EDIT:
-                case self::LIST:
-                case self::CREATE:
-                case self::TOGGLE:
-                    return true;
-                    break;
-            }
+            return $attribute === self::CREATE
+                || $attribute === self::EDIT
+                || $attribute === self::DELETE
+                || $attribute === self::LIST
+                || $attribute === self::TOGGLE
+                ?? false;
+
         }
 
         if (in_array('ROLE_USER', $userRoles)) {
-            switch ($attribute) {
-                case self::DELETE:
-                    return $this->checkOwner($subject, $token);
-                case self::EDIT:
-                    return $this->checkOwner($subject, $token);
-                    break;
-                case self::LIST:
-                case self::CREATE:
-                case self::TOGGLE:
-                    return true;
-                    break;
-            }
+            return $attribute === self::CREATE
+                || $attribute === self::EDIT
+                || $attribute === self::DELETE
+                || $attribute === self::LIST
+                || $attribute === self::TOGGLE
+                ?? false;
+
         }
+
         return false;
+
     }
 
+    /**
+     * Function to check Owner of Task
+     * 
+     * @param TokenInterface $token
+     * 
+     * @return bool|AccessDeniedException
+     */
     protected function checkOwner(mixed $subject, TokenInterface $token): bool|AccessDeniedException
     {
         $user = $token->getUser();
         $checkIdUser = $subject?->getOwner() === $user;
 
-        return $checkIdUser ? $checkIdUser : throw new AccessDeniedException("Vous n'êtes pas le propriétaire de cette tâche.");
+        if ($checkIdUser) {
+            return $checkIdUser;
+
+        }
+        
+        throw new AccessDeniedException("Vous n'êtes pas le propriétaire de cette tâche.");    
     }
+
 }
