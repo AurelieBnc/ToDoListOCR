@@ -21,7 +21,7 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('username', TextType::class, 
+            ->add('username', TextType::class,
                 [
                     'required' => true,
                     'label' => 'Nom d\'utilisateur',
@@ -56,7 +56,7 @@ class UserType extends AbstractType
                 [
                     'type' => PasswordType::class,
                     'first_options' => [
-                        'constraints' => [new CraftAssert\PasswordRequirements([])],
+                        // 'constraints' => [new CraftAssert\PasswordRequirements([])],
                         'label' => 'Mot de passe',
                         'label_attr' => ['class' => 'fw-bold '],
                         'attr' => [
@@ -89,16 +89,14 @@ class UserType extends AbstractType
 
                 }
             )
-            );
+        );
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => User::class,
-            ]
-        );
+        $resolver->setDefaults(['data_class' => User::class]);
 
     }
+
 }

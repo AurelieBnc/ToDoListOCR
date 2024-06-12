@@ -23,10 +23,7 @@ class TaskType extends AbstractType
                     'label' => 'Titre',
                     'label_attr' => ['class' => 'fw-bold pb-2 mt-3'],
                     'constraints' => [
-                        new Assert\NotBlank(
-                            [
-                                'message' => 'Merci de renseigner un titre.',
-                            ]
+                        new Assert\NotBlank(['message' => 'Merci de renseigner un titre.']
                         )
                     ],
                 ]
@@ -35,9 +32,7 @@ class TaskType extends AbstractType
                 [
                     'label' => 'Détail de la tâche',
                     'required' => false,
-                    'attr'=> [
-                        'rows' => 10,
-                    ],
+                    'attr' => ['rows' => 10],
                 ]
             )
             ->add('status', EnumType::class,
@@ -46,15 +41,12 @@ class TaskType extends AbstractType
                     'required' => false,
                 ]
             );
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => Task::class,
-            ]
-        );
+        $resolver->setDefaults(['data_class' => Task::class]);
 
     }
 }
