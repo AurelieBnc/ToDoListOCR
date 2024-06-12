@@ -17,32 +17,35 @@ class TaskType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-        ->add('title', TextType::class, 
-        [
-            'required' => true,
-            'label' => 'Titre',
-            'label_attr' => ['class' => 'fw-bold pb-2 mt-3'],
-            'constraints' => [
-                new Assert\NotBlank([
-                    'message' => 'Merci de renseigner un titre.',
-                ])
-            ],
-        ])
-        ->add('content', TextareaType::class, 
-        [
-            'label' => 'Détail de la tâche',
-            'required' => false,
-            'attr'=> [
-                'rows' => 10,
-            ],
-        ])
-        ->add('status', EnumType::class, 
-        [
-            'class' => TaskStatus::class,
-            'required' => false,
-        ])
-        ;
-
+            ->add('title', TextType::class,
+                [
+                    'required' => true,
+                    'label' => 'Titre',
+                    'label_attr' => ['class' => 'fw-bold pb-2 mt-3'],
+                    'constraints' => [
+                        new Assert\NotBlank(
+                            [
+                                'message' => 'Merci de renseigner un titre.',
+                            ]
+                        )
+                    ],
+                ]
+            )
+            ->add('content', TextareaType::class,
+                [
+                    'label' => 'Détail de la tâche',
+                    'required' => false,
+                    'attr'=> [
+                        'rows' => 10,
+                    ],
+                ]
+            )
+            ->add('status', EnumType::class,
+                [
+                    'class' => TaskStatus::class,
+                    'required' => false,
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -52,5 +55,6 @@ class TaskType extends AbstractType
                 'data_class' => Task::class,
             ]
         );
+
     }
 }
