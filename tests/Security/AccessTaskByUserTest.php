@@ -16,7 +16,6 @@ class AccessTaskByUserTest extends WebTestCase
     private KernelBrowser $client;
     private TaskRepository $taskRepository;
     private UserRepository $userRepository;
-
     private User $user;
     private User $userWithoutRole;
     private Task $taskUser1;
@@ -24,9 +23,13 @@ class AccessTaskByUserTest extends WebTestCase
     private Task $task;
 
 
+    /**
+     * We set up one task per user, a user with any role and a user with role USER.
+     */
     protected function setUp(): void
     {
-        $this->client = static::createClient([],
+        $this->client = static::createClient(
+            [],
             [
                 'HTTP_HOST' => 'localhost',
                 'HTTPS' => false,
@@ -47,8 +50,12 @@ class AccessTaskByUserTest extends WebTestCase
         $this->user = $user;
         $user = $this->userRepository->findOneByEmail('user3@todolist.fr');
         $this->userWithoutRole = $user;
+
     }
 
+    /**
+     * I want to create a task with an unauthorized access.
+     */
     public function testCreateTaskWithUnauthorizedAccess(): void
     {
         $this->client->followRedirects();
@@ -60,6 +67,9 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Se connecter');
     }
 
+    /**
+     * I want to create a task with an authorized access.
+     */
     public function testCreateTaskWithAuthorizedAccess(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
@@ -71,10 +81,13 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Ajouter');
     }
 
-    public function testCreateTasktWithDataWithUserWithoutRole(): void
+    /**
+     * I want to create a task with a user without a role.
+     */
+    public function testCreateTaskWithUserWithoutRole(): void
     {
         $this->client->followRedirects();
-        
+
         $this->client->loginUser($this->userWithoutRole, 'secured_area'); 
         $this->client->request('GET', '/tasks/create');
         $response = $this->client->getResponse();
@@ -82,17 +95,23 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
+    /**
+     * I want to edit a task with an unauthorized access.
+     */
     public function testEditTaskWithUnauthorizedAccess(): void
     {
         $this->client->followRedirects();
 
         $this->client->request('GET', '/tasks/'.$this->task->getId().'/edit');
         $response = $this->client->getResponse();
- 
+
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('button', 'Se connecter');
     }
 
+    /**
+     * I want to edit a task with an unauthorized user.
+     */
     public function testEditTasktWitUnauthorizedUser(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
@@ -103,6 +122,9 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
+    /**
+     * I want to edit a task with an authorized user.
+     */
     public function testEditTasktWithAuthorizedUser(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
@@ -113,6 +135,9 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Modifier');
     }
 
+    /**
+     * I want to delete a task with an unauthorized access.
+     */
     public function testTaskDeleteWithUnauthorizedAccess(): void
     {
         $this->client->followRedirects();
@@ -123,6 +148,9 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Se connecter');
     }
 
+    /**
+     * I want to delete a task with an unauthorized user.
+     */
     public function testTaskDeleteWithUnauthorizedUser(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
@@ -133,10 +161,13 @@ class AccessTaskByUserTest extends WebTestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
+    /**
+     * I want to delete a task with an authorized access.
+     */
     public function testTaskDeleteWithAuthorizedAccess(): void
     {
         $this->client->followRedirects();
-        $this->client->loginUser($this->user, 'secured_area'); 
+        $this->client->loginUser($this->user, 'secured_area');
         $taskToDelete = $this->taskRepository->findOneByTitle('Titre tache utilisateur 1 à supprimer');
 
         $this->client->request('GET', '/tasks/'.$taskToDelete->getId().'/delete');

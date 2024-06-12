@@ -10,28 +10,40 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserControllerTest extends WebTestCase
 {
+
     private KernelBrowser $client;
     private UserRepository $userRepository;
     private User $user;
     private User $admin;
 
+
+    /**
+     * We set up a user and an admin.
+     */
     protected function setUp(): void
     {
-        $this->client = static::createClient([], [
-            'HTTP_HOST' => 'localhost',
-            'HTTPS' => false,
-        ]);
+        $this->client = static::createClient(
+            [],
+            [
+                'HTTP_HOST' => 'localhost',
+                'HTTPS' => false,
+            ]
+        );
         $this->userRepository = $this->client->getContainer()->get(UserRepository::class);
- 
+
         $user = $this->userRepository->findOneByEmail('user1@todolist.fr');
         $this->user = $user;
 
         $admin = $this->userRepository->findOneByEmail('admin@todolist.fr');
         $this->admin = $admin;
-        
+
         $this->client->loginUser($this->admin, 'secured_area');
+
     }
 
+    /**
+     * I access the list of users with authorized access.
+     */
     public function testUserListWithAuthorizedAccess(): void
     {
         $crawler = $this->client->request('GET', '/users/list');
@@ -42,6 +54,9 @@ class UserControllerTest extends WebTestCase
         $this->assertCount(4, $crawler->filter('.user'));
     }
 
+    /**
+     * I create a user with authorized access.
+     */
     public function testCreateUserWithAuthorizedAccess(): void
     {
         $this->client->loginUser($this->admin, 'secured_area');
@@ -60,9 +75,12 @@ class UserControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('button', 'Modifier');
-        $this->assertSelectorTextContains('h1', 'Modifier '. $this->user->getUsername());
+        $this->assertSelectorTextContains('h1', 'Modifier '.$this->user->getUsername());
     }
 
+    /**
+     * I delete a user with authorized access.
+     */
     public function testUserDeleteWithAuthorizedAccess()
     {
         $this->client->followRedirects();
@@ -77,4 +95,5 @@ class UserControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
         $this->assertCount(4, $crawler->filter('.user'));
     }
+
 }

@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AccessAdminTest extends WebTestCase
 {
-    
+
     private KernelBrowser $client;
     private TaskRepository $taskRepository;
     private UserRepository $userRepository;
@@ -24,9 +24,13 @@ class AccessAdminTest extends WebTestCase
     private Task $anonymousTask;
 
 
+    /**
+     * We set up one anonymous task, a user and an admin.
+     */
     protected function setUp(): void
     {
-        $this->client = static::createClient([],
+        $this->client = static::createClient(
+            [],
             [
                 'HTTP_HOST' => 'localhost',
                 'HTTPS' => false,
@@ -43,8 +47,12 @@ class AccessAdminTest extends WebTestCase
         $this->user = $user;
         $admin = $this->userRepository->findOneByEmail('admin@todolist.fr');
         $this->admin = $admin;
+
     }
 
+    /**
+     * I want to edit an anonymous task with a user role.
+     */
     public function testEditTaskWithOutOwnerAndWithRoleUser(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
@@ -55,6 +63,9 @@ class AccessAdminTest extends WebTestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
+    /**
+     * I want to edit an anonymous task with a user admin.
+     */
     public function testEditTaskWithOutOwnerAndWithRoleAdmin(): void
     {
         $this->client->loginUser($this->admin, 'secured_area');
@@ -66,6 +77,9 @@ class AccessAdminTest extends WebTestCase
         $this->assertSelectorTextContains('button', 'Modifier');
     }
 
+    /**
+     * I want to delete an anonymous task with an unauthorized user
+     */
     public function testAnonymousTaskDeleteWithUnauthorizedUser(): void
     {
         $this->client->loginUser($this->user, 'secured_area');
@@ -76,6 +90,9 @@ class AccessAdminTest extends WebTestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
+    /**
+     * I want to delete a task from another user with an admin role.
+     */
     public function testTaskDeleteWithRoleAdminInOtherOwner(): void
     {
         $this->client->followRedirects();
@@ -91,6 +108,9 @@ class AccessAdminTest extends WebTestCase
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
     }
 
+    /**
+     * I change the status of an anonymous task with the admin role.
+     */
     public function testToggleTaskWithOutOwnerAndWithRoleAdmin(): void
     {
         $this->client->followRedirects();
