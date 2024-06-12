@@ -89,7 +89,7 @@ class UserType extends AbstractType
 
                 }
             )
-        );
+            );
 
     }
 

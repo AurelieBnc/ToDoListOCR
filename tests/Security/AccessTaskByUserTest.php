@@ -25,6 +25,8 @@ class AccessTaskByUserTest extends WebTestCase
 
     /**
      * We set up one task per user, a user with any role and a user with role USER.
+     * 
+     * @return void
      */
     protected function setUp(): void
     {
@@ -65,6 +67,7 @@ class AccessTaskByUserTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('button', 'Se connecter');
+
     }
 
     /**
@@ -76,7 +79,7 @@ class AccessTaskByUserTest extends WebTestCase
 
         $this->client->request('GET', '/tasks/create');
         $response = $this->client->getResponse();
- 
+
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('button', 'Ajouter');
     }
@@ -88,10 +91,10 @@ class AccessTaskByUserTest extends WebTestCase
     {
         $this->client->followRedirects();
 
-        $this->client->loginUser($this->userWithoutRole, 'secured_area'); 
+        $this->client->loginUser($this->userWithoutRole, 'secured_area');
         $this->client->request('GET', '/tasks/create');
         $response = $this->client->getResponse();
- 
+
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 

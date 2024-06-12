@@ -10,8 +10,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomePageController extends AbstractController
 {
     /**
-     * Index of Homepage's Application
-     * 
+     * Index of Homepage's Application.
+     *
      * @return Response
      */
     #[Route('/homepage',name: 'app_home_page')]

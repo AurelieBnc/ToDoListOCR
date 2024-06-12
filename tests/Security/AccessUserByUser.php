@@ -15,16 +15,12 @@ class UserControllerTest extends WebTestCase
     private UserRepository $userRepository;
     private User $user;
 
-
+    /**
+     * We setup an user
+     */
     protected function setUp(): void
     {
-        $this->client = static::createClient(
-            [],
-            [
-                'HTTP_HOST' => 'localhost',
-                'HTTPS' => false,
-            ]
-        );
+        $this->client = static::createClient([],['HTTP_HOST' => 'localhost','HTTPS' => false]);
         $this->userRepository = $this->client->getContainer()->get(UserRepository::class);
 
         $user = $this->userRepository->findOneByEmail('user1@todolist.fr');
@@ -36,6 +32,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * I access the list of users with unauthorized access.
+     * 
+     * @return void
      */
     public function testUserListWithUnauthorizedAccess(): void
     {
@@ -43,10 +41,13 @@ class UserControllerTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
     }
 
     /**
      * I create a user with unauthorized access.
+     * 
+     * @return void
      */
     public function testCreateUserWithUnauthorizedAccess(): void
     {
@@ -54,10 +55,13 @@ class UserControllerTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
     }
 
     /**
      * I edit a user with unauthorized access.
+     * 
+     * @return void
      */
     public function testEditUserWithUnauthorizedAccess(): void
     {
@@ -65,10 +69,13 @@ class UserControllerTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
     }
 
     /**
      * I delete a user with authorized access.
+     * 
+     * @return void
      */
     public function testUserDeleteWithUnauthorizedAccess()
     {
@@ -76,6 +83,7 @@ class UserControllerTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
     }
 
 }

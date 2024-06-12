@@ -23,9 +23,13 @@ class UserController extends AbstractController
 {
     
     private readonly UserManager $userManager;
+
     private readonly UserRepository $userRepository;
 
 
+    /**
+     * Construct with entityManagerInterface and UserManager.
+     */
     public function __construct(EntityManagerInterface $entityManager, UserManager $userManager)
     {
         $this->userManager = $userManager;
@@ -34,7 +38,10 @@ class UserController extends AbstractController
     }
 
     /**
-     * Paginated list of user
+     * Paginated list of user.
+     * 
+     * @param int $page number of the page called
+     * @return Response
      */
     #[Route('/list/{page}', name: '_list', defaults: ['page' => 1])]
     #[IsGranted('USER_LIST')]
@@ -47,7 +54,10 @@ class UserController extends AbstractController
     }
     
     /**
-     * Create user function
+     * Create user function.
+     * 
+     * @param Request $request request
+     * @return RedirectResponse|Response
      */
     #[Route('/create', name: '_create')]
     #[IsGranted('USER_CREATE')]
@@ -70,7 +80,11 @@ class UserController extends AbstractController
     }
 
     /**
-     * Edit user function
+     * Edit user function.
+     * 
+     * @param User $user user to edit
+     * @param Request $request request
+     * @return RedirectResponse|Response
      */
     #[Route('/{id}/edit', name: '_edit')]
     #[IsGranted('USER_EDIT', 'user')]
@@ -91,7 +105,10 @@ class UserController extends AbstractController
     }
 
     /**
-     * Delete user function
+     * Delete user function.
+     * 
+     * @param User $user user to delete
+     * @return RedirectResponse|Response
      */
     #[Route(path: '/{id}/delete', name: '_delete')]
     #[IsGranted('USER_DELETE', 'user')]
@@ -102,4 +119,5 @@ class UserController extends AbstractController
 
         return $this->redirectToRoute('users_list');
     }
+
 }

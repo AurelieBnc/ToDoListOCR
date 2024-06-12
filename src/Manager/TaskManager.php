@@ -15,6 +15,9 @@ class TaskManager
     private readonly TaskRepository $taskRepository;
 
 
+    /**
+     * Construct EntityManagerInterface.
+     */
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->taskRepository = $entityManager->getRepository(Task::class);

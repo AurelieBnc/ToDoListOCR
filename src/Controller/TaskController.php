@@ -17,7 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 
 /**
- * Provides functionality for managing, updating, deleting and marking tasks as complete within the system
+ * Provides functionality for managing, updating, deleting and marking tasks as complete within the system.
  */
 #[Route('/tasks', name: 'tasks')]
 class TaskController extends AbstractController
@@ -35,10 +35,9 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Paginated list of task by status
+     * Paginated list of task by status.
      * 
      * @param TaskStatus $status The status of task is an enum
-     * 
      * @return Response
      */
     #[Route('/_list/{status}/{page}', name: '_list')]
@@ -63,10 +62,9 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Create task function
+     * Create task function.
      *
-     * @param Request $request
-     *
+     * @param Request $request request
      * @return RedirectResponse|Response
      */
     #[Route('/create', name: '_create')]
@@ -88,19 +86,15 @@ class TaskController extends AbstractController
 
         }
 
-        return $this->render('task/create_task.html.twig',
-            [
-                'taskForm' => $form,
-            ]
-        );
+        return $this->render('task/create_task.html.twig',['taskForm' => $form,]);
 
     }
 
     /**
-     * Edit task function
+     * Edit task function.
+     * 
      * @param Request $request
      * @param Task $task Task we need update
-     *
      * @return RedirectResponse|Response
      */
     #[Route('/{id}/edit', name: '_edit')]
@@ -122,20 +116,14 @@ class TaskController extends AbstractController
 
         }
 
-        return $this->render('task/edit_task.html.twig',
-            [
-                'taskForm' => $form,
-                'task' => $task,
-            ]
-        );
+        return $this->render('task/edit_task.html.twig',['taskForm' => $form, 'task' => $task,]);
 
     }
 
     /**
-     * Delete task function
+     * Delete task function.
      * 
      * @param Task $task Task we need delete
-     * 
      * @return RedirectResponse
      */
     #[Route(path: '/{id}/delete', name: '_delete')]

@@ -17,6 +17,8 @@ class UserTypeTest extends TypeTestCase
 {
     /**
      * Test valid data.
+     * 
+     * @return void
      */
     public function testLoginSubmitValidData(): void
     {
@@ -34,7 +36,7 @@ class UserTypeTest extends TypeTestCase
 
         $taskList = [$task1, $task2];
 
-        $formData = 
+        $formData =
             [
                 'username' => 'UserName',
                 'email' => 'user@todolist.fr',
@@ -70,6 +72,8 @@ class UserTypeTest extends TypeTestCase
 
     /**
      * Add an extension to validate data.
+     * 
+     * @return ValidatorExtension
      */
     protected function getExtensions()
     {

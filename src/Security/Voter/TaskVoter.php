@@ -66,10 +66,9 @@ class TaskVoter extends Voter
     }
 
     /**
-     * Function to check Owner of Task
+     * Function to check Owner of Task.
      * 
      * @param TokenInterface $token
-     * 
      * @return bool|AccessDeniedException
      */
     protected function checkOwner(mixed $subject, TokenInterface $token): bool|AccessDeniedException
@@ -81,8 +80,8 @@ class TaskVoter extends Voter
             return $checkIdUser;
 
         }
-        
-        throw new AccessDeniedException("Vous n'êtes pas le propriétaire de cette tâche.");    
+
+        throw new AccessDeniedException("Vous n'êtes pas le propriétaire de cette tâche.");
     }
 
 }

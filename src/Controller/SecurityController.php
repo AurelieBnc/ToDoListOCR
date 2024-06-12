@@ -11,7 +11,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
-     * Function to login
+     * Function to login.
+     * 
      * @param AuthenticationUtils $authenticationUtils The authentication utils service
      * @return Response
      */
@@ -25,11 +26,13 @@ class SecurityController extends AbstractController
             'last_username' => $lastUsername,
             'error'         => $error,
         ]);
-        
+
     }
 
     /**
-     * Function to logout
+     * Function to logout.
+     * 
+     * @return void
      */
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void

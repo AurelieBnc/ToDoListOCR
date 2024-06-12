@@ -37,6 +37,9 @@ class AppFixtures extends Fixture
      *      - 5 tasks anonyme
      *      - 3 tasks stables - user1
      *      - 2 tasks stables - user2
+     * 
+     * @param ObjectManager $manager manager
+     * @return void
      */
     public function load(ObjectManager $manager): void
     {
@@ -193,5 +196,7 @@ class AppFixtures extends Fixture
         $manager->persist($task);
         
         $manager->flush();
+
     }
+
 }

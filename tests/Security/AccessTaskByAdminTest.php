@@ -26,6 +26,8 @@ class AccessAdminTest extends WebTestCase
 
     /**
      * We set up one anonymous task, a user and an admin.
+     * 
+     * @return void
      */
     protected function setUp(): void
     {
@@ -37,7 +39,7 @@ class AccessAdminTest extends WebTestCase
             ]
         );
         $this->taskRepository = $this->client->getContainer()->get(TaskRepository::class);
-        
+   
         $task = $this->taskRepository->findOneByTitle('Titre tache anonyme 1');
         $this->anonymousTask = $task;
 
@@ -52,6 +54,8 @@ class AccessAdminTest extends WebTestCase
 
     /**
      * I want to edit an anonymous task with a user role.
+     * 
+     * @return void
      */
     public function testEditTaskWithOutOwnerAndWithRoleUser(): void
     {
@@ -61,10 +65,13 @@ class AccessAdminTest extends WebTestCase
         $response = $this->client->getResponse();
  
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
     }
 
     /**
      * I want to edit an anonymous task with a user admin.
+     * 
+     * @return void
      */
     public function testEditTaskWithOutOwnerAndWithRoleAdmin(): void
     {
@@ -75,10 +82,13 @@ class AccessAdminTest extends WebTestCase
  
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('button', 'Modifier');
+
     }
 
     /**
-     * I want to delete an anonymous task with an unauthorized user
+     * I want to delete an anonymous task with an unauthorized user.
+     * 
+     * @return void
      */
     public function testAnonymousTaskDeleteWithUnauthorizedUser(): void
     {
@@ -88,10 +98,13 @@ class AccessAdminTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
     }
 
     /**
      * I want to delete a task from another user with an admin role.
+     * 
+     * @return void
      */
     public function testTaskDeleteWithRoleAdminInOtherOwner(): void
     {
@@ -106,10 +119,13 @@ class AccessAdminTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
 
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
+
     }
 
     /**
      * I change the status of an anonymous task with the admin role.
+     * 
+     * @return void
      */
     public function testToggleTaskWithOutOwnerAndWithRoleAdmin(): void
     {
@@ -121,6 +137,7 @@ class AccessAdminTest extends WebTestCase
  
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
+
     }
 
 }

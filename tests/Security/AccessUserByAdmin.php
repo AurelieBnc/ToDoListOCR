@@ -19,6 +19,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * We set up a user and an admin.
+     * 
+     * @return void
      */
     protected function setUp(): void
     {
@@ -43,6 +45,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * I access the list of users with authorized access.
+     * 
+     * @return void
      */
     public function testUserListWithAuthorizedAccess(): void
     {
@@ -52,10 +56,13 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
         $this->assertCount(4, $crawler->filter('.user'));
+
     }
 
     /**
      * I create a user with authorized access.
+     * 
+     * @return void
      */
     public function testCreateUserWithAuthorizedAccess(): void
     {
@@ -63,11 +70,17 @@ class UserControllerTest extends WebTestCase
 
         $this->client->request('POST', '/users/create');
         $response = $this->client->getResponse();
- 
+
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('button', 'Ajouter');
+
     }
 
+    /**
+     * I edit a user with authorized access.
+     * 
+     * @return void
+     */
     public function testEditUserWithAuthorizedAccess(): void
     {
         $this->client->request('POST', '/users/'.$this->user->getId().'/edit');
@@ -76,12 +89,15 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('button', 'Modifier');
         $this->assertSelectorTextContains('h1', 'Modifier '.$this->user->getUsername());
+
     }
 
     /**
      * I delete a user with authorized access.
+     * 
+     * @return void
      */
-    public function testUserDeleteWithAuthorizedAccess()
+    public function testUserDeleteWithAuthorizedAccess(): void
     {
         $this->client->followRedirects();
         $user = $this->userRepository->findOneByEmail('user2@todolist.fr');
@@ -94,6 +110,7 @@ class UserControllerTest extends WebTestCase
 
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
         $this->assertCount(4, $crawler->filter('.user'));
+
     }
 
 }
