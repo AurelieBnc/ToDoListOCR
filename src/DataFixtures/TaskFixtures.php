@@ -8,7 +8,7 @@ namespace App\DataFixtures;
 class TaskFixtures
 {
     /**
-     * List of Content for task list
+     * List of Content for task list.
      *
      * @return array<string>
      */
@@ -68,6 +68,5 @@ class TaskFixtures
         ];
 
         return $taskContentList;
-
     }
 }

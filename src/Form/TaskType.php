@@ -24,7 +24,7 @@ class TaskType extends AbstractType
                     'label_attr' => ['class' => 'fw-bold pb-2 mt-3'],
                     'constraints' => [
                         new Assert\NotBlank(['message' => 'Merci de renseigner un titre.']
-                        )
+                        ),
                     ],
                 ]
             )
@@ -41,12 +41,10 @@ class TaskType extends AbstractType
                     'required' => false,
                 ]
             );
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => Task::class]);
-
     }
 }

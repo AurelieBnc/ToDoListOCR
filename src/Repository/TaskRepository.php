@@ -29,10 +29,10 @@ class TaskRepository extends ServiceEntityRepository
         $result = [];
         $statusToString = null;
 
-        if ($status === TaskStatus::IsDone) {
+        if (TaskStatus::IsDone === $status) {
             $statusToString = 'isDone';
         }
-        if ($status === TaskStatus::Todo) {
+        if (TaskStatus::Todo === $status) {
             $statusToString = 'todo';
         }
 
@@ -49,6 +49,7 @@ class TaskRepository extends ServiceEntityRepository
         if (empty($data)) {
             $result['data'] = [];
             $result['pages'] = 1;
+
             return $result;
         }
         $pages = ceil($paginator->count() / $limit);

@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AccessTaskByUserTest extends WebTestCase
 {
-
     private KernelBrowser $client;
     private TaskRepository $taskRepository;
     private UserRepository $userRepository;
@@ -22,11 +21,8 @@ class AccessTaskByUserTest extends WebTestCase
     private Task $taskUser2;
     private Task $task;
 
-
     /**
      * We set up one task per user, a user with any role and a user with role USER.
-     * 
-     * @return void
      */
     protected function setUp(): void
     {
@@ -52,7 +48,6 @@ class AccessTaskByUserTest extends WebTestCase
         $this->user = $user;
         $user = $this->userRepository->findOneByEmail('user3@todolist.fr');
         $this->userWithoutRole = $user;
-
     }
 
     /**
@@ -67,7 +62,6 @@ class AccessTaskByUserTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('button', 'Se connecter');
-
     }
 
     /**
@@ -121,7 +115,7 @@ class AccessTaskByUserTest extends WebTestCase
 
         $this->client->request('GET', '/tasks/'.$this->taskUser2->getId().'/edit');
         $response = $this->client->getResponse();
- 
+
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
     }
 
@@ -181,5 +175,4 @@ class AccessTaskByUserTest extends WebTestCase
 
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
     }
-
 }

@@ -23,5 +23,4 @@ class HomePageControllerTest extends WebTestCase
             $this->assertSelectorExists('a.btn.text-info.fw-bold');
         }
     }
-
 }

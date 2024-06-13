@@ -3,22 +3,19 @@
 namespace App\Manager;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Repository\UserRepository;
-
 
 class UserManager
 {
     private UserPasswordHasherInterface $userPasswordHasher;
     private readonly UserRepository $userRepository;
 
-
     public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userRepository = $entityManager->getRepository(User::class);
         $this->userPasswordHasher = $userPasswordHasher;
-
     }
 
     public function createUser(User $user, string $plainPassword): User
@@ -35,12 +32,12 @@ class UserManager
     }
 
     public function editUser(User $user, string $plainPassword): User
-    {        
+    {
         $newPasswordHashed = $this->userPasswordHasher->hashPassword(
             $user,
             $plainPassword
         );
-        
+
         $this->userRepository->upgradePassword($user, $newPasswordHashed);
         $this->userRepository->update($user);
 

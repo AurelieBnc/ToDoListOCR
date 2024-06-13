@@ -19,12 +19,11 @@ class TaskVoter extends Voter
     protected function supports(string $attribute, mixed $subject): bool
     {
         return
-        in_array($attribute, [self::CREATE, self::LIST]) ||
-        (
+        in_array($attribute, [self::CREATE, self::LIST])
+        || (
             in_array($attribute, [self::EDIT, self::DELETE, self::TOGGLE])
             && $subject instanceof Task
         );
-
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -32,13 +31,11 @@ class TaskVoter extends Voter
         $user = $token->getUser();
         if (!$user instanceof User) {
             return false;
-
         }
         $userRoles = $user->getRoles();
 
         if (in_array(null, $userRoles)) {
             return false;
-
         }
 
         if (in_array('ROLE_ADMIN', $userRoles)) {
@@ -51,7 +48,6 @@ class TaskVoter extends Voter
                     return true;
                     break;
             }
-
         }
 
         if (in_array('ROLE_USER', $userRoles)) {
@@ -67,24 +63,19 @@ class TaskVoter extends Voter
                     return true;
                     break;
             }
-
         }
 
         return false;
-
     }
 
     /**
      * Function to check Owner of Task.
-     * 
-     * @param TokenInterface $token
-     * @return bool|AccessDeniedException
      */
     protected function checkOwner(mixed $subject, TokenInterface $token): bool|AccessDeniedException
     {
         $user = $token->getUser();
         $checkIdUser = $subject?->getOwner() === $user;
+
         return $checkIdUser ? $checkIdUser : throw new AccessDeniedException("Vous n'êtes pas le propriétaire de cette tâche.");
     }
-
 }

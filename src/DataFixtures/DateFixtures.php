@@ -2,24 +2,19 @@
 
 namespace App\DataFixtures;
 
-use DateInterval;
-use DateTimeImmutable;
-
 /**
  * @codeCoverageIgnore
  */
 class DateFixtures
 {
     /**
-     * Function to simulate a date
-     *
-     * @return DateTimeImmutable
+     * Function to simulate a date.
      */
-    public function randDate(): DateTimeImmutable
+    public function randDate(): \DateTimeImmutable
     {
         // Date de début et de fin de la fourchette.
-        $startDate = new DateTimeImmutable('2023-01-01');
-        $endDate = new DateTimeImmutable('2024-12-31');
+        $startDate = new \DateTimeImmutable('2023-01-01');
+        $endDate = new \DateTimeImmutable('2024-12-31');
 
         // Calcul de la différence entre les deux dates.
         $interval = $endDate->diff($startDate);
@@ -28,9 +23,8 @@ class DateFixtures
         $randomDays = rand(0, $interval->days);
 
         // Ajout du nombre de jours aléatoires à la date de début.
-        $randomDate = $startDate->add(new DateInterval('P'.$randomDays.'D'));
+        $randomDate = $startDate->add(new \DateInterval('P'.$randomDays.'D'));
 
         return $randomDate;
-
     }
 }

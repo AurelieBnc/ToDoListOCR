@@ -4,10 +4,8 @@ namespace App\Entity;
 
 use App\EnumTodo\TaskStatus;
 use App\Repository\TaskRepository;
-use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-
 
 /**
  * @codeCoverageIgnore
@@ -15,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -30,19 +27,17 @@ class Task
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(name:'status',type: Types::STRING,
-    enumType: TaskStatus::class, options: ['default' => TaskStatus::Todo])]
+    #[ORM\Column(name: 'status', type: Types::STRING,
+        enumType: TaskStatus::class, options: ['default' => TaskStatus::Todo])]
     private TaskStatus $status = TaskStatus::Todo;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $owner = null;
 
-
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-
     }
 
     public function getId(): ?int
@@ -79,14 +74,14 @@ class Task
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTimeImmutable $createdAt): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getStatus(): TaskStatus 
+    public function getStatus(): TaskStatus
     {
         return $this->status;
     }
@@ -112,11 +107,11 @@ class Task
 
     public function toggle(TaskStatus $status): static
     {
-        if ($status === TaskStatus::Todo) {
-             $this->setStatus(TaskStatus::IsDone);
+        if (TaskStatus::Todo === $status) {
+            $this->setStatus(TaskStatus::IsDone);
         }
-        if ($status === TaskStatus::IsDone) {
-             $this->setStatus(TaskStatus::Todo);
+        if (TaskStatus::IsDone === $status) {
+            $this->setStatus(TaskStatus::Todo);
         }
 
         return $this;

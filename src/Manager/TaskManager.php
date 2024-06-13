@@ -5,15 +5,12 @@ namespace App\Manager;
 use App\Entity\Task;
 use App\Entity\User;
 use App\EnumTodo\TaskStatus;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\TaskRepository;
-
+use Doctrine\ORM\EntityManagerInterface;
 
 class TaskManager
 {
-
     private readonly TaskRepository $taskRepository;
-
 
     /**
      * Construct EntityManagerInterface.

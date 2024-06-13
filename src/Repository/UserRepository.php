@@ -55,6 +55,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         if (empty($data)) {
             $result['data'] = [];
             $result['pages'] = 1;
+
             return $result;
         }
         $pages = ceil($paginator->count() / $limit);

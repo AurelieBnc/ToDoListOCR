@@ -5,10 +5,9 @@ namespace tests\AppBundle\Form;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Form\UserType;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Unit testUnit test of the UserType form.
@@ -17,12 +16,9 @@ class UserTypeTest extends TypeTestCase
 {
     /**
      * Test valid data.
-     * 
-     * @return void
      */
     public function testLoginSubmitValidData(): void
     {
-
         $userToTest = new User();
 
         // Create a list of tasks
@@ -67,18 +63,15 @@ class UserTypeTest extends TypeTestCase
             $this->assertSame($expectedTask->getTitle(), $actualTasks[$key]->getTitle());
             $this->assertSame($expectedTask->getContent(), $actualTasks[$key]->getContent());
         }
-
     }
 
     /**
      * Add an extension to validate data.
-     * 
+     *
      * @return ValidatorExtension
      */
     protected function getExtensions()
     {
         return [new ValidatorExtension(Validation::createValidator())];
-
     }
-
 }

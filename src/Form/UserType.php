@@ -7,14 +7,13 @@ use App\Validator\Constraints as CraftAssert;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class UserType extends AbstractType
 {
@@ -26,7 +25,7 @@ class UserType extends AbstractType
                     'required' => true,
                     'label' => 'Nom d\'utilisateur',
                     'label_attr' => ['class' => 'fw-bold'],
-                    'constraints' => [new Assert\NotBlank],
+                    'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add('roles', ChoiceType::class,
@@ -36,12 +35,12 @@ class UserType extends AbstractType
                             'Visiteur' => null,
                             'Utilisateur' => User::ROLE_USER,
                             'Administrateur' => User::ROLE_ADMIN,
-                        ]
+                        ],
                     ],
                     'multiple' => false,
                     'required' => true,
                     'label' => 'Rôle de l\'utilisateur',
-                    'label_attr' => ['class' => 'fw-bold pe-3']
+                    'label_attr' => ['class' => 'fw-bold pe-3'],
                 ]
             )
             ->add('email', EmailType::class,
@@ -49,7 +48,7 @@ class UserType extends AbstractType
                     'label' => 'Adresse email',
                     'label_attr' => ['class' => 'fw-bold'],
                     'required' => true,
-                    'constraints' => [new Assert\NotBlank],
+                    'constraints' => [new Assert\NotBlank()],
                 ]
             )
             ->add('plainPassword', RepeatedType::class,
@@ -62,16 +61,16 @@ class UserType extends AbstractType
                         'attr' => [
                             'autocomplete' => 'new-password',
                             'class' => 'font-weight-light',
-                            'placeholder' => 'Mot de passe sécurisé'
-                            ],
+                            'placeholder' => 'Mot de passe sécurisé',
+                        ],
                     ],
                     'second_options' => [
                         'label' => 'Tapez le mot de passe à nouveau',
                         'label_attr' => ['class' => 'fw-bold'],
                         'attr' => [
                             'class' => 'font-weight-light',
-                            'placeholder' => 'Mot de passe identique'
-                            ],
+                            'placeholder' => 'Mot de passe identique',
+                        ],
                     ],
                     'invalid_message' => 'Les deux mots de passe doivent correspondre.',
                     'mapped' => false,
@@ -82,21 +81,16 @@ class UserType extends AbstractType
             ->addModelTransformer(new CallbackTransformer(
                 function ($tagsAsArray) {
                     return $tagsAsArray;
-
                 },
                 function ($tagsAsString) {
                     return [$tagsAsString];
-
                 }
             )
             );
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['data_class' => User::class]);
-
     }
-
 }

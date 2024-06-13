@@ -2,11 +2,11 @@
 
 namespace App\Validator\Constraints;
 
-use Symfony\Component\Validator\Constraints\Compound;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Compound;
 
 /**
- * secure password requirements
+ * secure password requirements.
  */
 #[\Attribute]
 class PasswordRequirements extends Compound
@@ -48,6 +48,5 @@ class PasswordRequirements extends Compound
                 ]
             ),
         ];
-
     }
 }
