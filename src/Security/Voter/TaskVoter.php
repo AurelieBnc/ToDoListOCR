@@ -42,22 +42,31 @@ class TaskVoter extends Voter
         }
 
         if (in_array('ROLE_ADMIN', $userRoles)) {
-            return $attribute === self::CREATE
-                || $attribute === self::EDIT
-                || $attribute === self::DELETE
-                || $attribute === self::LIST
-                || $attribute === self::TOGGLE
-                ?? false;
+            switch ($attribute) {
+                case self::DELETE:
+                case self::EDIT:
+                case self::LIST:
+                case self::CREATE:
+                case self::TOGGLE:
+                    return true;
+                    break;
+            }
 
         }
 
         if (in_array('ROLE_USER', $userRoles)) {
-            return $attribute === self::CREATE
-                || $attribute === self::EDIT
-                || $attribute === self::DELETE
-                || $attribute === self::LIST
-                || $attribute === self::TOGGLE
-                ?? false;
+            switch ($attribute) {
+                case self::DELETE:
+                    return $this->checkOwner($subject, $token);
+                case self::EDIT:
+                    return $this->checkOwner($subject, $token);
+                    break;
+                case self::LIST:
+                case self::CREATE:
+                case self::TOGGLE:
+                    return true;
+                    break;
+            }
 
         }
 
@@ -75,13 +84,7 @@ class TaskVoter extends Voter
     {
         $user = $token->getUser();
         $checkIdUser = $subject?->getOwner() === $user;
-
-        if ($checkIdUser) {
-            return $checkIdUser;
-
-        }
-
-        throw new AccessDeniedException("Vous n'êtes pas le propriétaire de cette tâche.");
+        return $checkIdUser ? $checkIdUser : throw new AccessDeniedException("Vous n'êtes pas le propriétaire de cette tâche.");
     }
 
 }
