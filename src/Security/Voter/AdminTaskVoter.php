@@ -6,9 +6,8 @@ use App\Entity\Task;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class TaskVoter extends Voter
+class AdminTaskVoter extends Voter
 {
     public const CREATE = 'TASK_CREATE';
     public const DELETE = 'TASK_DELETE';
@@ -50,36 +49,6 @@ class TaskVoter extends Voter
             }
         }
 
-        if (in_array('ROLE_USER', $userRoles)) {
-            switch ($attribute) {
-                case self::DELETE:
-                    return $this->checkOwner($subject, $token);
-                case self::EDIT:
-                    return $this->checkOwner($subject, $token);
-                    break;
-                case self::LIST:
-                case self::CREATE:
-                case self::TOGGLE:
-                    return true;
-                    break;
-            }
-        }
-
         return false;
-    }
-
-    /**
-     * Function to check Owner of Task.
-     *
-     * @param mixed $subject the subject of voter
-     * @param TokenInterface $token The token
-     * @return bool|AccessDeniedException
-     */
-    protected function checkOwner(mixed $subject, TokenInterface $token): bool|AccessDeniedException
-    {
-        $user = $token->getUser();
-        $checkIdUser = $subject?->getOwner() === $user;
-
-        return $checkIdUser ? $checkIdUser : throw new AccessDeniedException("Vous n'êtes pas le propriétaire de cette tâche.");
     }
 }
