@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserControllerTest extends WebTestCase
+class AccessUserByAdminTest extends WebTestCase
 {
 
     private KernelBrowser $client;
@@ -55,7 +55,7 @@ class UserControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
-        $this->assertCount(4, $crawler->filter('.user'));
+        $this->assertCount(5, $crawler->filter('.user'));
 
     }
 

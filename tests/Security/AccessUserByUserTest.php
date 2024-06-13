@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class UserControllerTest extends WebTestCase
+class AccessUserByUserTest extends WebTestCase
 {
 
     private KernelBrowser $client;

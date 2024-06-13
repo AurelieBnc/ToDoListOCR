@@ -17,18 +17,16 @@ use App\EnumTodo\TaskStatus;
  */
 class AppFixtures extends Fixture
 {
-
     private $listStatus;
     private $userPasswordHasher;
-    
+
     public function __construct(UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userPasswordHasher = $userPasswordHasher;
         $this->listStatus = [
             TaskStatus::IsDone,
-            TaskStatus::Todo
+            TaskStatus::Todo,
         ];
-
     }
 
     /**
@@ -38,25 +36,57 @@ class AppFixtures extends Fixture
      *      - 5 tasks anonyme
      *      - 3 tasks stables - user1
      *      - 2 tasks stables - user2
-     * 
+     *
      * @param ObjectManager $manager manager
-     * @return void
      */
     public function load(ObjectManager $manager): void
     {
 
-        $userFixture = new UserFixtures($this->userPasswordHasher);
-        $userList = $userFixture->UserList($manager);
+        $userList = [];
 
-        $firstUser = $userList[1];
-        $secondUser = $userList[2];
+        // Création d'un user
+        $firstUser = new User();
+        $firstUser->setUsername("User1");
+        $firstUser->setEmail("user1@todolist.fr");
+        $firstUser->setRoles(["ROLE_USER"]);
+        $firstUser->setPassword($this->userPasswordHasher->hashPassword($firstUser, "password"));
+        $manager->persist($firstUser);
 
+        $userList[] = $firstUser;
 
-        // Création de 20 tasks avec Owner.
+        // Création d'un second user
+        $secondUser = new User();
+        $secondUser->setUsername("User2");
+        $secondUser->setEmail("user2@todolist.fr");
+        $secondUser->setRoles(["ROLE_USER"]);
+        $secondUser->setPassword($this->userPasswordHasher->hashPassword($secondUser, "password"));
+        $manager->persist($secondUser);
+
+        $userList[] = $secondUser;
+
+        //création d'un user sans role
+        $otherUser = new User();
+        $otherUser->setUsername("User3");
+        $otherUser->setEmail("user3@todolist.fr");
+        $otherUser->setRoles([null]);
+        $otherUser->setPassword($this->userPasswordHasher->hashPassword($otherUser, "password"));
+        $manager->persist($otherUser);
+
+        $userList[] = $otherUser;
+
+        // Création d'un user admin
+        $userAdmin = new User();
+        $userAdmin->setUsername("Admin");
+        $userAdmin->setEmail("admin@todolist.fr");
+        $userAdmin->setRoles(["ROLE_ADMIN"]);
+        $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, "password"));
+        $manager->persist($userAdmin); 
+
+        // Création de 20 tasks avec Owner
         $taskFixture = new TaskFixtures();
         $taskContentList = $taskFixture->TaskContentList();
 
-        for ($i = 0; $i < 35; $i++) {
+        for ($i = 0; $i < 35; ++$i) {
             $randomCreatedAt = (new DateFixtures())->randDate();
             $randomContentIndex = array_rand($taskContentList);
             $randomContent = $taskContentList[$randomContentIndex];
@@ -69,12 +99,12 @@ class AppFixtures extends Fixture
             $task->setCreatedAt($randomCreatedAt);
             $task->setOwner($userList[array_rand($userList)]);
             $task->setStatus($randomStatus);
-            
+
             $manager->persist($task);
         }
 
         // Création de 5 tasks anonyme
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 5; ++$i) {
             $randomCreatedAt = (new DateFixtures())->randDate();
 
             $randomContentIndex = array_rand($taskContentList);
@@ -87,7 +117,7 @@ class AppFixtures extends Fixture
             $task->setContent($randomContent);
             $task->setCreatedAt($randomCreatedAt);
             $task->setStatus($randomStatus);
-            
+
             $manager->persist($task);
         }
 
@@ -163,9 +193,7 @@ class AppFixtures extends Fixture
         $task->setStatus(TaskStatus::Todo);
 
         $manager->persist($task);
-        
+
         $manager->flush();
-
     }
-
 }

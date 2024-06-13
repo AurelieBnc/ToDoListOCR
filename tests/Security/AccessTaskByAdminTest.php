@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Test the access with role Admin
  */
-class AccessAdminTest extends WebTestCase
+class AccessTaskByAdminTest extends WebTestCase
 {
 
     private KernelBrowser $client;
