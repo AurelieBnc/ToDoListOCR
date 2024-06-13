@@ -9,7 +9,7 @@ class DateFixtures
 {
     /**
      * Function to simulate a date.
-     * 
+     *
      * @return DateTimeImmutable
      */
     public function randDate(): \DateTimeImmutable

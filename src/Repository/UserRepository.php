@@ -20,13 +20,23 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+    /**
+     * Construct with ManagerRegistry.
+     *
+     * @param ManagerRegistry $registry register of manager
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+
     }
 
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
+     *
+     * @param PasswordAuthenticatedUserInterface $user user to change password
+     * @param string $newHashedPassword new password hashed
+     * @return void
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
@@ -39,6 +49,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Function to find user list paginated.
+     *
+     * @param int $page current page
+     * @return array
+     */
     public function findByPagination(int $page): array
     {
         $limit = 15;
@@ -57,6 +73,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $result['pages'] = 1;
 
             return $result;
+
         }
         $pages = ceil($paginator->count() / $limit);
         $result['data'] = $data;
@@ -65,17 +82,35 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $result;
     }
 
+    /**
+     * Function to add an user.
+     *
+     * @param User $user to add
+     * @return User
+     */
     public function add(User $entity): void
     {
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * Function to update an user.
+     *
+     * @param User $user to update
+     * @return User
+     */
     public function update(User $entity): void
     {
         $this->add($entity);
     }
 
+    /**
+     * Function to remove an user.
+     *
+     * @param User $user to remove
+     * @return User
+     */
     public function remove(User $entity): void
     {
         $this->getEntityManager()->remove($entity);

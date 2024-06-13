@@ -86,7 +86,8 @@ class UserType extends AbstractType
                     return [$tagsAsString];
                 }
             )
-            );
+        );
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

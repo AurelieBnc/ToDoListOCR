@@ -16,7 +16,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
     public const ROLE_USER = 'ROLE_USER';
+
     public const ROLE_ADMIN = 'ROLE_ADMIN';
 
     #[ORM\Id]
@@ -45,9 +47,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Task::class)]
     private ?Collection $tasks;
 
+    /**
+     * Construct with arrayCollection for taskList of User.
+     */
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -120,7 +126,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
+        // If you store any temporary, sensitive data on the user, clear it here.
         // $this->plainPassword = null;
     }
 

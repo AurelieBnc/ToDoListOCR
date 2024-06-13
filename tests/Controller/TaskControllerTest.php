@@ -12,17 +12,27 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TaskControllerTest extends WebTestCase
 {
+
     private KernelBrowser $client;
+
     private TaskRepository $taskRepository;
+
     private UserRepository $userRepository;
+
     private User $user;
+
     private Task $taskUser1;
+
     private Task $taskUser2;
+
     private Task $task;
+
     private Task $anonymousTask;
 
     /**
      * We setup 1 task per User, one anonymous task, and a user.
+     *
+     * @return void
      */
     protected function setUp(): void
     {
@@ -42,10 +52,13 @@ class TaskControllerTest extends WebTestCase
 
         $user = $this->userRepository->findOneByEmail('user1@todolist.fr');
         $this->user = $user;
+
     }
 
     /**
      * I create a new task with datas.
+     *
+     * @return void
      */
     public function testCreateTasktWithData(): void
     {
@@ -68,10 +81,13 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
+
     }
 
     /**
      * I edit a new task with datas.
+     *
+     * @return void
      */
     public function testEditTasktWithNewData(): void
     {
@@ -93,10 +109,13 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
+
     }
 
     /**
      * I want change status of a task with unauthorized access.
+     *
+     * @return void
      */
     public function testToggleTaskWithUnauthorizedAccess(): void
     {
@@ -107,10 +126,13 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('button', 'Se connecter');
+
     }
 
     /**
      * I want change status of a task with an other user that owner.
+     *
+     * @return void
      */
     public function testToggleTasktWitOtherUser(): void
     {
@@ -122,10 +144,13 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
+
     }
 
     /**
      * I want change status of an anonymous task with a user without role.
+     *
+     * @return void
      */
     public function testToggleTaskWithOutOwnerAndWithRoleUser(): void
     {
@@ -137,10 +162,13 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
+
     }
 
     /**
      * I want change status of a task with task's owner.
+     *
+     * @return void
      */
     public function testToggleTasktWithOwningUser(): void
     {
@@ -151,5 +179,7 @@ class TaskControllerTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('h1', 'Liste des tâches');
+
     }
+
 }

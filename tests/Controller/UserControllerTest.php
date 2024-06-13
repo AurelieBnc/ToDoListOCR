@@ -10,8 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UserControllerTest extends WebTestCase
 {
+
     private KernelBrowser $client;
+
     private UserRepository $userRepository;
+
     private User $admin;
 
     /**
@@ -28,14 +31,21 @@ class UserControllerTest extends WebTestCase
         $this->admin = $admin;
 
         $this->client->loginUser($this->admin, 'secured_area');
+
     }
 
+    /**
+     * I get user list with page unvalid.
+     *
+     * @return void
+     */
     public function testUserListWithPageUnvalid(): void
     {
         $this->client->request('GET', '/users/list?page=0');
         $this->client->getResponse();
 
         $this->assertResponseIsSuccessful();
+
     }
 
     /**
@@ -68,6 +78,7 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
         $this->assertCount(5, $crawler->filter('.user'));
+
     }
 
     /**
@@ -93,5 +104,7 @@ class UserControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
         $this->assertCount(5, $crawler->filter('.user'));
+
     }
+
 }

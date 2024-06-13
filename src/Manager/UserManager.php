@@ -15,17 +15,24 @@ class UserManager
     private readonly UserRepository $userRepository;
 
     /**
-     * Construct with EntityManagerInterface and UserPasswordHasherInterface
+     * Construct with EntityManagerInterface and UserPasswordHasherInterface.
      *
-     * @param EntityManagerInterface $entityManager Manage to create UserRepository
-     * @param UserPasswordHasherInterface $userPasswordHasher Hasher for password of User
+     * @param EntityManagerInterface        $entityManager Manage to create UserRepository
+     * @param UserPasswordHasherInterface   $userPasswordHasher Hasher for password of User
      */
     public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userRepository = $entityManager->getRepository(User::class);
         $this->userPasswordHasher = $userPasswordHasher;
+
     }
 
+    /**
+     * Function to create an user.
+     *
+     * @param User $user to create
+     * @return User
+     */
     public function createUser(User $user, string $plainPassword): User
     {
         $user->setPassword(
@@ -39,6 +46,12 @@ class UserManager
         return $user;
     }
 
+    /**
+     * Function to edit an user.
+     *
+     * @param User $user to edit
+     * @return User
+     */
     public function editUser(User $user, string $plainPassword): User
     {
         $newPasswordHashed = $this->userPasswordHasher->hashPassword(
@@ -52,6 +65,12 @@ class UserManager
         return $user;
     }
 
+    /**
+     * Function to delete an user.
+     *
+     * @param User $user to edit
+     * @return void
+     */
     public function deleteUser(User $user): void
     {
         $this->userRepository->remove($user, true);

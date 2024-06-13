@@ -11,8 +11,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  * such as view, edit, and delete permissions. It implements
  * logic to determine if a user has the necessary rights to
  * perform specific operations based on roles and ownership.
- *
- * @return void
  */
 class UserVoter extends Voter
 {

@@ -6,6 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HomePageControllerTest extends WebTestCase
 {
+    /**
+     * I test get homepage.
+     *
+     * @return void
+     */
     public function testIndex(): void
     {
         $client = static::createClient();
@@ -23,4 +28,5 @@ class HomePageControllerTest extends WebTestCase
             $this->assertSelectorExists('a.btn.text-info.fw-bold');
         }
     }
+
 }

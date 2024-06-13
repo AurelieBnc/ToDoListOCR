@@ -19,6 +19,11 @@ class AppFixtures extends Fixture
 
     private $userPasswordHasher;
 
+    /**
+     * Construct with UserPasswordHasherInterface.
+     *
+     * @param UserPasswordHasherInterface $userPasswordHasher hasher for user
+     */
     public function __construct(UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userPasswordHasher = $userPasswordHasher;
@@ -26,6 +31,7 @@ class AppFixtures extends Fixture
             TaskStatus::IsDone,
             TaskStatus::Todo,
         ];
+
     }
 
     /**

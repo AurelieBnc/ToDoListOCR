@@ -15,6 +15,13 @@ class AdminTaskVoter extends Voter
     public const EDIT = 'TASK_EDIT';
     public const TOGGLE = 'TASK_TOGGLE';
 
+    /**
+     * Method of voter.
+     *
+     * @param string $attribute Is the attribute determined if voter is true or false
+     * @param mixed $subject the subject of the vote
+     * @return bool
+     */
     protected function supports(string $attribute, mixed $subject): bool
     {
         return
@@ -23,18 +30,30 @@ class AdminTaskVoter extends Voter
             in_array($attribute, [self::EDIT, self::DELETE, self::TOGGLE])
             && $subject instanceof Task
         );
+
     }
 
+    /**
+     * Method of voter.
+     *
+     * @param string $attribute Is the attribute determined if voter is true or false
+     * @param mixed $subject the subject of the vote
+     * @param TokenInterface $token token of vote
+     * @return bool
+     */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
         if (!$user instanceof User) {
             return false;
+
         }
+
         $userRoles = $user->getRoles();
 
         if (in_array(null, $userRoles)) {
             return false;
+
         }
 
         if (in_array('ROLE_ADMIN', $userRoles)) {
