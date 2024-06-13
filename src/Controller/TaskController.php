@@ -36,7 +36,7 @@ class TaskController extends AbstractController
 
     /**
      * Paginated list of task by status.
-     * 
+     *
      * @param TaskStatus $status The status of task is an enum
      * @return Response
      */
@@ -52,12 +52,7 @@ class TaskController extends AbstractController
             throw $this->createNotFoundException('Numéro de page invalide');
         }
 
-        return $this->render('task/list.html.twig',
-            [
-                'status' => $status,
-                'tasks' => $taskListPaginated,
-            ]
-        );
+        return $this->render('task/list.html.twig', ['status' => $status, 'tasks' => $taskListPaginated]);
 
     }
 
@@ -81,9 +76,8 @@ class TaskController extends AbstractController
                 'success','La tâche a bien été ajoutée.'
             );
             $status = $this->taskManager->convertStatusTaskToString($task->getStatus());
-            
-            return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
 
+            return $this->redirectToRoute('tasks_list', ['status' => $status, 'page' => 1]);
         }
 
         return $this->render('task/create_task.html.twig',['taskForm' => $form,]);
@@ -93,14 +87,14 @@ class TaskController extends AbstractController
     /**
      * Edit task function.
      * 
-     * @param Request $request
+     * @param Request $request request
      * @param Task $task Task we need update
      * @return RedirectResponse|Response
      */
     #[Route('/{id}/edit', name: '_edit')]
     #[IsGranted('TASK_EDIT', 'task')]
     public function editAction(Task $task, Request $request): RedirectResponse|Response
-    {        
+    {
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
 

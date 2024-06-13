@@ -12,7 +12,7 @@ class SecurityController extends AbstractController
 {
     /**
      * Function to login.
-     * 
+     *
      * @param AuthenticationUtils $authenticationUtils The authentication utils service
      * @return Response
      */
@@ -22,22 +22,20 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', [
-            'last_username' => $lastUsername,
-            'error'         => $error,
-        ]);
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername,'error']);
 
     }
 
     /**
      * Function to logout.
-     * 
+     *
      * @return void
      */
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(): void
     {
         $this->addFlash('success', 'Vous avez bien été déconnecté !');
+
     }
 
 }

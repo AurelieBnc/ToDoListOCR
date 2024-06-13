@@ -21,7 +21,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/users', name: 'users')]
 class UserController extends AbstractController
 {
-    
+
     private readonly UserManager $userManager;
 
     private readonly UserRepository $userRepository;
@@ -29,6 +29,9 @@ class UserController extends AbstractController
 
     /**
      * Construct with entityManagerInterface and UserManager.
+     *
+     * @param   EntityManagerInterface $entityManager entity manager
+     * @param   UserManager $userManager user manager
      */
     public function __construct(EntityManagerInterface $entityManager, UserManager $userManager)
     {
@@ -39,9 +42,9 @@ class UserController extends AbstractController
 
     /**
      * Paginated list of user.
-     * 
-     * @param int $page number of the page called
-     * @return Response
+     *
+     * @param   int $page number of the page called
+     * @return  Response
      */
     #[Route('/list/{page}', name: '_list', defaults: ['page' => 1])]
     #[IsGranted('USER_LIST')]
@@ -51,13 +54,14 @@ class UserController extends AbstractController
         $userListPaginated = $this->userRepository->findByPagination($page);
 
         return $this->render('user/user_list.html.twig', ['users' => $userListPaginated]);
+
     }
     
     /**
      * Create user function.
-     * 
-     * @param Request $request request
-     * @return RedirectResponse|Response
+     *
+     * @param   Request $request request
+     * @return  RedirectResponse|Response
      */
     #[Route('/create', name: '_create')]
     #[IsGranted('USER_CREATE')]
@@ -81,10 +85,10 @@ class UserController extends AbstractController
 
     /**
      * Edit user function.
-     * 
-     * @param User $user user to edit
-     * @param Request $request request
-     * @return RedirectResponse|Response
+     *
+     * @param   User $user user to edit
+     * @param   Request $request request
+     * @return  RedirectResponse|Response
      */
     #[Route('/{id}/edit', name: '_edit')]
     #[IsGranted('USER_EDIT', 'user')]
@@ -106,9 +110,9 @@ class UserController extends AbstractController
 
     /**
      * Delete user function.
-     * 
-     * @param User $user user to delete
-     * @return RedirectResponse|Response
+     *
+     * @param   User $user user to delete
+     * @return  RedirectResponse|Response
      */
     #[Route(path: '/{id}/delete', name: '_delete')]
     #[IsGranted('USER_DELETE', 'user')]
