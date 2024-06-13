@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TaskManager
 {
+
     private readonly TaskRepository $taskRepository;
 
     /**

@@ -21,7 +21,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/tasks', name: 'tasks')]
 class TaskController extends AbstractController
 {
+
     private readonly TaskManager $taskManager;
+
     private readonly TaskRepository $taskRepository;
 
     public function __construct(EntityManagerInterface $entityManager, TaskManager $taskManager)
@@ -34,6 +36,8 @@ class TaskController extends AbstractController
      * Paginated list of task by status.
      *
      * @param TaskStatus $status The status of task is an enum
+     * @param int $page the current page
+     * @return Response
      */
     #[Route('/_list/{status}/{page}', name: '_list')]
     #[IsGranted('TASK_LIST')]
@@ -43,7 +47,7 @@ class TaskController extends AbstractController
         $taskListPaginated = $this->taskRepository->findByPagination($page, $status);
 
         $pages = $taskListPaginated['pages'] ?? null;
-        if ($page < 1 || null === $pages) {
+        if ($pages === null || $page < 1) {
             throw $this->createNotFoundException('Numéro de page invalide');
         }
 
@@ -54,6 +58,7 @@ class TaskController extends AbstractController
      * Create task function.
      *
      * @param Request $request request
+     * @return RedirectResponse|Response
      */
     #[Route('/create', name: '_create')]
     #[IsGranted('TASK_CREATE')]
@@ -79,8 +84,9 @@ class TaskController extends AbstractController
     /**
      * Edit task function.
      *
-     * @param Request $request request
      * @param Task    $task    Task we need update
+     * @param Request $request request of call
+     * @return RedirectResponse|Response
      */
     #[Route('/{id}/edit', name: '_edit')]
     #[IsGranted('TASK_EDIT', 'task')]
@@ -107,6 +113,7 @@ class TaskController extends AbstractController
      * Delete task function.
      *
      * @param Task $task Task we need delete
+     * @return RedirectResponse|Response
      */
     #[Route(path: '/{id}/delete', name: '_delete')]
     #[IsGranted('TASK_DELETE', 'task')]
@@ -124,6 +131,7 @@ class TaskController extends AbstractController
      * Toogle task function - change the status of task.
      *
      * @param Task $task Task we need change status
+     * @return RedirectResponse|Response
      */
     #[Route(path: '/{id}/toggle', name: '_toggle')]
     #[IsGranted('TASK_TOGGLE', 'task')]
@@ -132,7 +140,7 @@ class TaskController extends AbstractController
         $task = $this->taskManager->toggle($task);
         $status = $this->taskManager->convertStatusTaskToString($task->getStatus());
 
-        if ('isDone' === $status) {
+        if ($status === 'isDone') {
             $this->addFlash(
                 'success', 'La tâche a bien été marquée comme réalisée!'
             );

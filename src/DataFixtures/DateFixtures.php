@@ -9,6 +9,8 @@ class DateFixtures
 {
     /**
      * Function to simulate a date.
+     * 
+     * @return DateTimeImmutable
      */
     public function randDate(): \DateTimeImmutable
     {
@@ -26,5 +28,6 @@ class DateFixtures
         $randomDate = $startDate->add(new \DateInterval('P'.$randomDays.'D'));
 
         return $randomDate;
+
     }
 }

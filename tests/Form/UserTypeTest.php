@@ -32,8 +32,8 @@ class UserTypeTest extends TypeTestCase
 
         $taskList = [$task1, $task2];
 
-        $formData =
-            [
+        $formData 
+            = [
                 'username' => 'UserName',
                 'email' => 'user@todolist.fr',
                 'roles' => ['ROLE_USER'],

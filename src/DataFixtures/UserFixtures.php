@@ -11,6 +11,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
  */
 class UserFixtures
 {
+
     private $userPasswordHasher;
 
     /**
@@ -27,7 +28,6 @@ class UserFixtures
      * List of Content for task list.
      *
      * @param ObjectManager $manager to create User
-     *
      * @return array<User>
      */
     public function UserList(ObjectManager $manager): array

@@ -10,13 +10,19 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AccessUserByAdminTest extends WebTestCase
 {
+
     private KernelBrowser $client;
+
     private UserRepository $userRepository;
+
     private User $user;
+
     private User $admin;
 
     /**
      * We set up a user and an admin.
+     *
+     * @return void
      */
     protected function setUp(): void
     {
@@ -36,10 +42,13 @@ class AccessUserByAdminTest extends WebTestCase
         $this->admin = $admin;
 
         $this->client->loginUser($this->admin, 'secured_area');
+
     }
 
     /**
      * I access the list of users with authorized access.
+     *
+     * @return void
      */
     public function testUserListWithAuthorizedAccess(): void
     {
@@ -49,10 +58,13 @@ class AccessUserByAdminTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
         $this->assertCount(5, $crawler->filter('.user'));
+
     }
 
     /**
      * I create a user with authorized access.
+     *
+     * @return void
      */
     public function testCreateUserWithAuthorizedAccess(): void
     {
@@ -63,10 +75,13 @@ class AccessUserByAdminTest extends WebTestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertSelectorTextContains('button', 'Ajouter');
+
     }
 
     /**
      * I edit a user with authorized access.
+     *
+     * @return void
      */
     public function testEditUserWithAuthorizedAccess(): void
     {
@@ -76,10 +91,13 @@ class AccessUserByAdminTest extends WebTestCase
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('button', 'Modifier');
         $this->assertSelectorTextContains('h1', 'Modifier '.$this->user->getUsername());
+
     }
 
     /**
      * I delete a user with authorized access.
+     *
+     * @return void
      */
     public function testUserDeleteWithAuthorizedAccess(): void
     {
@@ -94,5 +112,6 @@ class AccessUserByAdminTest extends WebTestCase
 
         $this->assertSelectorTextContains('h1', 'Liste des utilisateurs');
         $this->assertCount(4, $crawler->filter('.user'));
+
     }
 }

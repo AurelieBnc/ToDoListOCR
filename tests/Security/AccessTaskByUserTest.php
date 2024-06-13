@@ -12,17 +12,27 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AccessTaskByUserTest extends WebTestCase
 {
+
     private KernelBrowser $client;
+
     private TaskRepository $taskRepository;
+
     private UserRepository $userRepository;
+
     private User $user;
+
     private User $userWithoutRole;
+
     private Task $taskUser1;
+
     private Task $taskUser2;
+
     private Task $task;
 
     /**
      * We set up one task per user, a user with any role and a user with role USER.
+     *
+     * @return void
      */
     protected function setUp(): void
     {
@@ -52,6 +62,8 @@ class AccessTaskByUserTest extends WebTestCase
 
     /**
      * I want to create a task with an unauthorized access.
+     *
+     * @return void
      */
     public function testCreateTaskWithUnauthorizedAccess(): void
     {
@@ -66,6 +78,8 @@ class AccessTaskByUserTest extends WebTestCase
 
     /**
      * I want to create a task with an authorized access.
+     *
+     * @return void
      */
     public function testCreateTaskWithAuthorizedAccess(): void
     {
@@ -80,6 +94,8 @@ class AccessTaskByUserTest extends WebTestCase
 
     /**
      * I want to create a task with a user without a role.
+     *
+     * @return void
      */
     public function testCreateTaskWithUserWithoutRole(): void
     {
@@ -94,6 +110,8 @@ class AccessTaskByUserTest extends WebTestCase
 
     /**
      * I want to edit a task with an unauthorized access.
+     *
+     * @return void
      */
     public function testEditTaskWithUnauthorizedAccess(): void
     {
@@ -108,6 +126,8 @@ class AccessTaskByUserTest extends WebTestCase
 
     /**
      * I want to edit a task with an unauthorized user.
+     *
+     * @return void
      */
     public function testEditTasktWitUnauthorizedUser(): void
     {
@@ -121,6 +141,8 @@ class AccessTaskByUserTest extends WebTestCase
 
     /**
      * I want to edit a task with an authorized user.
+     *
+     * @return void
      */
     public function testEditTasktWithAuthorizedUser(): void
     {
@@ -134,6 +156,8 @@ class AccessTaskByUserTest extends WebTestCase
 
     /**
      * I want to delete a task with an unauthorized access.
+     *
+     * @return void
      */
     public function testTaskDeleteWithUnauthorizedAccess(): void
     {
@@ -147,6 +171,8 @@ class AccessTaskByUserTest extends WebTestCase
 
     /**
      * I want to delete a task with an unauthorized user.
+     *
+     * @return void
      */
     public function testTaskDeleteWithUnauthorizedUser(): void
     {
@@ -160,6 +186,8 @@ class AccessTaskByUserTest extends WebTestCase
 
     /**
      * I want to delete a task with an authorized access.
+     *
+     * @return void
      */
     public function testTaskDeleteWithAuthorizedAccess(): void
     {

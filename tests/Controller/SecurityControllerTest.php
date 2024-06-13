@@ -12,6 +12,8 @@ class SecurityControllerTest extends WebTestCase
 
     /**
      * We setup client.
+     *
+     * @return void
      */
     protected function setUp(): void
     {
@@ -20,6 +22,8 @@ class SecurityControllerTest extends WebTestCase
 
     /**
      * I test login route.
+     *
+     * @return void
      */
     public function testLogin(): void
     {
@@ -34,6 +38,8 @@ class SecurityControllerTest extends WebTestCase
 
     /**
      * I test logout route.
+     *
+     * @return void
      */
     public function testLogOut(): void
     {

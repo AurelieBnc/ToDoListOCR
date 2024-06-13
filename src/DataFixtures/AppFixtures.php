@@ -14,7 +14,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
  */
 class AppFixtures extends Fixture
 {
+
     private $listStatus;
+
     private $userPasswordHasher;
 
     public function __construct(UserPasswordHasherInterface $userPasswordHasher)
@@ -34,13 +36,14 @@ class AppFixtures extends Fixture
      *      - 3 tasks stables - user1
      *      - 2 tasks stables - user2
      *
-     * @param ObjectManager $manager manager
+     * @param ObjectManager $manager manager of user
+     * @return void
      */
     public function load(ObjectManager $manager): void
     {
         $userList = [];
 
-        // Création d'un user
+        // Création d'un user.
         $firstUser = new User();
         $firstUser->setUsername('User1');
         $firstUser->setEmail('user1@todolist.fr');
@@ -50,7 +53,7 @@ class AppFixtures extends Fixture
 
         $userList[] = $firstUser;
 
-        // Création d'un second user
+        // Création d'un second user.
         $secondUser = new User();
         $secondUser->setUsername('User2');
         $secondUser->setEmail('user2@todolist.fr');
@@ -60,7 +63,7 @@ class AppFixtures extends Fixture
 
         $userList[] = $secondUser;
 
-        // création d'un user sans role
+        // Création d'un user sans role.
         $otherUser = new User();
         $otherUser->setUsername('User3');
         $otherUser->setEmail('user3@todolist.fr');
@@ -70,7 +73,7 @@ class AppFixtures extends Fixture
 
         $userList[] = $otherUser;
 
-        // Création d'un user admin
+        // Création d'un user admin.
         $userAdmin = new User();
         $userAdmin->setUsername('Admin');
         $userAdmin->setEmail('admin@todolist.fr');
@@ -78,7 +81,7 @@ class AppFixtures extends Fixture
         $userAdmin->setPassword($this->userPasswordHasher->hashPassword($userAdmin, 'password'));
         $manager->persist($userAdmin);
 
-        // Création de 20 tasks avec Owner
+        // Création de 20 tasks avec Owner.
         $taskFixture = new TaskFixtures();
         $taskContentList = $taskFixture->TaskContentList();
 
@@ -99,7 +102,7 @@ class AppFixtures extends Fixture
             $manager->persist($task);
         }
 
-        // Création de 5 tasks anonyme
+        // Création de 5 tasks anonyme.
         for ($i = 0; $i < 5; ++$i) {
             $randomCreatedAt = (new DateFixtures())->randDate();
 
@@ -117,8 +120,8 @@ class AppFixtures extends Fixture
             $manager->persist($task);
         }
 
-        // Création de 5 tasks stables
-        // Utilisateur 1
+        // Création de 5 tasks stables.
+        // Utilisateur 1.
         $randomCreatedAt = (new DateFixtures())->randDate();
 
         $randomContentIndex = array_rand($taskContentList);
@@ -161,7 +164,7 @@ class AppFixtures extends Fixture
 
         $manager->persist($task);
 
-        // Utilisateur 2
+        // Utilisateur 2.
         $randomCreatedAt = (new DateFixtures())->randDate();
 
         $randomContentIndex = array_rand($taskContentList);

@@ -11,6 +11,12 @@ use Symfony\Component\Validator\Constraints\Compound;
 #[\Attribute]
 class PasswordRequirements extends Compound
 {
+    /**
+     * Requierements for secured password
+     *
+     * @param $options necessary for extends compound
+     * @return array
+     */
     protected function getConstraints(array $options): array
     {
         return [

@@ -70,6 +70,10 @@ class TaskVoter extends Voter
 
     /**
      * Function to check Owner of Task.
+     *
+     * @param mixed $subject the subject of voter
+     * @param TokenInterface $token The token
+     * @return bool|AccessDeniedException
      */
     protected function checkOwner(mixed $subject, TokenInterface $token): bool|AccessDeniedException
     {

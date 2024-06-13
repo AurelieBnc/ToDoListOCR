@@ -16,6 +16,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * We setup an admin user.
+     *
+     * @return void
      */
     protected function setUp(): void
     {
@@ -38,6 +40,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * I create a new user with data.
+     *
+     * @return void
      */
     public function testCreateUsertWithData(): void
     {
@@ -68,6 +72,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * I edit a user with new data.
+     *
+     * @return void
      */
     public function testEditUsertWithNewData(): void
     {

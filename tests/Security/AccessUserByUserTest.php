@@ -10,12 +10,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AccessUserByUserTest extends WebTestCase
 {
+
     private KernelBrowser $client;
+
     private UserRepository $userRepository;
+
     private User $user;
 
     /**
      * We setup an user.
+     *
+     * @return void
      */
     protected function setUp(): void
     {
@@ -26,10 +31,13 @@ class AccessUserByUserTest extends WebTestCase
         $this->user = $user;
 
         $this->client->loginUser($this->user, 'secured_area');
+
     }
 
     /**
      * I access the list of users with unauthorized access.
+     *
+     * @return void
      */
     public function testUserListWithUnauthorizedAccess(): void
     {
@@ -37,10 +45,13 @@ class AccessUserByUserTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
     }
 
     /**
      * I create a user with unauthorized access.
+     *
+     * @return void
      */
     public function testCreateUserWithUnauthorizedAccess(): void
     {
@@ -48,10 +59,13 @@ class AccessUserByUserTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
     }
 
     /**
      * I edit a user with unauthorized access.
+     *
+     * @return void
      */
     public function testEditUserWithUnauthorizedAccess(): void
     {
@@ -59,6 +73,7 @@ class AccessUserByUserTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
     }
 
     /**
@@ -72,5 +87,6 @@ class AccessUserByUserTest extends WebTestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
     }
 }
