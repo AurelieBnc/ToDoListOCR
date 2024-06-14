@@ -8,6 +8,12 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * TaskVoter is responsible for voting on task-related actions
+ * such as view, edit, and delete permissions. It implements
+ * logic to determine if a user has the necessary rights to
+ * perform specific operations based on roles and ownership.
+ */
 class UserTaskVoter extends Voter
 {
     public const CREATE = 'TASK_CREATE';

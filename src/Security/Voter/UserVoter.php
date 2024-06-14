@@ -19,6 +19,13 @@ class UserVoter extends Voter
     public const LIST = 'USER_LIST';
     public const EDIT = 'USER_EDIT';
 
+    /**
+     * Method of voter.
+     *
+     * @param string $attribute Is the attribute determined if voter is true or false
+     * @param mixed  $subject   the subject of the vote
+     * @return bool
+     **/
     protected function supports(string $attribute, mixed $subject): bool
     {
         return
@@ -29,6 +36,14 @@ class UserVoter extends Voter
         );
     }
 
+    /**
+     * Method of voter.
+     *
+     * @param string         $attribute Is the attribute determined if voter is true or false
+     * @param mixed          $subject   the subject of the vote
+     * @param TokenInterface $token     token of vote
+     * @return bool
+     */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();

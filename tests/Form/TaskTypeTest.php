@@ -16,6 +16,8 @@ class TaskTypeTest extends TypeTestCase
 {
     /**
      * Test valid data.
+     *
+     * @return void
      */
     public function testSubmitValidData(): void
     {
@@ -29,7 +31,7 @@ class TaskTypeTest extends TypeTestCase
 
         $form = $this->factory->create(TaskType::class, $taskToTest);
 
-        // Create new Task
+        // Create new Task.
         $task = new Task();
         $task->setTitle('A title');
         $task->setContent('A great content!');
@@ -48,6 +50,8 @@ class TaskTypeTest extends TypeTestCase
 
     /**
      * Add an extension to validate data.
+     *
+     * @return void
      */
     protected function getExtensions()
     {
