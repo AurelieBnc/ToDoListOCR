@@ -97,7 +97,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param list<string> $roles
+     * @param list<string> $roles set roles for accessVoter
+     *
+     * @return self
      */
     public function setRoles(array $roles): self
     {

@@ -16,12 +16,14 @@ class UserTypeTest extends TypeTestCase
 {
     /**
      * Test valid data.
+     *
+     * @return void
      */
     public function testLoginSubmitValidData(): void
     {
         $userToTest = new User();
 
-        // Create a list of tasks
+        // Create a list of tasks.
         $task1 = new Task();
         $task1->setTitle('Task 1');
         $task1->setContent('Task 1 content');
