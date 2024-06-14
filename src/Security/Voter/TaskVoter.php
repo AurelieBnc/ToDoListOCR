@@ -68,6 +68,18 @@ class UserTaskVoter extends Voter
             }
         }
 
+        if (in_array('ROLE_ADMIN', $userRoles)) {
+            switch ($attribute) {
+                case self::DELETE:
+                case self::EDIT:
+                case self::LIST:
+                case self::CREATE:
+                case self::TOGGLE:
+                    return true;
+                    break;
+            }
+        }
+
         return false;
     }
 
