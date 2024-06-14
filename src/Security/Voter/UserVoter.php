@@ -2,11 +2,16 @@
 
 namespace App\Security\Voter;
 
-
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * UserVoter is responsible for voting on user-related actions
+ * such as view, edit, and delete permissions. It implements
+ * logic to determine if a user has the necessary rights to
+ * perform specific operations based on roles and ownership.
+ */
 class UserVoter extends Voter
 {
     public const CREATE = 'USER_CREATE';
@@ -17,8 +22,8 @@ class UserVoter extends Voter
     protected function supports(string $attribute, mixed $subject): bool
     {
         return
-        in_array($attribute, [self::CREATE, self::LIST]) ||
-        (
+        in_array($attribute, [self::CREATE, self::LIST])
+        || (
             in_array($attribute, [self::EDIT, self::DELETE])
             && $subject instanceof User
         );
@@ -30,10 +35,11 @@ class UserVoter extends Voter
         if (!$user instanceof User) {
             return false;
         }
+
         $userRoles = $user->getRoles();
 
         if (in_array('ROLE_ADMIN', $userRoles)) {
-            return $attribute === self::CREATE || $attribute === self::EDIT || $attribute === self::DELETE || $attribute === self::LIST
+            return self::CREATE === $attribute || self::EDIT === $attribute || self::DELETE === $attribute || self::LIST === $attribute
             ?? false;
         }
 

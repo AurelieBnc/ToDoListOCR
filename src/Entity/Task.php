@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -28,14 +29,16 @@ class Task
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(name:'status',type: Types::STRING,
-    enumType: TaskStatus::class, options: ['default' => TaskStatus::Todo])]
+    #[ORM\Column(name: 'status', type: Types::STRING, enumType: TaskStatus::class, options: ['default' => TaskStatus::Todo])]
     private TaskStatus $status = TaskStatus::Todo;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $owner = null;
 
+    /**
+     * Construct with DateTimeImmutable for createdAt.
+     */
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -70,7 +73,7 @@ class Task
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -82,7 +85,7 @@ class Task
         return $this;
     }
 
-    public function getStatus(): TaskStatus 
+    public function getStatus(): TaskStatus
     {
         return $this->status;
     }
@@ -106,14 +109,22 @@ class Task
         return $this;
     }
 
+    /**
+     * Function to change status of task when toggle this
+     *
+     * @param TaskStatus $status Enum for choices status
+     * @return static
+     */
     public function toggle(TaskStatus $status): static
     {
-        if ($status === TaskStatus::Todo) {
-             $this->setStatus(TaskStatus::IsDone);
+        if (TaskStatus::Todo === $status) {
+            $this->setStatus(TaskStatus::IsDone);
         }
-        if ($status === TaskStatus::IsDone) {
-             $this->setStatus(TaskStatus::Todo);
+
+        if (TaskStatus::IsDone === $status) {
+            $this->setStatus(TaskStatus::Todo);
         }
+
         return $this;
     }
 }

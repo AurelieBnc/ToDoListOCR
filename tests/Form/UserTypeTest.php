@@ -5,10 +5,9 @@ namespace tests\AppBundle\Form;
 use App\Entity\Task;
 use App\Entity\User;
 use App\Form\UserType;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Form\Test\TypeTestCase;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Unit testUnit test of the UserType form.
@@ -18,9 +17,9 @@ class UserTypeTest extends TypeTestCase
     /**
      * Test valid data.
      */
-    public function testLoginSubmitValidData()
+    public function testLoginSubmitValidData(): void
     {
-    $userToTest = new User();
+        $userToTest = new User();
 
         // Create a list of tasks
         $task1 = new Task();
@@ -33,12 +32,13 @@ class UserTypeTest extends TypeTestCase
 
         $taskList = [$task1, $task2];
 
-        $formData = [
-            'username' => 'UserName',
-            'email' => 'user@todolist.fr',
-            'roles' => ['ROLE_USER'],
-            'tasks' => $taskList,
-        ];
+        $formData
+            = [
+                'username' => 'UserName',
+                'email' => 'user@todolist.fr',
+                'roles' => ['ROLE_USER'],
+                'tasks' => $taskList,
+            ];
 
         $form = $this->factory->create(UserType::class, $userToTest);
 
@@ -67,6 +67,8 @@ class UserTypeTest extends TypeTestCase
 
     /**
      * Add an extension to validate data.
+     *
+     * @return ValidatorExtension
      */
     protected function getExtensions()
     {

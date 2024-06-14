@@ -3,11 +3,11 @@
 namespace tests\AppBundle\Form;
 
 use App\Entity\Task;
-use App\Form\TaskType;
-use Symfony\Component\Validator\Validation;
-use Symfony\Component\Form\Test\TypeTestCase;
-use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use App\EnumTodo\TaskStatus;
+use App\Form\TaskType;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Validator\Validation;
 
 /**
  * Unit testUnit test of the TaskType form.
@@ -17,17 +17,16 @@ class TaskTypeTest extends TypeTestCase
     /**
      * Test valid data.
      */
-    public function testSubmitValidData()
+    public function testSubmitValidData(): void
     {
         $taskToTest = new Task();
 
         $formData = [
             'title' => 'A title',
             'content' => 'A great content!',
-            'status' => TaskStatus::IsDone
+            'status' => TaskStatus::IsDone,
         ];
 
-        // $objectToCompare will retrieve data from the form submission
         $form = $this->factory->create(TaskType::class, $taskToTest);
 
         // Create new Task

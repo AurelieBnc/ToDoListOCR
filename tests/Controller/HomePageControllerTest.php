@@ -6,14 +6,19 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HomePageControllerTest extends WebTestCase
 {
+    /**
+     * I test get homepage.
+     *
+     * @return void
+     */
     public function testIndex(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/homepage');
+        $client->request('GET', '/homepage');
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorTextContains('h1', 'Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !');
-    
+
         if ($client->getContainer()->get('security.authorization_checker')->isGranted('TASK_CREATE')) {
             $this->assertSelectorExists('a.btn.btn-success');
         }
@@ -23,4 +28,5 @@ class HomePageControllerTest extends WebTestCase
             $this->assertSelectorExists('a.btn.text-info.fw-bold');
         }
     }
+
 }

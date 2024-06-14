@@ -8,9 +8,11 @@ namespace App\DataFixtures;
 class TaskFixtures
 {
     /**
+     * List of Content for task list.
+     *
      * @return array<string>
      */
-    public static function TaskContentList(): array 
+    public static function TaskContentList(): array
     {
         $taskContentList = [
             'Faire son lit chaque matin.',
@@ -66,5 +68,6 @@ class TaskFixtures
         ];
 
         return $taskContentList;
+
     }
 }

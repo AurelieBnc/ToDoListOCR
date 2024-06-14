@@ -4,36 +4,61 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Manager\UserManager;
+use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\UserRepository;
-use Symfony\Component\HttpFoundation\Request;
-use App\Manager\UserManager;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+/**
+ * Provides functionality for managing, updating, deleting and marking users as complete within the system.
+ */
 #[Route('/users', name: 'users')]
 class UserController extends AbstractController
 {
-    public function __construct(
-        private readonly UserManager $userManager,
-        private readonly UserRepository $userRepository
-    ) {
+
+    private readonly UserManager $userManager;
+
+    private readonly UserRepository $userRepository;
+
+    /**
+     * Construct with entityManagerInterface and UserManager.
+     *
+     * @param EntityManagerInterface $entityManager entity manager
+     * @param UserManager            $userManager   user manager
+     */
+    public function __construct(EntityManagerInterface $entityManager, UserManager $userManager)
+    {
+        $this->userManager = $userManager;
+        $this->userRepository = $entityManager->getRepository(User::class);
     }
 
+    /**
+     * Paginated list of user.
+     *
+     * @param int $page number of the page called
+     * @return RedirectResponse|Response
+     */
     #[Route('/list/{page}', name: '_list', defaults: ['page' => 1])]
     #[IsGranted('USER_LIST')]
-    public function getUserList(int $page): Response 
+    public function getUserList(int $page): Response
     {
         $userListPaginated = null;
         $userListPaginated = $this->userRepository->findByPagination($page);
 
-        return $this->render('user/user_list.html.twig', [
-            'users' => $userListPaginated,
-        ]);
+        return $this->render('user/user_list.html.twig', ['users' => $userListPaginated]);
     }
-    
+
+    /**
+     * Create user function.
+     *
+     * @param Request $request request
+     * @return RedirectResponse|Response
+     */
     #[Route('/create', name: '_create')]
     #[IsGranted('USER_CREATE')]
     public function createAction(Request $request): RedirectResponse|Response
@@ -50,11 +75,17 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('users_list');
         }
-        return $this->render('user/create_user.html.twig', [
-            'userForm' => $userForm->createView(),
-        ]);
+
+        return $this->render('user/create_user.html.twig', ['userForm' => $userForm->createView()]);
     }
 
+    /**
+     * Edit user function.
+     *
+     * @param User    $user    user to edit
+     * @param Request $request request
+     * @return RedirectResponse|Response
+     */
     #[Route('/{id}/edit', name: '_edit')]
     #[IsGranted('USER_EDIT', 'user')]
     public function editAction(User $user, Request $request): RedirectResponse|Response
@@ -69,9 +100,16 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('users_list');
         }
+
         return $this->render('user/edit_user.html.twig', ['userForm' => $userForm->createView(), 'user' => $user]);
     }
 
+    /**
+     * Delete user function.
+     *
+     * @param User $user user to delete
+     * @return RedirectResponse|Response
+     */
     #[Route(path: '/{id}/delete', name: '_delete')]
     #[IsGranted('USER_DELETE', 'user')]
     public function deleteTaskAction(User $user): RedirectResponse

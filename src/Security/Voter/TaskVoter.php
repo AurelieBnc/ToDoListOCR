@@ -8,7 +8,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class TaskVoter extends Voter
+class UserTaskVoter extends Voter
 {
     public const CREATE = 'TASK_CREATE';
     public const DELETE = 'TASK_DELETE';
@@ -16,16 +16,31 @@ class TaskVoter extends Voter
     public const EDIT = 'TASK_EDIT';
     public const TOGGLE = 'TASK_TOGGLE';
 
+    /**
+     * Method of voter.
+     *
+     * @param string $attribute Is the attribute determined if voter is true or false
+     * @param mixed  $subject   the subject of the vote
+     * @return bool
+     **/
     protected function supports(string $attribute, mixed $subject): bool
     {
         return
-        in_array($attribute, [self::CREATE, self::LIST]) ||
-        (
+        in_array($attribute, [self::CREATE, self::LIST])
+        || (
             in_array($attribute, [self::EDIT, self::DELETE, self::TOGGLE])
             && $subject instanceof Task
         );
     }
 
+    /**
+     * Method of voter.
+     *
+     * @param string         $attribute Is the attribute determined if voter is true or false
+     * @param mixed          $subject   the subject of the vote
+     * @param TokenInterface $token     token of vote
+     * @return bool
+     */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
@@ -36,18 +51,6 @@ class TaskVoter extends Voter
 
         if (in_array(null, $userRoles)) {
             return false;
-        }  
-
-        if (in_array('ROLE_ADMIN', $userRoles)) {
-            switch ($attribute) {
-                case self::DELETE:
-                case self::EDIT:
-                case self::LIST:
-                case self::CREATE:
-                case self::TOGGLE:
-                    return true;
-                    break;
-            }
         }
 
         if (in_array('ROLE_USER', $userRoles)) {
@@ -64,9 +67,29 @@ class TaskVoter extends Voter
                     break;
             }
         }
+
+        if (in_array('ROLE_ADMIN', $userRoles)) {
+            switch ($attribute) {
+                case self::DELETE:
+                case self::EDIT:
+                case self::LIST:
+                case self::CREATE:
+                case self::TOGGLE:
+                    return true;
+                    break;
+            }
+        }
+
         return false;
     }
 
+    /**
+     * Function to check Owner of Task.
+     *
+     * @param mixed          $subject the subject of voter
+     * @param TokenInterface $token   The token
+     * @return bool|AccessDeniedException
+     */
     protected function checkOwner(mixed $subject, TokenInterface $token): bool|AccessDeniedException
     {
         $user = $token->getUser();
