@@ -20,7 +20,7 @@ class UserTaskVoter extends Voter
      * Method of voter.
      *
      * @param string $attribute Is the attribute determined if voter is true or false
-     * @param mixed $subject the subject of the vote
+     * @param mixed  $subject   the subject of the vote
      * @return bool
      **/
     protected function supports(string $attribute, mixed $subject): bool
@@ -36,9 +36,9 @@ class UserTaskVoter extends Voter
     /**
      * Method of voter.
      *
-     * @param string $attribute Is the attribute determined if voter is true or false
-     * @param mixed $subject the subject of the vote
-     * @param TokenInterface $token token of vote
+     * @param string         $attribute Is the attribute determined if voter is true or false
+     * @param mixed          $subject   the subject of the vote
+     * @param TokenInterface $token     token of vote
      * @return bool
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -86,8 +86,8 @@ class UserTaskVoter extends Voter
     /**
      * Function to check Owner of Task.
      *
-     * @param mixed $subject the subject of voter
-     * @param TokenInterface $token The token
+     * @param mixed          $subject the subject of voter
+     * @param TokenInterface $token   The token
      * @return bool|AccessDeniedException
      */
     protected function checkOwner(mixed $subject, TokenInterface $token): bool|AccessDeniedException

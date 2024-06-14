@@ -36,7 +36,7 @@ class TaskController extends AbstractController
      * Paginated list of task by status.
      *
      * @param TaskStatus $status The status of task is an enum
-     * @param int $page the current page
+     * @param int        $page   The current page
      * @return Response
      */
     #[Route('/_list/{status}/{page}', name: '_list')]

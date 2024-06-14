@@ -34,8 +34,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      *
-     * @param PasswordAuthenticatedUserInterface $user user to change password
-     * @param string $newHashedPassword new password hashed
+     * @param PasswordAuthenticatedUserInterface $user              user to change password
+     * @param string                             $newHashedPassword new password hashed
      * @return void
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
@@ -61,9 +61,9 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $result = [];
 
         $query = $this->createQueryBuilder('u')
-        ->orderBy('u.id', 'ASC')
-        ->setMaxResults($limit)
-        ->setFirstResult($page * $limit - $limit);
+            ->orderBy('u.id', 'ASC')
+            ->setMaxResults($limit)
+            ->setFirstResult($page * $limit - $limit);
 
         $paginator = new Paginator($query);
         $data = $paginator->getQuery()->getResult();
@@ -73,7 +73,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $result['pages'] = 1;
 
             return $result;
-
         }
         $pages = ceil($paginator->count() / $limit);
         $result['data'] = $data;
@@ -85,35 +84,35 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Function to add an user.
      *
-     * @param User $user to add
+     * @param User $user user to add
      * @return User
      */
-    public function add(User $entity): void
+    public function add(User $user): void
     {
-        $this->getEntityManager()->persist($entity);
+        $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
 
     /**
      * Function to update an user.
      *
-     * @param User $user to update
+     * @param User $user user to update
      * @return User
      */
-    public function update(User $entity): void
+    public function update(User $user): void
     {
-        $this->add($entity);
+        $this->add($user);
     }
 
     /**
      * Function to remove an user.
      *
-     * @param User $user to remove
+     * @param User $user user to remove
      * @return User
      */
-    public function remove(User $entity): void
+    public function remove(User $user): void
     {
-        $this->getEntityManager()->remove($entity);
+        $this->getEntityManager()->remove($user);
         $this->getEntityManager()->flush();
     }
 }

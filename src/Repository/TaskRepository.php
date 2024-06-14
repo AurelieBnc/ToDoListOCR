@@ -32,7 +32,7 @@ class TaskRepository extends ServiceEntityRepository
     /**
      * Function to find task list paginated by status.
      *
-     * @param int $page current page
+     * @param int        $page   current page
      * @param TaskStatus $status status need to call
      * @return array
      */
@@ -44,12 +44,10 @@ class TaskRepository extends ServiceEntityRepository
 
         if (TaskStatus::IsDone === $status) {
             $statusToString = 'isDone';
-
         }
 
         if (TaskStatus::Todo === $status) {
             $statusToString = 'todo';
-
         }
 
         $query = $this->createQueryBuilder('t')

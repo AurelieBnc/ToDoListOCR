@@ -87,14 +87,11 @@ class TaskManager
     {
         if (TaskStatus::IsDone === $status) {
             return 'isDone';
-
         }
 
         if (TaskStatus::Todo === $status) {
             return 'todo';
-
         }
-
     }
 
 }

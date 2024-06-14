@@ -17,7 +17,7 @@ class UserManager
     /**
      * Construct with EntityManagerInterface and UserPasswordHasherInterface.
      *
-     * @param EntityManagerInterface        $entityManager Manage to create UserRepository
+     * @param EntityManagerInterface        $entityManager      Manage to create UserRepository
      * @param UserPasswordHasherInterface   $userPasswordHasher Hasher for password of User
      */
     public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher)
@@ -30,7 +30,8 @@ class UserManager
     /**
      * Function to create an user.
      *
-     * @param User $user to create
+     * @param User   $user          to create
+     * @param string $plainPassword password no hashed from form
      * @return User
      */
     public function createUser(User $user, string $plainPassword): User
@@ -49,7 +50,8 @@ class UserManager
     /**
      * Function to edit an user.
      *
-     * @param User $user to edit
+     * @param User   $user          to edit
+     * @param string $plainPassword password no hashed from form
      * @return User
      */
     public function editUser(User $user, string $plainPassword): User
