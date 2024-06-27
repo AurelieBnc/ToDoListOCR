@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * logic to determine if a user has the necessary rights to
  * perform specific operations based on roles and ownership.
  */
-class UserTaskVoter extends Voter
+class TaskVoter extends Voter
 {
     public const CREATE = 'TASK_CREATE';
     public const DELETE = 'TASK_DELETE';
@@ -59,13 +59,10 @@ class UserTaskVoter extends Voter
             return false;
         }
 
-        if (in_array('ROLE_USER', $userRoles)) {
+        if (in_array('ROLE_ADMIN', $userRoles)) {
             switch ($attribute) {
                 case self::DELETE:
-                    return $this->checkOwner($subject, $token);
                 case self::EDIT:
-                    return $this->checkOwner($subject, $token);
-                    break;
                 case self::LIST:
                 case self::CREATE:
                 case self::TOGGLE:
@@ -74,10 +71,13 @@ class UserTaskVoter extends Voter
             }
         }
 
-        if (in_array('ROLE_ADMIN', $userRoles)) {
+        if (in_array('ROLE_USER', $userRoles)) {
             switch ($attribute) {
                 case self::DELETE:
+                    return $this->checkOwner($subject, $token);
                 case self::EDIT:
+                    return $this->checkOwner($subject, $token);
+                    break;
                 case self::LIST:
                 case self::CREATE:
                 case self::TOGGLE:

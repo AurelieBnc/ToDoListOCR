@@ -2,6 +2,7 @@
 # ToDoListOCR
 
 Refactorisation d'une application Symfony de gestion de tâches quotidiennes datant de 8 ans - projet OCR 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e4d7aac320aa43a39a909f965de216bb)](https://app.codacy.com/gh/AurelieBnc/ToDoListOCR/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ## Require
 
@@ -102,8 +103,22 @@ Lancer une couverture de tests avec visuel html:
 vendor/bin/phpunit --coverage-html public/test-coverage
 ```
 
-## Audit
+## Performance
 
-### Codacy
+Une fois le projet installé, afin d'optimiser les performances lancer ces commandes :
+```
+composer dump-env prod
+composer dump-autoload --optimize
+```
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e4d7aac320aa43a39a909f965de216bb)](https://app.codacy.com/gh/AurelieBnc/ToDoListOCR/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+Il est également nécessaire d'activer les extensions php suivante :
+```
+extension=php_apcu
+
+zend_extension=opcache
+opcache.preload=/app/var/cache/prod/App_KernelProdContainer.preload.php
+```
+
+## Contribution
+
+Merci de votre intérêt à contribuer! Il existe de nombreuses façons de contribuer à ce projet. Get started here (link).
