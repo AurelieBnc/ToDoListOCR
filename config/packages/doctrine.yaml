@@ -37,11 +37,11 @@ when@prod:
             auto_generate_proxy_classes: false
             proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
             query_cache_driver:
-                type: pool
-                pool: doctrine.system_cache_pool
+                type: apcu
             result_cache_driver:
                 type: pool
                 pool: doctrine.result_cache_pool
+            metadata_cache_driver: apcu
 
     framework:
         cache:
