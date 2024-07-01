@@ -1,9 +1,9 @@
 
 # ToDoListOCR
 
-Refactorisation d'une application Symfony de gestion de tâches quotidiennes datant de 8 ans - projet OCR 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/e4d7aac320aa43a39a909f965de216bb)](https://app.codacy.com/gh/AurelieBnc/ToDoListOCR/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+Refactorisation d'une application Symfony de gestion de tâches quotidiennes datant de 8 ans - projet OCR
 
+<img src="https://insight.symfony.com/insight/img/medals/with-ribbon/medal-silver.png" width="20" height="20" /> [![Codacy Badge](https://app.codacy.com/project/badge/Grade/e4d7aac320aa43a39a909f965de216bb)](https://app.codacy.com/gh/AurelieBnc/ToDoListOCR/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) 
 ## Require
 
 - PHP 8.2
@@ -15,7 +15,7 @@ Refactorisation d'une application Symfony de gestion de tâches quotidiennes dat
 ### Télécharger le projet et dézipez le
 
 ```
-
+https://github.com/AurelieBnc/ToDoListOCR/archive/refs/heads/dev.zip
 ```
 
 ### Créer un fichier .env.local et réecrire les paramètres d'environnement dans le fichier .env (changer user_db et password_db et les identifiant du compte pour envoyer les mails)
@@ -118,7 +118,11 @@ extension=php_apcu
 zend_extension=opcache
 opcache.preload=/app/var/cache/prod/App_KernelProdContainer.preload.php
 ```
+## Documentations
+- [Diagrammes](https://github.com/AurelieBnc/ToDoListOCR/tree/dev/docs/diagrammes)
+- [Documentations techniques](https://github.com/AurelieBnc/ToDoListOCR/tree/dev/docs/documentation_technique)
+- [Audit de qualité et de performance & bonnes pratiques](https://github.com/AurelieBnc/ToDoListOCR/tree/dev/docs/audit)
 
 ## Contribution
 
-Merci de votre intérêt à contribuer! Il existe de nombreuses façons de contribuer à ce projet. Get started here (link).
+Merci de votre intérêt à contribuer! Il existe de nombreuses façons de contribuer à ce projet. Get started [here](https://github.com/AurelieBnc/ToDoListOCR/blob/dev/CONTRIBUTING.md).
