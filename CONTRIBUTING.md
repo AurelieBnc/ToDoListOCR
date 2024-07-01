@@ -6,26 +6,28 @@ Thanx for your contributing !
 
 ## Introduction
 
-Suivre ces directives permet de respecter le temps de chacun et de garder une cohérence dans l'application et dans la qualité du code.
+Following these guidelines allows you to respect everyone's time and maintain consistency in the application and in the quality of the code.
 
-Vous pouvez écrire des contributions de mise à jour de package, de correctif de bug, de sécurité ou de nouvelle fonctionalité.
-Nous ne cherchons pas à faire une refonte graphique de l'application actuellement.
+You can write package update, bug fix, security or new feature contributions.
+We are not currently looking to do a graphical overhaul of the application.
 
-N'oubliez pas de consulter le Readme.md !
+Don’t forget to check out the Readme.md!
 
 ### 1. Code of Conduct
 
-Avant de faire une PR, vous devez écrire une Issue en respectant le modèle des précédentes, les taguer selon leur contenu et l'affilier au projet ToDoListOcr. Elle devra être affilié à un MileStone correspondant au thème de l'Issue.
-Une fois l'Issue validée, vous pourrez créer une PR qui se revue par l'équipe.
+Before making a PR, you must write an Issue respecting the model of the previous ones, tag them according to their content and affiliate it with the ToDoListOcr project. It must be affiliated with a MileStone corresponding to the theme of the Issue.
+Once the Issue has been validated, you can create a PR which is reviewed by the team.
 
-Soyez bienvaillant dans les revues de code ou d'issue, nous sommes tous et toujours en apprentissage.
+Be kind in code or issue reviews, we are all always learning.
 
-Vous travaillez sur votre première Pull Request ? Vous pouvez apprendre comment procéder grâce à cette série gratuite , Comment contribuer à un projet Open Source sur GitHub . https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github
+Are you working on your first Pull Request?
+
+You can learn how to do this with this free series, [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github). 
 
 ### 2. Prerequisites
 
-Avant de faire une PR, vous devez écrire une Issue en respectant le modèle des précédentes, les taguer selon leur contenu et l'affilier au projet ToDoListOcr. Elle devra être affilié à un MileStone correspondant au thème de l'Issue.
-Une fois l'Issue validée, vous pourrez créer une PR qui sera revue par l'équipe.
+Before making a PR, you must write an Issue respecting the model of the previous ones, tag them according to their content and affiliate it with the ToDoListOcr project. It must be affiliated with a MileStone corresponding to the theme of the Issue.
+Once the Issue has been validated, you will be able to create a PR which will be reviewed by the team.
 
 ## To Start
 
@@ -42,23 +44,23 @@ git push -u origin HEAD
 
 ### 1. Testing
 
-Pour chaque nouvelle fonctionnalité, merci de créer les tests unitaires et fonctionnels correspondant et de maintenir un rapport de couverture au dessus de 70%.
-Pour cela nous utilisons PhpUnit et la commande :
+For each new feature, please create the corresponding unit and functional tests and maintain a coverage ratio above 70%.
+For this we use PhpUnit and the command:
 ```
 vendor/bin/phpunit --coverage-html public/test-coverage
 ```
-Elle permetra d'avoir un visuel html du rapport de couverture et de son efficacité, et de connaitre la répartition des tests.
+It will allow you to have an HTML visual of the coverage report and its effectiveness, and to know the distribution of the tests.
 
 ### 2. Code Quality
 
-Afin de maintenir une bonne qualité du code et éviter une dette technique trop importante, nous utilisons Php-Cs-Fixer pour respecter les normes de qualité de Symfony et des PSR. Nous les vérifions grace à des audits avec Codacy.
+In order to maintain good code quality and avoid excessive technical debt, we use Php-Cs-Fixer to respect the quality standards of Symfony and PSR. We verify them through audits with Codacy.
 
-Installer Php-Cs-Fixer à la racine du projet et lancer la vérification
+Install Php-Cs-Fixer in the project root and run the check
 ```
 composer require --dev friendsofphp/php-cs-fixer
 vendor/bin/php-cs-fixer check
 ```
-Après avoir vérifier le check, lancer le fix et placer le dans un commit.
+After verifying the check, launch the fix and place it in a commit.
 ```
 vendor/bin/php-cs-fixer fix
 ```
@@ -77,4 +79,4 @@ Create a PR with this template
 
 ## About Symfony
 
-This application develop with Symfony framework, please check the Symfony Documentation to follow best practices.
+This application develop with Symfony framework, please check the [Symfony Documentation](https://symfony.com/doc/current/index.html) to follow best practices.
