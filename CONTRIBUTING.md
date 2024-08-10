@@ -37,7 +37,7 @@ Before writing your code créer une nouvelle branche
 ```
 git checkout -b new-branch
 ```
-Puis
+After
 ```
 git push -u origin HEAD
 ```
