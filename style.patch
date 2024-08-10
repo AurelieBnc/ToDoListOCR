@@ -1,0 +1,53 @@
+diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -1,1 +1,1 @@
+-# ToDoListOCR
++# ToDoListOCR
+
+@@ -4,1 +4,1 @@
+-## Require
++## Require
+
+@@ -5,1 +5,1 @@
+-- PHP 8.2
++
+- PHP 8.2
+@@ -11,1 +11,1 @@
+-### TÃ©lÃ©charger le projet et dÃ©zipez le
++### TÃ©lÃ©charger le projet et dÃ©zipez le
+
+@@ -22,1 +22,1 @@
+-### DÃ©placer le terminal dans le dossier clonÃ©
++### DÃ©placer le terminal dans le dossier clonÃ©
+
+@@ -27,1 +27,1 @@
+-### Taper les commandes suivantes :
++### Taper les commandes suivantes
+@@ -34,1 +34,1 @@
+-### Installation des fixtures
++### Installation des fixtures
+
+@@ -39,1 +39,1 @@
+-### Lancer/arrÃªter le serveur local Symfony
++### Lancer/arrÃªter le serveur local Symfony
+
+@@ -46,1 +46,1 @@
+-### Activer le deboggage en env local
++### Activer le deboggage en env local
+
+@@ -53,1 +53,1 @@
+-### Passer en env de Prod
++### Passer en env de Prod
+
+@@ -65,1 +65,1 @@
+-## Tests et couverture de test
++## Tests et couverture de test
+
+@@ -66,1 +66,1 @@
+-### CrÃ©ation de la base de donnÃ©es de Test et charger les fixtures
++
+### CrÃ©ation de la base de donnÃ©es de Test et charger les fixtures
+@@ -81,1 +81,1 @@
+-### Lancement des tests et de la couverture de test
++### Lancement des tests et de la couverture de test

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% form_theme userForm 'bootstrap_5_layout.html.twig' %}
+
+{% block header_title %}<h1 class="row col-md-10 mx-auto ps-2 mt-5">Créer un utilisateur</h1>{% endblock %}
+{% block header_img %}{% endblock %}
+
+{% block body %}
+    <div class="row col-md-10 m-auto">
+        {{ form_errors(userForm) }}
+        {{ form_start(userForm, {'action' : path('users_create')}) }}
+            {{ form_widget(userForm) }}
+            <div class="row ms-auto col-md-3">
+                <button type="submit" class="btn btn-success">Ajouter</button>
+            </div>
+        {{ form_end(userForm) }}
+    </div>
+{% endblock %}
